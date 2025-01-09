@@ -269,6 +269,7 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
       {CollapseOptions.map((opt, idx) =>
         opt.value.length > 0 ? (
           <Accordion
+            key={3+idx}
             expanded={Opened.includes(3)}
             onChange={() => toggleOpened(3)}
             sx={{
