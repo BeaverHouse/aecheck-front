@@ -72,6 +72,7 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
 
   const changeManifest = (step: number) => {
     const changedStep = currentStep + step;
+    if (changedStep < 0 || changedStep > info.maxManifest) return;
     const changedManifest = changedStep * 10000 + id;
     const newState = [
       ...manifest.filter((x) => x % 10000 !== id),
