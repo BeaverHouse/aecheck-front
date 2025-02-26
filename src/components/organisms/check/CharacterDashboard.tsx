@@ -57,10 +57,6 @@ function CharacterDashboard({
       );
     });
 
-  useEffect(() => {
-    setPage(1);
-  }, [filteredCharacters, invenStatusFilter]);
-
   /**
    * 1. Add character
    * 2. Add required 4-star character (if exist)
@@ -207,6 +203,13 @@ function CharacterDashboard({
 
   const itemsPerPage = getItemsPerPage();
   const totalPages = Math.ceil(targetCharacters.length / itemsPerPage);
+
+  useEffect(() => {
+    const maxPage = Math.ceil(targetCharacters.length / itemsPerPage);
+    if (page > maxPage) {
+      setPage(maxPage || 1);
+    }
+  }, [targetCharacters, page, itemsPerPage]);
 
   const currentCharacters = targetCharacters.slice(
     (page - 1) * itemsPerPage,

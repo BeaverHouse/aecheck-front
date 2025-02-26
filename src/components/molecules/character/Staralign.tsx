@@ -60,6 +60,7 @@ const CharacterStaralign: React.FC<CharacterSummary> = (info) => {
   const isRecent = isUpdatedInWeeks(info.lastUpdated);
   const changeManifest = (step: number) => {
     const changedStep = currentStep + step;
+    if (changedStep < 0 || changedStep > 3) return;
     const changedStaralign = changedStep * 10000 + id;
     const newState = [
       ...staralign.filter((x) => x % 10000 !== id),
