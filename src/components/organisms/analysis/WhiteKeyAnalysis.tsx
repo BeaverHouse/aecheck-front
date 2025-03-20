@@ -36,7 +36,8 @@ const WhiteKeyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
       (char) =>
         char.category === AECategories.encounter &&
         (char.style === AECharacterStyles.extra ||
-          char.style === AECharacterStyles.another)
+          char.style === AECharacterStyles.another ||
+          char.isAlter)
     )
     .sort((a, b) =>
       getShortName(t(a.code), i18n.language).localeCompare(
