@@ -20,14 +20,17 @@ interface BuddyCardProps {
 }
 
 const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick }) => {
-  const { buddy } = useCheckStore();
+  const { buddy, inven } = useCheckStore();
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const { setModal } = useModalStore();
 
   const id = getNumber(info);
+  const partnerID = info.characterID
+    ? Number(info.characterID.replace("char", ""))
+    : -1;
   const isRecent = isUpdatedInWeeks(info.lastUpdated);
-  const checked = buddy.includes(id);
+  const checked = buddy.includes(id) && inven.includes(partnerID);
 
   return (
     <Card
