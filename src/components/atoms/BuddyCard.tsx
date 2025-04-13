@@ -30,7 +30,8 @@ const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick }) => {
     ? Number(info.characterID.replace("char", ""))
     : -1;
   const isRecent = isUpdatedInWeeks(info.lastUpdated);
-  const checked = buddy.includes(id) && inven.includes(partnerID);
+  const checked =
+    buddy.includes(id) && (partnerID === -1 || inven.includes(partnerID));
 
   return (
     <Card

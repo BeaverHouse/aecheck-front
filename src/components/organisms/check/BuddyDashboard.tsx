@@ -11,9 +11,7 @@ import Loading from "../../atoms/Loading";
 function BuddyDashboard() {
   const { t } = useTranslation();
   const { buddy, setBuddy } = useCheckStore();
-  const {
-    searchWord,
-  } = useFilterStore();
+  const { searchWord } = useFilterStore();
   const { isPending, error, data } = useQuery({
     queryKey: ["getBuddies"],
     queryFn: () =>
@@ -29,7 +27,8 @@ function BuddyDashboard() {
   );
 
   const filteredBuddies = allBuddies.filter((b) =>
-    t(b.id).toLowerCase().includes(searchWord.toLowerCase()))
+    t(b.id).toLowerCase().includes(searchWord.toLowerCase())
+  );
 
   const toggleSingleBuddy = (info: BuddyDetail) => {
     if (info.characterID) return;
@@ -39,7 +38,7 @@ function BuddyDashboard() {
     } else {
       setBuddy([...buddy, id]);
     }
-  }
+  };
 
   return (
     <Box
@@ -51,7 +50,11 @@ function BuddyDashboard() {
     >
       <Grid container spacing={1} justifyContent="center">
         {filteredBuddies.map((info) => (
-          <BuddyCard key={info.id} info={info} onClick={() => toggleSingleBuddy(info)} />
+          <BuddyCard
+            key={info.id}
+            info={info}
+            onClick={() => toggleSingleBuddy(info)}
+          />
         ))}
       </Grid>
     </Box>
