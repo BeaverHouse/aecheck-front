@@ -6,21 +6,18 @@ import EmailIcon from "@mui/icons-material/Email";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import LanguageButton from "../atoms/button/Language";
-import EmergencyAnnounce from "../atoms/button/EmergencyAnnounce";
 
 function ErrorPage() {
   const { t } = useTranslation();
 
-
   return (
     <Box sx={MainWrapperSx} flexDirection="column">
-      <EmergencyAnnounce />
       <Typography variant="h6" sx={{ m: 2 }}>
         {t("frontend.server.error")}
       </Typography>
       <img src="/error.png" alt="error" style={{ width: 200 }} />
-      <br/>
-      <br/>
+      <br />
+      <br />
       <Button
         variant="contained"
         sx={{ mr: 2 }}
@@ -37,9 +34,9 @@ function ErrorPage() {
       >
         E-mail
       </Button>
-      <br/>
-      <br/>
-      <br/>
+      <br />
+      <br />
+      <br />
       <LanguageButton />
     </Box>
   );

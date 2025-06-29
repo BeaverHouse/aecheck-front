@@ -14,24 +14,23 @@ type CheckStateV4 = {
   buddy: Array<number>;
 };
 
-
 // API Data type
 
 type IDInfo = {
   id: string;
-}
+};
 
 type MappingInfo = {
   id: string;
   description: string;
-}
+};
 
 type DungeonInfo = MappingInfo & {
   links: {
     altemaURL?: string;
     aewikiURL?: string;
-  }
-}
+  };
+};
 
 type CharacterSummary = {
   id: string;
@@ -48,7 +47,7 @@ type CharacterSummary = {
   personalities: MappingInfo[];
   dungeons: DungeonInfo[];
   buddy?: BuddyDetail;
-}
+};
 
 type BuddyDetail = {
   id: string;
@@ -57,18 +56,20 @@ type BuddyDetail = {
   seesaaURL?: string;
   aewikiURL?: string;
   lastUpdated?: Date;
-}
+};
 
 type CharacterDetail = CharacterSummary & {
   seesaaURL?: string;
   aewikiURL?: string;
-}
+};
 
 interface AnnouncementData {
-  announceContentCode: number;
-  koreanDescription: string;
-  englishDescription: string;
+  state: string;
   title: string;
+  link: string;
+  createdTime: string;
+  effect: Array<string>;
+  category: string;
 }
 
 // Common props
@@ -79,4 +80,4 @@ interface AnalysisProps {
 
 type DashboardProps = AnalysisProps & {
   filteredCharacters: CharacterSummary[];
-}
+};

@@ -1,57 +1,84 @@
 import { useQuery } from "@tanstack/react-query";
-import { LanguageOptions } from "../../../constants/enum";
 import { useTranslation } from "react-i18next";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 
 function NormalAnnounce() {
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const { isPending, data, error } = useQuery<AnnouncementData, Error>({
     queryKey: ["normalAnnounce"],
     queryFn: () =>
-      fetch("https://announce.haulrest.me/api/history/latest/aecheck").then(
-        (res) => {
-          if (res.ok) return res.json();
-          else if (res.status === 404)
-            return {
-              announceContentCode: -1,
-              koreanDescription: "",
-              englishDescription: "",
-              title: "",
-            };
-          else throw new Error("Failed to fetch announce");
-        }
-      ),
+      fetch(
+        "https://raw.githubusercontent.com/BeaverHouse/service-status/refs/heads/master/assets/announce-status.json"
+      ).then((res) => {
+        if (res.ok) return res.json();
+        else
+          return {
+            state: "",
+            title: "",
+            link: "",
+            createdTime: "",
+            effect: [],
+            category: "",
+          };
+      }),
     throwOnError: true,
   });
 
-  const announceCode = window.localStorage.getItem("AE_ANNOUNCE_3_1");
+  const announceViewed =
+    window.localStorage.getItem("AE_ANNOUNCE_3_1") === data?.createdTime;
 
-  if (isPending || error || data.announceContentCode === -1) return null;
-  if (announceCode === `${data.announceContentCode}_${i18n.language}`)
+  if (
+    isPending ||
+    error ||
+    !data.effect.includes("ba-torment") ||
+    announceViewed
+  )
     return null;
 
-  const description =
-    i18n.language === LanguageOptions.ko
-      ? data.koreanDescription
-      : data.englishDescription;
+  const type =
+    data.state === "closed"
+      ? "success"
+      : data.category === "maintenance"
+      ? "warning"
+      : "error";
+
+  const message = () => {
+    if (data.state === "closed") {
+      if (data.category === "maintenance") return "frontend.maintenance.closed";
+      else return "frontend.incident.closed";
+    } else {
+      if (data.category === "maintenance") return "frontend.maintenance.open";
+      else return "frontend.incident.open";
+    }
+  };
+
   return (
     <Alert
       variant="filled"
-      severity="success"
+      severity={type}
       id="normal-announce"
       onClose={() => {
         window.localStorage.setItem(
           `AE_ANNOUNCE_3_1`,
-          `${data.announceContentCode}_${i18n.language}`
+          String(data.createdTime)
         );
         if (document.getElementById("normal-announce"))
           document.getElementById("normal-announce")!.style.display = "none";
       }}
       sx={{ maxWidth: "400px", margin: "0 auto", textAlign: "left" }}
     >
-      <AlertTitle>{data.title}</AlertTitle>
-      <div style={{ whiteSpace: "pre-line" }}>{description}</div>
+      <a
+        href={data.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <AlertTitle>{t(message())}</AlertTitle>
+        <div style={{ whiteSpace: "pre-line" }}>
+          {data.state === "closed" ? data.link : data.title}
+        </div>
+      </a>
     </Alert>
   );
 }
