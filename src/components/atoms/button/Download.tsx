@@ -52,7 +52,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         element.classList.remove("temporary");
         element.classList.add("shadow");
       });
-      
+
       if (navigator.userAgent.match(/NAVER|KAKAOTALK/i)) {
         Swal.fire({
           title: "File Upload",
@@ -68,8 +68,8 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
             const body = {
               file: canvas.toDataURL("image/jpeg"),
             };
-    
-            const uploadURL = `https://api.haulrest.me/file/aecheck`;
+
+            const uploadURL = `https://v1.api.haulrest.me/file/aecheck`;
             const res = await fetch(uploadURL, {
               method: "POST",
               headers: {
@@ -82,9 +82,9 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
             });
             const url = ((await res.json()) as APIResponse<string>).data;
             const link = document.createElement("a");
-    
+
             document.body.appendChild(link);
-    
+
             link.href = url;
             link.target = "_blank";
             link.rel = "noopener noreferrer";
