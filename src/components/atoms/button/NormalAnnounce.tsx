@@ -1,84 +1,39 @@
-import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { useState } from "react";
 
 function NormalAnnounce() {
-  const { t } = useTranslation();
-  const { isPending, data, error } = useQuery<AnnouncementData, Error>({
-    queryKey: ["normalAnnounce"],
-    queryFn: () =>
-      fetch(
-        "https://raw.githubusercontent.com/BeaverHouse/service-status/refs/heads/master/assets/announce-status.json"
-      ).then((res) => {
-        if (res.ok) return res.json();
-        else
-          return {
-            state: "",
-            title: "",
-            link: "",
-            createdTime: "",
-            effect: [],
-            category: "",
-          };
-      }),
-    throwOnError: true,
-  });
+  const { i18n } = useTranslation();
+  const [visible, setVisible] = useState(true);
 
-  const announceViewed =
-    window.localStorage.getItem("AE_ANNOUNCE_3_1") === data?.createdTime;
+  const announceViewed = window.localStorage.getItem("AE_ANNOUNCE_3_2") === "true";
 
-  if (
-    isPending ||
-    error ||
-    !data.effect.includes("ba-torment") ||
-    announceViewed
-  )
-    return null;
+  if (announceViewed || !visible) return null;
 
-  const type =
-    data.state === "closed"
-      ? "success"
-      : data.category === "maintenance"
-      ? "warning"
-      : "error";
+  const title = i18n.language === "ko"
+    ? "서비스 안내"
+    : "Service Notice";
 
-  const message = () => {
-    if (data.state === "closed") {
-      if (data.category === "maintenance") return "frontend.maintenance.closed";
-      else return "frontend.incident.closed";
-    } else {
-      if (data.category === "maintenance") return "frontend.maintenance.open";
-      else return "frontend.incident.open";
-    }
-  };
+  const description = i18n.language === "ko"
+    ? "디자인 변경과 커스텀 현현 체크를 추가할 예정입니다. 조금만 더 기다려 주세요."
+    : "Design change and Weapon Tempering check will be added. Please wait a moment.";
 
   return (
     <Alert
       variant="filled"
-      severity={type}
+      severity="info"
       id="normal-announce"
       onClose={() => {
-        window.localStorage.setItem(
-          `AE_ANNOUNCE_3_1`,
-          String(data.createdTime)
-        );
-        if (document.getElementById("normal-announce"))
-          document.getElementById("normal-announce")!.style.display = "none";
+        window.localStorage.setItem("AE_ANNOUNCE_3_2", "true");
+        setVisible(false);
       }}
       sx={{ maxWidth: "400px", margin: "0 auto", textAlign: "left" }}
     >
-      <a
-        href={data.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <AlertTitle>{t(message())}</AlertTitle>
-        <div style={{ whiteSpace: "pre-line" }}>
-          {data.state === "closed" ? data.link : data.title}
-        </div>
-      </a>
+      <AlertTitle>{title}</AlertTitle>
+      <div style={{ whiteSpace: "pre-line" }}>
+        {description}
+      </div>
     </Alert>
   );
 }
