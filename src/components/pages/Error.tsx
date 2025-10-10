@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import { useTranslation } from "react-i18next";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EmailIcon from "@mui/icons-material/Email";
+import InfoIcon from "@mui/icons-material/Info";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import LanguageButton from "../atoms/button/Language";
@@ -25,6 +26,16 @@ function ErrorPage() {
         endIcon={<RefreshIcon />}
       >
         Refresh
+      </Button>
+      <Button
+        variant="contained"
+        sx={{ mr: 2 }}
+        href="https://status.haulrest.me"
+        target="_blank"
+        rel="noopener noreferrer"
+        endIcon={<InfoIcon />}
+      >
+        API Status
       </Button>
       <Button
         variant="contained"
