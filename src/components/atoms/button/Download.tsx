@@ -65,30 +65,39 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
           showCancelButton: true,
         }).then(async (result) => {
           if (result.isConfirmed) {
-            const body = {
-              file: canvas.toDataURL("image/jpeg"),
-            };
+            canvas.toBlob(async (blob) => {
+              if (!blob) {
+                return window.alert("!!!");
+              }
 
-            const uploadURL = `https://v1.api.haulrest.me/file/aecheck`;
-            const res = await fetch(uploadURL, {
-              method: "POST",
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
-              },
-              body: JSON.stringify(body),
-              signal: AbortSignal.timeout(15000),
+              const formData = new FormData();
+              const fileName = `${Date.now().toString()}.jpg`;
+              formData.append("file", blob, fileName);
+
+              const uploadURL = `https://api.tinyclover.com/file-manager/v1/files/upload/user-image`;
+              const res = await fetch(uploadURL, {
+                method: "POST",
+                headers: {
+                  "X-Access-Token": import.meta.env.VITE_API_KEY,
+                },
+                body: formData,
+                signal: AbortSignal.timeout(15000),
+              });
+              const response = (await res.json()) as APIResponse<{
+                file_name: string;
+                file_size: number;
+                file_url: string;
+                s3_path: string;
+              }>;
+              const link = document.createElement("a");
+
+              document.body.appendChild(link);
+
+              link.href = response.data.file_url;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.click();
             });
-            const url = ((await res.json()) as APIResponse<string>).data;
-            const link = document.createElement("a");
-
-            document.body.appendChild(link);
-
-            link.href = url;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            link.click();
           }
         });
       } else {
