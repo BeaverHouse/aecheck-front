@@ -30,7 +30,7 @@ function ErrorPage() {
       <Button
         variant="contained"
         sx={{ mr: 2 }}
-        href="https://status.haulrest.me"
+        href="https://status.haulrest.me/status/overall"
         target="_blank"
         rel="noopener noreferrer"
         endIcon={<InfoIcon />}

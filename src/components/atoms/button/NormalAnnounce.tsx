@@ -1,10 +1,12 @@
 import { useTranslation } from "react-i18next";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import useTheme from "@mui/material/styles/useTheme";
 import { useState } from "react";
 
 function NormalAnnounce() {
   const { i18n } = useTranslation();
+  const theme = useTheme();
   const [visible, setVisible] = useState(true);
 
   const announceViewed = window.localStorage.getItem("AE_ANNOUNCE_3_2") === "true";
@@ -28,7 +30,22 @@ function NormalAnnounce() {
         window.localStorage.setItem("AE_ANNOUNCE_3_2", "true");
         setVisible(false);
       }}
-      sx={{ maxWidth: "400px", margin: "0 auto", textAlign: "left" }}
+      sx={{
+        maxWidth: "400px",
+        margin: "0 auto",
+        textAlign: "left",
+        backgroundColor: theme.palette.info.main,
+        color: theme.palette.info.dark,
+        "& .MuiAlert-icon": {
+          color: theme.palette.info.dark
+        },
+        "& .MuiAlertTitle-root": {
+          color: theme.palette.info.dark
+        },
+        "& .MuiIconButton-root": {
+          color: theme.palette.info.dark
+        }
+      }}
     >
       <AlertTitle>{title}</AlertTitle>
       <div style={{ whiteSpace: "pre-line" }}>
