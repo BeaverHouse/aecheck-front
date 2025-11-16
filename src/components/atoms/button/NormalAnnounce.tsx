@@ -12,22 +12,20 @@ function NormalAnnounce() {
   const [announceViewed, setAnnounceViewed] = useState(true);
 
   useEffect(() => {
-    const viewed = window.localStorage.getItem("AE_ANNOUNCE_3_2") === "true";
+    const viewed = window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20251116";
     setAnnounceViewed(viewed);
   }, []);
 
   if (announceViewed || !visible) return null;
 
-  const title = i18n.language === "ko"
-    ? "서비스 안내"
-    : "Service Notice";
+  const title = "25.11.16 Update";
 
   const description = i18n.language === "ko"
-    ? "디자인 변경과 커스텀 현현 체크를 추가할 예정입니다. 조금만 더 기다려 주세요."
-    : "Design change and Weapon Tempering check will be added. Please wait a moment.";
+    ? "디자인을 변경하고 결실 현현 체크를 추가했어요. 디자인은 계속 개선할 예정이에요."
+    : "Changed the design and added the weapon tempering check. The design will be improved continuously.";
 
   const handleDismiss = () => {
-    window.localStorage.setItem("AE_ANNOUNCE_3_2", "true");
+    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251116");
     setVisible(false);
   };
 
