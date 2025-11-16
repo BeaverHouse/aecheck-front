@@ -1,0 +1,20 @@
+{
+  "frontend.menu.analysis": "分析",
+  "frontend.menu.check": "チェック",
+  "frontend.menu.link": "リンク集",
+  "frontend.menu.loader": "データ Save & Load",
+  "frontend.menu.loader.description": "現在のデータを保存するか、新しいデータを挿入して下さい。",
+  "frontend.menu.search": "検索",
+  "frontend.menu.settings": "設定",
+  "frontend.server.error": "サーバーは現在オンラインでありません。開発者に報告してください。",
+  "frontend.manifest.weaponTempering": "結実",
+  "frontend.filter.weaponTempering.has-weapon-tempering": "有",
+  "frontend.filter.weaponTempering.no-weapon-tempering": "無",
+  "settings.title": "設定",
+  "settings.description": "表示設定を変更します",
+  "settings.displayMode.title": "キャラクター表示モード",
+  "settings.displayMode.pagination": "ページネーション",
+  "settings.displayMode.paginationDesc": "従来のページ単位のナビゲーション",
+  "settings.displayMode.infiniteScroll": "無限スクロール",
+  "settings.displayMode.infiniteScrollDesc": "スクロールすると自動的にキャラクターを読み込みます"
+}
