@@ -197,21 +197,20 @@ const FilterModal: React.FC = () => {
 
           <PersonalitySelect />
 
-          <div className="flex flex-col gap-1.5">
+          <div className="space-y-1.5">
             <Label className="text-xs font-medium">
               {t("frontend.filter.bookdrop")}
             </Label>
-            <div>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
-                  className="w-full justify-between"
+                  className="w-full justify-between min-h-[36px] h-auto text-xs"
                 >
-                  {dungeon ? t(dungeon) : "Select"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  <span className="text-muted-foreground text-xs">{dungeon ? t(dungeon) : "Select"}</span>
+                  <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50 ml-2" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
@@ -243,7 +242,6 @@ const FilterModal: React.FC = () => {
                 </Command>
               </PopoverContent>
             </Popover>
-            </div>
           </div>
 
           <Button
