@@ -32,8 +32,8 @@ const LegacyTableAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
         }}
       >
         <table
+          className="bg-background text-foreground"
           style={{
-            backgroundColor: "white",
             whiteSpace: "normal",
             textAlign: "center",
           }}

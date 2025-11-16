@@ -53,7 +53,7 @@ function HomePage() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[500px] p-4">
+    <div className="flex flex-col items-center justify-center min-h-[500px] p-4 bg-background">
       <div className="w-full max-w-md mx-auto text-center">
         <h1 className="text-2xl font-semibold mb-2">
           Total Characters : {totalCodes.length + 23}

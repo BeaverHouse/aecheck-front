@@ -33,7 +33,7 @@ function AnalysisPage() {
     }
   };
 
-  return <div className="flex-grow overflow-auto">{component()}</div>;
+  return <div className="flex-grow overflow-auto bg-background">{component()}</div>;
 }
 
 export default AnalysisPage;

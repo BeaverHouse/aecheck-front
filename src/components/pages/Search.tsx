@@ -7,7 +7,7 @@ function SearchPage() {
   const { lastSearchMenu } = useConfigStore();
 
   return (
-    <div className="flex-grow overflow-auto">
+    <div className="flex-grow overflow-auto bg-background">
       {lastSearchMenu === CheckMenuOptions.characters ? (
         <CharacterSearch />
       ) : (

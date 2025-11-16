@@ -72,7 +72,7 @@ function CheckPage() {
   );
 
   return lastCheckMenu === CheckMenuOptions.characters ? (
-    <div className="flex-grow flex flex-col pt-2">
+    <div className="flex-grow flex flex-col pt-2 bg-background">
       <GlobalFilter type={CheckMenuOptions.characters} />
       <Tabs value={lastCheckTab} onValueChange={(v) => updateLastCheckTab(v as CheckTabOptions)} className="w-full flex-grow flex flex-col">
         <div className="flex justify-center w-full mb-4">
@@ -95,7 +95,7 @@ function CheckPage() {
       </Tabs>
     </div>
   ) : (
-    <div className="flex-grow flex flex-col pt-2">
+    <div className="flex-grow flex flex-col pt-2 bg-background">
       <GlobalFilter type={CheckMenuOptions.buddies} />
       <div className="flex-grow overflow-auto">
         <BuddyDashboard />

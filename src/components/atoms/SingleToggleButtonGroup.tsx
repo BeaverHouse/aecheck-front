@@ -39,7 +39,7 @@ function SingleToggleButtonGroup<T extends string | number | boolean>({
               !isFirst && !isLast && "rounded-none",
               isFirst && "rounded-r-none",
               isLast && "rounded-l-none",
-              !isFirst && "border-l",
+              !isFirst && !isSelected && "border-l-0",
               isSelected && "z-10",
               buttonClassName
             )}

@@ -37,12 +37,16 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         element.classList.remove("shadow");
         element.classList.add("temporary");
       });
+
+      // Detect dark mode and set appropriate background color
+      const isDark = document.documentElement.classList.contains('dark');
+
       const canvas = await html2canvas(element, {
         scale: 1.1,
         allowTaint: true,
         useCORS: true,
         windowWidth: tag === "ae-wrapper" ? 1200 : element.clientWidth,
-        backgroundColor: null,
+        backgroundColor: isDark ? '#171717' : '#ffffff',
         ignoreElements: (element) => element.id === "downloader",
       });
 

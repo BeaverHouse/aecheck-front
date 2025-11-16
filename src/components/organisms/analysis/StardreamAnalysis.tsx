@@ -112,7 +112,7 @@ const StardreamAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   );
 
   return (
-    <div id="ae-wrapper" className="m-2 flex flex-col items-center justify-center text-center">
+    <div id="ae-wrapper" className="m-2 flex flex-col items-center justify-center text-center bg-background">
       <p className="m-4 text-base font-medium">
         {t("frontend.analyze.stardream.description")}
       </p>

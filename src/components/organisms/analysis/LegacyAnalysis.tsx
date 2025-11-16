@@ -93,7 +93,7 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   );
 
   return (
-    <div id="ae-wrapper" className="m-2 mt-6 flex flex-col items-center justify-center gap-4">
+    <div id="ae-wrapper" className="m-2 mt-6 flex flex-col items-center justify-center gap-4 bg-background">
       <p className="text-base font-medium">
         {t("frontend.analyze.legacy.description")}
       </p>
@@ -106,8 +106,8 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
             {Object.values(AECategories).map((category) => {
               const filtered = notOwned.filter((char) => char.category === category);
               return filtered.length > 0 ? (
-                <div key={category}>
-                  <h3 className="mt-4 mb-2 flex justify-center items-center text-xl font-semibold">
+                <div key={category} className="mb-6">
+                  <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
                     {t(`frontend.category.${category.toLowerCase()}`)} ({filtered.length})
                   </h3>
                   <Suspense fallback={<Loading />}>
@@ -125,8 +125,8 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
             {Object.values(AECategories).map((category) => {
               const filtered = onlyFour.filter((char) => char.category === category);
               return filtered.length > 0 ? (
-                <div key={category}>
-                  <h3 className="mt-4 mb-2 flex justify-center items-center text-xl font-semibold">
+                <div key={category} className="mb-6">
+                  <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
                     {t(`frontend.category.${category.toLowerCase()}`)} ({filtered.length})
                   </h3>
                   <Suspense fallback={<Loading />}>
@@ -145,8 +145,8 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
               if (style === AECharacterStyles.four) return null;
               const filtered = ccAvailable.filter((char) => char.style === style);
               return filtered.length > 0 ? (
-                <div key={style}>
-                  <h3 className="mt-4 mb-2 flex justify-center items-center text-xl font-semibold">
+                <div key={style} className="mb-6">
+                  <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
                     {style} ({filtered.length})
                   </h3>
                   <Suspense fallback={<Loading />}>
@@ -179,8 +179,8 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
                     val.personalityIds.includes(p)
                   );
                   return filtered.length > 0 ? (
-                    <div key={p}>
-                      <h3 className="mt-4 mb-2 flex justify-center items-center text-xl font-semibold">
+                    <div key={p} className="mb-6">
+                      <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
                         {p.startsWith("personality") ? (
                           <img
                             src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${p}.png`}
