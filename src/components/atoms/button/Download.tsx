@@ -1,5 +1,5 @@
 import React from "react";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import { Download } from "lucide-react";
 import useModalStore from "../../../store/useModalStore";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { ModalType } from "../../../constants/enum";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
-import saveAs from "file-saver";
+import { saveAs } from "file-saver";
 import { isIOS } from "react-device-detect";
 
 const AnnounceSwal = withReactContent(Swal);
@@ -42,7 +42,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         allowTaint: true,
         useCORS: true,
         windowWidth: tag === "ae-wrapper" ? 1200 : element.clientWidth,
-        backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--background').trim() || '#ffffff',
+        backgroundColor: null,
         ignoreElements: (element) => element.id === "downloader",
       });
 
@@ -64,57 +64,74 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             canvas.toBlob(async (blob) => {
-              if (!blob) {
-                return window.alert("!!!");
+              try {
+                if (!blob) {
+                  hideModal();
+                  return window.alert("!!!");
+                }
+
+                const formData = new FormData();
+                const fileName = `${Date.now().toString()}.jpg`;
+                formData.append("file", blob, fileName);
+
+                const uploadURL = `https://api.tinyclover.com/file-manager/v1/files/upload/user-image`;
+                const res = await fetch(uploadURL, {
+                  method: "POST",
+                  headers: {
+                    "X-Access-Token": process.env.NEXT_PUBLIC_API_KEY!,
+                  },
+                  body: formData,
+                  signal: AbortSignal.timeout(15000),
+                });
+                const response = (await res.json()) as APIResponse<{
+                  file_name: string;
+                  file_size: number;
+                  file_url: string;
+                  s3_path: string;
+                }>;
+                const link = document.createElement("a");
+
+                document.body.appendChild(link);
+
+                link.href = response.data.file_url;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.click();
+                hideModal();
+              } catch (error) {
+                console.error("Upload error:", error);
+                hideModal();
+                AnnounceSwal.fire({
+                  icon: "error",
+                  title: "Image Upload Error",
+                  text: "Please try again later.",
+                  confirmButtonText: "Ok",
+                });
               }
-
-              const formData = new FormData();
-              const fileName = `${Date.now().toString()}.jpg`;
-              formData.append("file", blob, fileName);
-
-              const uploadURL = `https://api.tinyclover.com/file-manager/v1/files/upload/user-image`;
-              const res = await fetch(uploadURL, {
-                method: "POST",
-                headers: {
-                  "X-Access-Token": process.env.NEXT_PUBLIC_API_KEY!,
-                },
-                body: formData,
-                signal: AbortSignal.timeout(15000),
-              });
-              const response = (await res.json()) as APIResponse<{
-                file_name: string;
-                file_size: number;
-                file_url: string;
-                s3_path: string;
-              }>;
-              const link = document.createElement("a");
-
-              document.body.appendChild(link);
-
-              link.href = response.data.file_url;
-              link.target = "_blank";
-              link.rel = "noopener noreferrer";
-              link.click();
-            });
+            }, "image/jpeg", 0.95);
+          } else {
+            hideModal();
           }
         });
       } else {
         canvas.toBlob((blob) => {
           if (!blob) {
+            hideModal();
             return window.alert("!!!");
           }
           saveAs(blob, `${Date.now().toString()}${isIOS ? "" : ".jpg"}`);
-        });
+          hideModal();
+        }, "image/jpeg", 0.95);
       }
-    } catch {
+    } catch (error) {
+      console.error("Download error:", error);
+      hideModal();
       AnnounceSwal.fire({
         icon: "error",
         title: "Image Download Error",
         text: "Please try again later.",
         confirmButtonText: "Ok",
       });
-    } finally {
-      hideModal();
     }
   };
 
