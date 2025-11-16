@@ -147,7 +147,7 @@ const CharacterModal: React.FC = () => {
             />
           </picture>
           <div className="flex-grow pl-4">
-            <p className="text-sm font-medium">
+            <p className="text-sm font-medium text-foreground">
               Release: {dayjs(characterData.updateDate).format("YYYY-MM-DD")}
             </p>
           </div>
@@ -169,7 +169,7 @@ const CharacterModal: React.FC = () => {
         {id < 1000 && (
           <div className="flex w-full items-center mb-2">
             {invenIcon()}
-            <p className="text-sm font-medium">
+            <p className="text-sm font-medium text-foreground">
               {t(`frontend.status.${currentInven}`)}
             </p>
           </div>
@@ -183,7 +183,7 @@ const CharacterModal: React.FC = () => {
                 alt="complete"
                 className="w-7 h-7 mr-2"
               />
-              <p className="text-sm font-medium">
+              <p className="text-sm font-medium text-foreground">
                 {t(manifestTag!)} Complete
               </p>
             </div>
@@ -196,7 +196,7 @@ const CharacterModal: React.FC = () => {
               alt="weapon tempering complete"
               className="w-7 h-7 mr-2"
             />
-            <p className="text-sm font-medium">
+            <p className="text-sm font-medium text-foreground">
               {t("frontend.manifest.weaponTempering")} Complete
             </p>
           </div>
@@ -211,14 +211,14 @@ const CharacterModal: React.FC = () => {
               alt="complete"
               className="w-7 h-7 mr-2"
             />
-            <p className="text-sm font-medium">
+            <p className="text-sm font-medium text-foreground">
               {t("frontend.word.staralign")} Complete
             </p>
           </div>
         )}
 
         <div className="flex w-full items-center justify-center flex-col sm:flex-row mb-2 mt-4">
-          <p className="text-sm font-medium m-1">
+          <p className="text-sm font-medium text-foreground m-1">
             {t(`frontend.word.element`)}
           </p>
           <div className="flex-grow m-1 text-center">
@@ -233,7 +233,7 @@ const CharacterModal: React.FC = () => {
                 />
               ))}
           </div>
-          <p className="text-sm font-medium m-1">
+          <p className="text-sm font-medium text-foreground m-1">
             {t(`frontend.word.weapon`)}
           </p>
           <div className="flex-grow m-1 text-center">
@@ -251,7 +251,7 @@ const CharacterModal: React.FC = () => {
         </div>
 
         <div className="flex w-full items-center justify-center flex-col sm:flex-row mb-2">
-          <p className="text-sm font-medium m-1 break-keep">
+          <p className="text-sm font-medium text-foreground m-1 break-keep">
             {t(`frontend.word.personality`)}
           </p>
           <div className="flex-grow text-center">
@@ -271,7 +271,7 @@ const CharacterModal: React.FC = () => {
 
         {characterData.buddy && (
           <div className="flex w-full items-center justify-center flex-col sm:flex-row mb-4 mt-4 break-keep">
-            <p className="text-sm font-medium m-1">
+            <p className="text-sm font-medium text-foreground m-1">
               {t(`frontend.word.buddy`)}
             </p>
             <div className="flex-grow text-center">
@@ -290,7 +290,7 @@ const CharacterModal: React.FC = () => {
                   className="w-[50px] h-[50px] border border-border rounded-[5px] pointer-events-none inline-block"
                 />
               </picture>
-              <p className="text-sm font-medium">
+              <p className="text-sm font-medium text-foreground">
                 {t(characterData.buddy.id)}
               </p>
             </div>
@@ -314,7 +314,7 @@ const CharacterModal: React.FC = () => {
                   className="w-[40px] h-[40px] pointer-events-none inline"
                 />
               </div>
-              <p className="text-base font-medium ml-2">
+              <p className="text-base font-medium text-foreground ml-2">
                 {bookName}
               </p>
             </>
@@ -323,7 +323,7 @@ const CharacterModal: React.FC = () => {
 
         {Array.isArray(characterData.dungeons) && characterData.dungeons.length > 0 && (
           <div className="mt-2 flex flex-col">
-            <p className="text-sm font-bold text-center">
+            <p className="text-sm font-bold text-foreground text-center">
               {t(`frontend.filter.bookdrop`)}
               {characterData.style === AECharacterStyles.four ? " (NS)" : ""}
             </p>

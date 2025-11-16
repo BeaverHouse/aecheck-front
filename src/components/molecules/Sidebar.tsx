@@ -54,9 +54,9 @@ function AECheckSidebar() {
         <Menu className="h-5 w-5" />
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-[240px] flex flex-col h-full">
+        <SheetContent side="left" className="w-[240px] flex flex-col h-full bg-background text-foreground">
           <SheetHeader className="flex flex-row justify-between items-center p-2">
-            <SheetTitle>{AppInfo.name}</SheetTitle>
+            <SheetTitle className="text-foreground">{AppInfo.name}</SheetTitle>
             <SheetClose asChild>
               <Button variant="ghost" size="icon">
                 <X className="h-4 w-4" />
@@ -70,7 +70,7 @@ function AECheckSidebar() {
             <nav className="space-y-1">
               <Button
                 variant="ghost"
-                className="w-full justify-start h-[30px] px-2"
+                className="w-full justify-start h-[30px] px-2 text-foreground hover:bg-accent hover:text-accent-foreground"
                 onClick={() => {
                   router.push("/");
                   setOpen(false);
@@ -86,7 +86,7 @@ function AECheckSidebar() {
                 <Button
                   key={label}
                   variant="ghost"
-                  className="w-full justify-start h-[30px] px-2 mt-1"
+                  className="w-full justify-start h-[30px] px-2 mt-1 text-foreground hover:bg-accent hover:text-accent-foreground"
                   onClick={() => {
                     router.push(`/${label}`);
                     setOpen(false);
@@ -101,7 +101,7 @@ function AECheckSidebar() {
 
               <Button
                 variant="ghost"
-                className="w-full justify-start h-[30px] px-2"
+                className="w-full justify-start h-[30px] px-2 text-foreground hover:bg-accent hover:text-accent-foreground"
                 onClick={() => {
                   setModal(ModalType.settings);
                   setOpen(false);
