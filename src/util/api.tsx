@@ -1,6 +1,6 @@
 export const fetchAPI = async (endpoint: string, options?: RequestInit) => {
-  // Next.js rewrites를 통한 프록시 사용으로 CORS 문제 해결
-  const res = await fetch(`/api/${endpoint}`, {
+  // Static export에서는 외부 API URL 직접 호출
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${endpoint}`, {
     ...options,
     headers: {
       'X-Access-Token': process.env.NEXT_PUBLIC_API_KEY || '',
