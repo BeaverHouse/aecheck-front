@@ -1,3 +1,6 @@
+/**
+ * BuyMeACoffee Button (for sponsor)
+ */
 function BuyMeACoffeeButton() {
   return (
     <a

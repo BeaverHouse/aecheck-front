@@ -8,7 +8,6 @@ import {
   Search,
   BarChart3,
   ExternalLink,
-  Coffee,
   Mail,
   Github,
 } from "lucide-react";
@@ -20,8 +19,8 @@ import { AppInfo } from "../../constants";
 import Loading from "../atoms/Loading";
 import { fetchAPI } from "../../util/api";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import BuyMeACoffeeButton from "../atoms/button/BuyMeACoffee";
 
 const ExternalLinks = [
   {
@@ -183,19 +182,7 @@ function HomePage() {
             </div>
           </div>
 
-          {/* Buy Me a Coffee */}
-          <div className="flex justify-center mb-8">
-            <Button
-              variant="outline"
-              className="gap-2 hover:bg-yellow-500/10 hover:border-yellow-500/50 transition-colors"
-              onClick={() =>
-                window.open("https://www.buymeacoffee.com/haulrest", "_blank")
-              }
-            >
-              <Coffee className="w-4 h-4 text-yellow-600" />
-              <span>Buy me a coffee</span>
-            </Button>
-          </div>
+          <BuyMeACoffeeButton />
         </div>
       </div>
 
