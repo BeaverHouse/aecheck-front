@@ -14,6 +14,7 @@ function ToggleThemeButton() {
         onCheckedChange={(checked) =>
           toggleTheme(checked ? ThemeOptions.dark : ThemeOptions.light)
         }
+        className="data-[state=checked]:bg-white/50 data-[state=checked]:border-white/70"
       />
       <Moon className="w-5 h-5" />
     </div>
