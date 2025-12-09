@@ -2,7 +2,6 @@ export const MenuOptions = {
   check: "check",
   search: "search",
   analysis: "analysis",
-  link: "link",
 } as const;
 
 export const ThemeOptions = {

@@ -1,11 +1,9 @@
 {
   "frontend.menu.analysis": "分析",
   "frontend.menu.check": "チェック",
-  "frontend.menu.link": "リンク集",
   "frontend.menu.loader": "データ Save & Load",
   "frontend.menu.loader.description": "現在のデータを保存するか、新しいデータを挿入して下さい。",
   "frontend.menu.search": "検索",
-  "frontend.menu.settings": "設定",
   "frontend.server.error": "サーバーは現在オンラインでありません。開発者に報告してください。",
   "frontend.manifest.weaponTempering": "結実",
   "frontend.filter.weaponTempering.has-weapon-tempering": "有",

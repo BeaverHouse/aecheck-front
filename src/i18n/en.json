@@ -1,11 +1,9 @@
 {
   "frontend.menu.analysis": "Analysis",
   "frontend.menu.check": "Check",
-  "frontend.menu.link": "Other Links",
   "frontend.menu.loader": "Data Save & Load",
   "frontend.menu.loader.description": "Save the current data or insert new data to textbox.",
   "frontend.menu.search": "Search",
-  "frontend.menu.settings": "Settings",
   "frontend.server.error": "Server is currently offline. Please report this issue to developer.",
   "frontend.manifest.weaponTempering": "Weapon Tempering",
   "frontend.filter.weaponTempering.has-weapon-tempering": "Yes",

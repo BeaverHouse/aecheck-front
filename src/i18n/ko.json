@@ -1,11 +1,9 @@
 {
   "frontend.menu.analysis": "분석",
   "frontend.menu.check": "체크",
-  "frontend.menu.link": "기타 링크",
   "frontend.menu.loader": "데이터 저장 & 불러오기",
   "frontend.menu.loader.description": "현재 데이터를 저장하거나, 새로운 데이터를 넣어 주세요.",
   "frontend.menu.search": "검색",
-  "frontend.menu.settings": "설정",
   "frontend.server.error": "서버가 연결되지 않았습니다. 관리자에게 문의하세요.",
   "frontend.manifest.weaponTempering": "무기 결실 현현",
   "frontend.filter.weaponTempering.has-weapon-tempering": "O",

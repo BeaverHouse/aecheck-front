@@ -1,7 +1,15 @@
 "use client";
 
 import React from "react";
-import { CheckCircle, Search, BarChart3, Link as LinkIcon, Home, Settings, Menu, X } from "lucide-react";
+import {
+  CheckCircle,
+  Search,
+  BarChart3,
+  Home,
+  Settings,
+  Menu,
+  X,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import LanguageButton from "../atoms/button/Language";
@@ -37,10 +45,6 @@ function AECheckSidebar() {
       label: MenuOptions.analysis,
       icon: <BarChart3 className="w-5 h-5" />,
     },
-    {
-      label: MenuOptions.link,
-      icon: <LinkIcon className="w-5 h-5" />,
-    },
   ];
 
   return (
@@ -54,7 +58,10 @@ function AECheckSidebar() {
         <Menu className="h-5 w-5" />
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-[240px] flex flex-col h-full bg-background text-foreground">
+        <SheetContent
+          side="left"
+          className="w-[240px] flex flex-col h-full bg-background text-foreground"
+        >
           <SheetHeader className="flex flex-row justify-between items-center p-2">
             <SheetTitle className="text-foreground">{AppInfo.name}</SheetTitle>
             <SheetClose asChild>
