@@ -3,7 +3,7 @@
 import LanguageButton from "../atoms/button/Language";
 import { useQuery } from "@tanstack/react-query";
 import { LanguageOptions, MenuOptions, ModalType } from "../../constants/enum";
-import { CheckCircle, Search, BarChart3, Mail, Github } from "lucide-react";
+import { CheckCircle, Search, BarChart3 } from "lucide-react";
 import useModalStore from "../../store/useModalStore";
 import i18n from "../../i18n";
 import { useRouter } from "next/navigation";
@@ -181,28 +181,6 @@ function HomePage() {
           <BuyMeACoffeeButton />
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-border/50 bg-background/80 backdrop-blur-sm py-4 mt-auto">
-        <div className="flex items-center justify-center gap-6 text-muted-foreground">
-          <a
-            href="https://github.com/BeaverHouse/aecheck-front"
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-1.5 text-xs hover:text-foreground transition-colors"
-          >
-            <Github className="w-4 h-4" />
-            <span>GitHub</span>
-          </a>
-          <a
-            href="mailto:haulrest@gmail.com"
-            className="flex items-center gap-1.5 text-xs hover:text-foreground transition-colors"
-          >
-            <Mail className="w-4 h-4" />
-            <span>Contact</span>
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

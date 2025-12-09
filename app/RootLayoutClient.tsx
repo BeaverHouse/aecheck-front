@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import Swal from "sweetalert2";
 import { getNumber } from "@/util/func";
 import { cn } from "@/lib/utils";
+import Footer from "@/components/atoms/Footer";
 
 export default function RootLayoutClient({
   children,
@@ -111,28 +112,33 @@ export default function RootLayoutClient({
   // Apply dark mode and color blind mode classes
   useEffect(() => {
     if (theme === ThemeOptions.dark) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, [theme]);
 
   useEffect(() => {
     if (colorBlindMode) {
-      document.documentElement.classList.add('color-blind');
+      document.documentElement.classList.add("color-blind");
     } else {
-      document.documentElement.classList.remove('color-blind');
+      document.documentElement.classList.remove("color-blind");
     }
   }, [colorBlindMode]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={cn("min-h-screen bg-background text-foreground")}>
+      <div
+        className={cn(
+          "min-h-screen bg-background text-foreground flex flex-col"
+        )}
+      >
         <GlobalModal type={modalType} />
         <AECheckMenu />
         <NormalAnnounce />
         <div id="back-to-top-anchor" />
-        {children}
+        <div className="flex-1">{children}</div>
+        <Footer />
         <ScrollTop>
           <Button
             size="icon"
