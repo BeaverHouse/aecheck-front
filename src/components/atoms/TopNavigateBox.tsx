@@ -39,7 +39,13 @@ const TopNavigateBox: React.FC = () => {
     setCategory(currentCategory);
   }, [pathname]);
 
-  if (!category || (category !== MenuOptions.check && category !== MenuOptions.search && category !== MenuOptions.analysis)) return null;
+  if (
+    !category ||
+    (category !== MenuOptions.check &&
+      category !== MenuOptions.search &&
+      category !== MenuOptions.analysis)
+  )
+    return null;
 
   const currentOption = {
     [MenuOptions.analysis]: lastAnalysisMenu,
@@ -48,9 +54,7 @@ const TopNavigateBox: React.FC = () => {
   }[category];
 
   const options =
-    category === MenuOptions.analysis
-      ? AnalysisMenuOptions
-      : CheckMenuOptions;
+    category === MenuOptions.analysis ? AnalysisMenuOptions : CheckMenuOptions;
 
   const handleChange = (value: string) => {
     // Check if it's a menu navigation
@@ -86,7 +90,11 @@ const TopNavigateBox: React.FC = () => {
         ))}
         <SelectSeparator />
         {Object.values(MenuOptions).map((menu) => (
-          <SelectItem key={menu} value={menu} className="text-secondary-foreground">
+          <SelectItem
+            key={menu}
+            value={menu}
+            className="text-secondary-foreground"
+          >
             {t(`frontend.menu.${menu}`)}
           </SelectItem>
         ))}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { X, Info } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -12,44 +11,47 @@ function NormalAnnounce() {
   const [announceViewed, setAnnounceViewed] = useState(true);
 
   useEffect(() => {
-    const viewed = window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20251116";
+    const viewed =
+      window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20251209";
     setAnnounceViewed(viewed);
   }, []);
 
   if (announceViewed || !visible) return null;
 
-  const title = "25.11.16 Update";
+  const title = "25.12.09 Update";
 
-  const description = i18n.language === "ko"
-    ? "디자인을 변경하고 결실 현현 체크를 추가했어요. 디자인은 계속 개선할 예정이에요."
-    : "Changed the design and added the weapon tempering check. The design will be improved continuously.";
+  const description =
+    i18n.language === "ko"
+      ? "디자인 1차 개선이 이루어졌어요. 디자인은 계속 개선할 예정이에요."
+      : "Design 1st improvement is complete. The design will be improved continuously.";
 
   const handleDismiss = () => {
-    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251116");
+    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251209");
     setVisible(false);
   };
 
   return (
-    <div className="relative max-w-md mx-auto">
-      <Alert
-        id="normal-announce"
-        className="text-left bg-blue-500 text-white border-blue-600"
-      >
-        <Info className="h-4 w-4 !text-white" />
-        <AlertTitle className="text-white pr-8">{title}</AlertTitle>
-        <AlertDescription className="whitespace-pre-line text-white pr-8">
-          {description}
-        </AlertDescription>
-      </Alert>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-2 top-2 h-8 w-8 text-white hover:bg-blue-600/50 hover:text-white rounded-sm"
-        onClick={handleDismiss}
-        aria-label="Close announcement"
-      >
-        <X className="h-4 w-4" />
-      </Button>
+    <div className="sticky top-[60px] z-40 w-full border-b bg-accent border-primary/30">
+      <div className="flex items-center justify-between px-4 py-2 max-w-4xl mx-auto">
+        <div className="flex items-center gap-3">
+          <Info className="h-4 w-4 shrink-0 text-foreground" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+            <span className="font-semibold text-sm text-foreground">
+              {title}
+            </span>
+            <span className="text-sm text-muted-foreground">{description}</span>
+          </div>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6 shrink-0 text-foreground hover:bg-primary/20"
+          onClick={handleDismiss}
+          aria-label="Close announcement"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }

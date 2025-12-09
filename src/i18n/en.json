@@ -1,20 +1,20 @@
 {
   "frontend.menu.analysis": "Analysis",
   "frontend.menu.check": "Check",
-  "frontend.menu.link": "Other Links",
   "frontend.menu.loader": "Data Save & Load",
   "frontend.menu.loader.description": "Save the current data or insert new data to textbox.",
   "frontend.menu.search": "Search",
-  "frontend.menu.settings": "Settings",
   "frontend.server.error": "Server is currently offline. Please report this issue to developer.",
   "frontend.manifest.weaponTempering": "Weapon Tempering",
   "frontend.filter.weaponTempering.has-weapon-tempering": "Yes",
   "frontend.filter.weaponTempering.no-weapon-tempering": "No",
   "settings.title": "Settings",
-  "settings.description": "Configure your viewing preferences",
+  "settings.description": "Configure display settings, save data, or load data.",
   "settings.displayMode.title": "Character Display Mode",
   "settings.displayMode.pagination": "Pagination",
   "settings.displayMode.paginationDesc": "Traditional page-by-page navigation",
   "settings.displayMode.infiniteScroll": "Infinite Scroll",
-  "settings.displayMode.infiniteScrollDesc": "Automatically load more characters as you scroll"
+  "settings.displayMode.infiniteScrollDesc": "Automatically load more characters as you scroll",
+  "settings.colorBlindMode": "Color Blind Mode",
+  "settings.colorBlindModeDesc": "Use blue instead of green colors"
 }
