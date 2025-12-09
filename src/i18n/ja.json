@@ -11,7 +11,7 @@
   "frontend.filter.weaponTempering.has-weapon-tempering": "有",
   "frontend.filter.weaponTempering.no-weapon-tempering": "無",
   "settings.title": "設定",
-  "settings.description": "表示設定を変更します",
+  "settings.description": "表示設定を変更したり、データを保存したり、読み込んだりします。",
   "settings.displayMode.title": "キャラクター表示モード",
   "settings.displayMode.pagination": "ページネーション",
   "settings.displayMode.paginationDesc": "従来のページ単位のナビゲーション",

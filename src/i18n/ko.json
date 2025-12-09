@@ -11,7 +11,7 @@
   "frontend.filter.weaponTempering.has-weapon-tempering": "O",
   "frontend.filter.weaponTempering.no-weapon-tempering": "X",
   "settings.title": "설정",
-  "settings.description": "화면 표시 설정을 변경합니다",
+  "settings.description": "화면 표시를 변경하고, 데이터를 저장하거나 불러올 수 있어요",
   "settings.displayMode.title": "캐릭터 표시 모드",
   "settings.displayMode.pagination": "페이지네이션",
   "settings.displayMode.paginationDesc": "전통적인 페이지 단위 탐색",

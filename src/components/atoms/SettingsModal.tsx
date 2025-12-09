@@ -179,28 +179,28 @@ const SettingsModal: React.FC = () => {
           className="w-full"
         >
           {/* Display Settings */}
-          <AccordionItem value="display" className="border-b-0">
+          <AccordionItem value="display">
             <AccordionTrigger className="text-base font-semibold hover:no-underline rounded-lg px-3 hover:bg-accent/50">
               <div className="flex items-center gap-2">
                 <Monitor className="w-4 h-4 text-muted-foreground" />
-                <span className="text-foreground">Display Settings</span>
+                <span className="text-foreground">Display</span>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-1 pt-4 pb-2">
+            <AccordionContent className="px-3 pt-1 pb-4">
               <div className="space-y-4">
                 {/* Display Mode */}
-                <div className="space-y-3">
+                <div className="space-y-1">
                   <Label className="text-sm font-medium text-muted-foreground">
                     {t("settings.displayMode.title")}
                   </Label>
                   <RadioGroup
                     value={displayMode}
                     onValueChange={handleDisplayModeChange}
-                    className="space-y-2"
+                    className="mt-1"
                   >
                     <label
                       htmlFor="pagination"
-                      className={`flex items-center space-x-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                      className={`flex items-center space-x-3 p-2 rounded-lg border cursor-pointer transition-all ${
                         displayMode === DisplayMode.pagination
                           ? "border-primary bg-primary/5 ring-1 ring-primary/20"
                           : "hover:bg-accent/50"
@@ -222,7 +222,7 @@ const SettingsModal: React.FC = () => {
 
                     <label
                       htmlFor="infiniteScroll"
-                      className={`flex items-center space-x-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                      className={`flex items-center space-x-3 p-2 rounded-lg border cursor-pointer transition-all ${
                         displayMode === DisplayMode.infiniteScroll
                           ? "border-primary bg-primary/5 ring-1 ring-primary/20"
                           : "hover:bg-accent/50"
@@ -284,17 +284,17 @@ const SettingsModal: React.FC = () => {
           </AccordionItem>
 
           {/* Appearance */}
-          <AccordionItem value="appearance" className="border-b-0">
+          <AccordionItem value="appearance">
             <AccordionTrigger className="text-base font-semibold hover:no-underline rounded-lg px-3 hover:bg-accent/50">
               <div className="flex items-center gap-2">
                 <Palette className="w-4 h-4 text-muted-foreground" />
-                <span className="text-foreground">Appearance</span>
+                <span className="text-foreground">Theme</span>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-1 pt-4 pb-2">
+            <AccordionContent className="px-3 pt-1 pb-4">
               <div className="space-y-3">
                 {/* Language */}
-                <div className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
+                <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-foreground">
                       Language
@@ -329,7 +329,7 @@ const SettingsModal: React.FC = () => {
                 </div>
 
                 {/* Theme */}
-                <div className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
+                <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2">
                       <Sun className="w-4 h-4 text-amber-500" />
@@ -337,7 +337,7 @@ const SettingsModal: React.FC = () => {
                       <Moon className="w-4 h-4 text-indigo-400" />
                     </div>
                     <span className="text-sm font-medium text-foreground">
-                      Theme
+                      Dark Mode
                     </span>
                   </div>
                   <Switch
@@ -347,7 +347,7 @@ const SettingsModal: React.FC = () => {
                 </div>
 
                 {/* Color Blind Mode */}
-                <div className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
+                <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
                   <div className="flex-1 min-w-0 pr-4">
                     <span className="text-sm font-medium text-foreground block">
                       {t("settings.colorBlindMode")}
@@ -366,7 +366,7 @@ const SettingsModal: React.FC = () => {
           </AccordionItem>
 
           {/* Data Management */}
-          <AccordionItem value="data" className="border-b-0">
+          <AccordionItem value="data">
             <AccordionTrigger className="text-base font-semibold hover:no-underline rounded-lg px-3 hover:bg-accent/50">
               <div className="flex items-center gap-2">
                 <Scroll className="w-4 h-4 text-muted-foreground" />
@@ -375,7 +375,7 @@ const SettingsModal: React.FC = () => {
                 </span>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-1 pt-4 pb-2">
+            <AccordionContent className="px-3 pt-1 pb-4">
               <div className="space-y-4">
                 <p className="text-sm text-muted-foreground bg-accent/30 p-3 rounded-lg">
                   {t("frontend.menu.loader.description")}
