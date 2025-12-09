@@ -11,20 +11,22 @@ function NormalAnnounce() {
   const [announceViewed, setAnnounceViewed] = useState(true);
 
   useEffect(() => {
-    const viewed = window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20251116";
+    const viewed =
+      window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20251209";
     setAnnounceViewed(viewed);
   }, []);
 
   if (announceViewed || !visible) return null;
 
-  const title = "25.11.16 Update";
+  const title = "25.12.09 Update";
 
-  const description = i18n.language === "ko"
-    ? "디자인을 변경하고 결실 현현 체크를 추가했어요. 디자인은 계속 개선할 예정이에요."
-    : "Changed the design and added the weapon tempering check. The design will be improved continuously.";
+  const description =
+    i18n.language === "ko"
+      ? "디자인 1차 개선이 이루어졌어요. 디자인은 계속 개선할 예정이에요."
+      : "Design 1st improvement is complete. The design will be improved continuously.";
 
   const handleDismiss = () => {
-    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251116");
+    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251209");
     setVisible(false);
   };
 
@@ -37,9 +39,7 @@ function NormalAnnounce() {
             <span className="font-semibold text-sm text-foreground">
               {title}
             </span>
-            <span className="text-sm text-muted-foreground">
-              {description}
-            </span>
+            <span className="text-sm text-muted-foreground">{description}</span>
           </div>
         </div>
         <Button
