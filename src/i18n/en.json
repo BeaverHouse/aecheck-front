@@ -16,5 +16,7 @@
   "settings.displayMode.pagination": "Pagination",
   "settings.displayMode.paginationDesc": "Traditional page-by-page navigation",
   "settings.displayMode.infiniteScroll": "Infinite Scroll",
-  "settings.displayMode.infiniteScrollDesc": "Automatically load more characters as you scroll"
+  "settings.displayMode.infiniteScrollDesc": "Automatically load more characters as you scroll",
+  "settings.colorBlindMode": "Color Blind Mode",
+  "settings.colorBlindModeDesc": "Use blue instead of green colors"
 }

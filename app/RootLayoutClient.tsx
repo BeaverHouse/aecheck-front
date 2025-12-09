@@ -23,7 +23,7 @@ export default function RootLayoutClient({
 }: {
   children: React.ReactNode;
 }) {
-  const { theme } = useConfigStore();
+  const { theme, colorBlindMode } = useConfigStore();
   const { modalType } = useModalStore();
   const { t } = useTranslation();
   const { loadSaveData } = useCheckStore();
@@ -108,7 +108,7 @@ export default function RootLayoutClient({
     if (t("frontend.message.migrate") !== "frontend.message.migrate") migrate();
   }, []);
 
-  // Apply dark mode class to body
+  // Apply dark mode and color blind mode classes
   useEffect(() => {
     if (theme === ThemeOptions.dark) {
       document.documentElement.classList.add('dark');
@@ -117,13 +117,21 @@ export default function RootLayoutClient({
     }
   }, [theme]);
 
+  useEffect(() => {
+    if (colorBlindMode) {
+      document.documentElement.classList.add('color-blind');
+    } else {
+      document.documentElement.classList.remove('color-blind');
+    }
+  }, [colorBlindMode]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className={cn("min-h-screen bg-background text-foreground")}>
         <GlobalModal type={modalType} />
         <AECheckMenu />
-        <div id="back-to-top-anchor" className="h-[20px]" />
         <NormalAnnounce />
+        <div id="back-to-top-anchor" />
         {children}
         <ScrollTop>
           <Button

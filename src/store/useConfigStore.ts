@@ -13,6 +13,7 @@ interface ConfigState {
   popupOnCheck: PopupOnCheckOptions;
   theme: ThemeOptions;
   displayMode: DisplayMode;
+  colorBlindMode: boolean;
   lastCheckMenu: CheckMenuOptions;
   lastCheckTab: CheckTabOptions;
   lastSearchMenu: CheckMenuOptions;
@@ -20,6 +21,7 @@ interface ConfigState {
   setPopupOnCheck: (popup: PopupOnCheckOptions) => void;
   toggleTheme: (theme: ThemeOptions) => void;
   setDisplayMode: (mode: DisplayMode) => void;
+  setColorBlindMode: (enabled: boolean) => void;
   updateLastCheckMenu: (option: CheckMenuOptions) => void;
   updateLastCheckTab: (option: CheckTabOptions) => void;
   updateLastSearchMenu: (option: CheckMenuOptions) => void;
@@ -32,6 +34,7 @@ const useConfigStore = create(
       popupOnCheck: PopupOnCheckOptions.fourOnly,
       theme: ThemeOptions.light,
       displayMode: DisplayMode.pagination,
+      colorBlindMode: false,
       lastCheckMenu: CheckMenuOptions.characters,
       lastCheckTab: CheckTabOptions.inven,
       lastSearchMenu: CheckMenuOptions.characters,
@@ -49,6 +52,11 @@ const useConfigStore = create(
         set((state) => ({
           ...state,
           displayMode: mode,
+        })),
+      setColorBlindMode: (enabled) =>
+        set((state) => ({
+          ...state,
+          colorBlindMode: enabled,
         })),
       updateLastCheckMenu: (option) =>
         set((state) => ({
@@ -75,9 +83,15 @@ const useConfigStore = create(
       name: "AE_CONFIG_V3_1",
       storage: createJSONStorage(() => localStorage),
       migrate: (persistedState: unknown) => {
-        // Add displayMode to existing configs if it doesn't exist
-        if (persistedState && typeof persistedState === 'object' && 'displayMode' in persistedState === false) {
-          (persistedState as ConfigState).displayMode = DisplayMode.pagination;
+        if (persistedState && typeof persistedState === 'object') {
+          // Add displayMode to existing configs if it doesn't exist
+          if ('displayMode' in persistedState === false) {
+            (persistedState as ConfigState).displayMode = DisplayMode.pagination;
+          }
+          // Add colorBlindMode to existing configs if it doesn't exist
+          if ('colorBlindMode' in persistedState === false) {
+            (persistedState as ConfigState).colorBlindMode = false;
+          }
         }
         return persistedState as ConfigState;
       },

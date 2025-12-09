@@ -3,14 +3,7 @@
 import LanguageButton from "../atoms/button/Language";
 import { useQuery } from "@tanstack/react-query";
 import { LanguageOptions, MenuOptions, ModalType } from "../../constants/enum";
-import {
-  CheckCircle,
-  Search,
-  BarChart3,
-  ExternalLink,
-  Mail,
-  Github,
-} from "lucide-react";
+import { CheckCircle, Search, BarChart3, Mail, Github } from "lucide-react";
 import useModalStore from "../../store/useModalStore";
 import i18n from "../../i18n";
 import { useRouter } from "next/navigation";
@@ -20,7 +13,13 @@ import Loading from "../atoms/Loading";
 import { fetchAPI } from "../../util/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import BuyMeACoffeeButton from "../atoms/button/BuyMeACoffee";
+import {
+  HybridTooltip,
+  HybridTooltipContent,
+  HybridTooltipTrigger,
+} from "../ui/custom/hybrid-tooltip";
 
 const ExternalLinks = [
   {
@@ -64,17 +63,14 @@ function HomePage() {
     {
       label: MenuOptions.check,
       icon: <CheckCircle className="w-7 h-7" />,
-      color: "from-emerald-500/20 to-teal-500/20",
     },
     {
       label: MenuOptions.search,
       icon: <Search className="w-7 h-7" />,
-      color: "from-blue-500/20 to-cyan-500/20",
     },
     {
       label: MenuOptions.analysis,
       icon: <BarChart3 className="w-7 h-7" />,
-      color: "from-purple-500/20 to-pink-500/20",
     },
   ];
 
@@ -107,7 +103,7 @@ function HomePage() {
             {menuData.map((menu) => (
               <Card
                 key={menu.label}
-                className={`cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg bg-gradient-to-br ${menu.color} backdrop-blur-sm border-border/50`}
+                className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg bg-card backdrop-blur-sm border-border"
                 onClick={() => router.push(`/${menu.label}`)}
               >
                 <CardContent className="flex flex-col items-center justify-center h-[100px] p-4">
@@ -149,37 +145,37 @@ function HomePage() {
             <LanguageButton />
           </div>
 
-          {/* External Resources Section */}
+          {/* Other Sites Section */}
           <div className="mb-6">
             <h2 className="text-sm font-semibold text-muted-foreground mb-3 text-center uppercase tracking-wider">
-              Resources
+              Other Sites
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {ExternalLinks.map((data) => (
-                <a
-                  key={data.label}
-                  href={data.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block"
-                >
-                  <Card className="cursor-pointer hover:bg-accent/50 transition-all duration-200 hover:scale-102 backdrop-blur-sm border-border/50">
-                    <CardContent className="flex items-center gap-3 p-4 h-[70px]">
-                      <Avatar className="w-10 h-10 shrink-0">
-                        <AvatarImage
-                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${data.label}.jpg`}
-                          alt={data.label}
-                        />
-                      </Avatar>
-                      <span className="text-sm font-medium flex-grow truncate">
-                        {data.desc}
-                      </span>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground shrink-0" />
-                    </CardContent>
-                  </Card>
-                </a>
-              ))}
-            </div>
+            <TooltipProvider>
+              <div className="flex justify-center gap-4">
+                {ExternalLinks.map((data) => (
+                  <HybridTooltip key={data.label}>
+                    <HybridTooltipTrigger>
+                      <a
+                        href={data.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition-transform duration-200 hover:scale-110"
+                      >
+                        <Avatar className="w-12 h-12 ring-2 ring-border hover:ring-primary cursor-pointer">
+                          <AvatarImage
+                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${data.label}.jpg`}
+                            alt={data.desc}
+                          />
+                        </Avatar>
+                      </a>
+                    </HybridTooltipTrigger>
+                    <HybridTooltipContent>
+                      <p>{data.desc}</p>
+                    </HybridTooltipContent>
+                  </HybridTooltip>
+                ))}
+              </div>
+            </TooltipProvider>
           </div>
 
           <BuyMeACoffeeButton />

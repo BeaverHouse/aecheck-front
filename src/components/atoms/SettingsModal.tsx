@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/accordion";
 
 const SettingsModal: React.FC = () => {
-  const { displayMode, setDisplayMode, popupOnCheck, setPopupOnCheck, theme, toggleTheme } = useConfigStore();
+  const { displayMode, setDisplayMode, popupOnCheck, setPopupOnCheck, theme, toggleTheme, colorBlindMode, setColorBlindMode } = useConfigStore();
   const { inven, grasta, manifest, staralign, buddy, weaponTempering, loadSaveData } = useCheckStore();
   const { hideModal } = useModalStore();
   const { t } = useTranslation();
@@ -234,6 +234,18 @@ const SettingsModal: React.FC = () => {
                 <Switch
                   checked={theme === ThemeOptions.dark}
                   onCheckedChange={handleThemeToggle}
+                />
+              </div>
+
+              {/* Color Blind Mode */}
+              <div className="flex items-center justify-between p-3 rounded-lg border">
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">{t("settings.colorBlindMode")}</span>
+                  <span className="text-xs text-muted-foreground">{t("settings.colorBlindModeDesc")}</span>
+                </div>
+                <Switch
+                  checked={colorBlindMode}
+                  onCheckedChange={setColorBlindMode}
                 />
               </div>
             </AccordionContent>
