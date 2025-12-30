@@ -205,38 +205,46 @@ const CharacterModal: React.FC = () => {
           </div>
         )}
 
-        <div className="flex w-full items-center justify-center flex-col sm:flex-row mb-2 mt-4">
-          <p className="text-sm font-medium text-foreground m-1">
-            {t(`frontend.word.element`)}
-          </p>
-          <div className="flex-grow m-1 text-center">
-            {Array.isArray(characterData.personalityIds) &&
-              characterData.personalityIds
-                .filter((id) => id.startsWith("personality00"))
-                .map((id) => (
-                  <img
-                    key={id}
-                    src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
-                    alt={id}
-                    className="inline w-[30px] h-[30px] pointer-events-none"
-                  />
-                ))}
+        <div className="flex w-full items-center justify-center gap-4 mb-2 mt-4">
+          {/* Attributes Group */}
+          <div className="flex flex-col items-center flex-1">
+            <p className="text-sm font-medium text-foreground mb-1">
+              {t(`frontend.word.element`)}
+            </p>
+            <div className="flex justify-center flex-wrap gap-1">
+              {Array.isArray(characterData.personalityIds) &&
+                characterData.personalityIds
+                  .filter((id) => id.startsWith("personality00"))
+                  .map((id) => (
+                    <img
+                      key={id}
+                      src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
+                      alt={id}
+                      className="w-[30px] h-[30px] pointer-events-none"
+                    />
+                  ))}
+            </div>
           </div>
-          <p className="text-sm font-medium text-foreground m-1">
-            {t(`frontend.word.weapon`)}
-          </p>
-          <div className="flex-grow m-1 text-center">
-            {Array.isArray(characterData.personalityIds) &&
-              characterData.personalityIds
-                .filter((id) => id.startsWith("personality01"))
-                .map((id) => (
-                  <img
-                    key={id}
-                    src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
-                    alt={id}
-                    className="inline w-[30px] h-[30px] pointer-events-none"
-                  />
-                ))}
+
+          {/* Divider if needed or just gap */}
+
+          <div className="flex flex-col items-center flex-1">
+            <p className="text-sm font-medium text-foreground mb-1">
+              {t(`frontend.word.weapon`)}
+            </p>
+            <div className="flex justify-center flex-wrap gap-1">
+              {Array.isArray(characterData.personalityIds) &&
+                characterData.personalityIds
+                  .filter((id) => id.startsWith("personality01"))
+                  .map((id) => (
+                    <img
+                      key={id}
+                      src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
+                      alt={id}
+                      className="w-[30px] h-[30px] pointer-events-none"
+                    />
+                  ))}
+            </div>
           </div>
         </div>
 
