@@ -34,11 +34,6 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
     .filter((char) => getNumber(char) < 1000)
     .sort((a, b) => a.id.localeCompare(b.id));
 
-  /**
-   * 1. 없어야 함
-   * 2. inven과 클체가능 목록이 겹치는 게 없어야 함
-   * 3. 본인 id 앞에 같은 code가 없을 경우만 표시
-   */
   const notOwned = baseCharacters.filter(
     (char, idx) =>
       getInvenStatus(allCharacters, char, inven) === InvenStatus.notOwned &&
@@ -70,14 +65,6 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
 
   const handleSort = (checked: boolean) => setWeaponSort(checked);
 
-  const CollapseOptions = [
-    {
-      label: "frontend.analyze.legacy.owned",
-      value: owned,
-      part: WeaponSort ? AEData.weaponTags : AEData.elementTags,
-    },
-  ];
-
   const renderCharacterGrid = (characters: CharacterSummary[]) => (
     <div className="grid grid-cols-[repeat(auto-fill,75px)] justify-center gap-4">
       {characters.map((c) => (
@@ -92,113 +79,177 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
     </div>
   );
 
+  const renderCategorySection = (
+    characters: CharacterSummary[],
+    categories: AECategories[]
+  ) => (
+    <div className="space-y-6">
+      {categories.map((category) => {
+        const filtered = characters.filter(
+          (char) => char.category === category
+        );
+        if (filtered.length === 0) return null;
+        return (
+          <div key={category}>
+            <h4 className="flex items-center gap-2 text-base font-semibold mb-3 pb-2 border-b border-border text-foreground">
+              {t(`frontend.category.${category.toLowerCase()}`)}
+              <span className="text-muted-foreground text-sm font-normal">
+                ({filtered.length})
+              </span>
+            </h4>
+            <Suspense fallback={<Loading />}>
+              {renderCharacterGrid(filtered)}
+            </Suspense>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  const renderStyleSection = (characters: CharacterSummary[]) => (
+    <div className="space-y-6">
+      {Object.values(AECharacterStyles).map((style) => {
+        if (style === AECharacterStyles.four) return null;
+        const filtered = characters.filter((char) => char.style === style);
+        if (filtered.length === 0) return null;
+        return (
+          <div key={style}>
+            <h4 className="flex items-center gap-2 text-base font-semibold mb-3 pb-2 border-b border-border text-foreground">
+              {style}
+              <span className="text-muted-foreground text-sm font-normal">
+                ({filtered.length})
+              </span>
+            </h4>
+            <Suspense fallback={<Loading />}>
+              {renderCharacterGrid(filtered)}
+            </Suspense>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  const renderOwnedSection = (characters: CharacterSummary[]) => {
+    const parts = WeaponSort ? AEData.weaponTags : AEData.elementTags;
+    return (
+      <div className="space-y-6">
+        {parts.map((p) => {
+          const filtered = characters.filter((val) =>
+            val.personalityIds.includes(p)
+          );
+          if (filtered.length === 0) return null;
+          return (
+            <div key={p}>
+              <h4 className="flex items-center gap-2 text-base font-semibold mb-3 pb-2 border-b border-border text-foreground">
+                {p.startsWith("personality") && (
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${p}.png`}
+                    alt={p}
+                    className="w-6 h-6"
+                  />
+                )}
+                {t(p)}
+                <span className="text-muted-foreground text-sm font-normal">
+                  ({filtered.length})
+                </span>
+              </h4>
+              <Suspense fallback={<Loading />}>
+                {renderCharacterGrid(filtered)}
+              </Suspense>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
-    <div id="ae-wrapper" className="m-2 mt-6 flex flex-col items-center justify-center gap-4 bg-background">
-      <p className="text-base font-medium">
-        {t("frontend.analyze.legacy.description")}
-      </p>
-      <DownloadButton tag="ae-wrapper" />
+    <div
+      id="ae-wrapper"
+      className="w-full max-w-[1200px] mx-auto p-2 md:p-6 lg:p-8 space-y-6 md:space-y-8"
+    >
+      <div className="flex flex-col items-center justify-center text-center space-y-4">
+        <p className="text-muted-foreground text-sm">
+          {t("frontend.analyze.legacy.description")}
+        </p>
+        <DownloadButton tag="ae-wrapper" />
+      </div>
 
-      <Accordion type="multiple" value={Opened} onValueChange={setOpened} className="w-[98%] max-w-[1100px]">
-        <AccordionItem value="0">
-          <AccordionTrigger>{t("frontend.analyze.legacy.notowned")}</AccordionTrigger>
-          <AccordionContent className="text-center">
-            {Object.values(AECategories).map((category) => {
-              const filtered = notOwned.filter((char) => char.category === category);
-              return filtered.length > 0 ? (
-                <div key={category} className="mb-6">
-                  <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
-                    {t(`frontend.category.${category.toLowerCase()}`)} ({filtered.length})
-                  </h3>
-                  <Suspense fallback={<Loading />}>
-                    {renderCharacterGrid(filtered)}
-                  </Suspense>
+      <Accordion
+        type="multiple"
+        value={Opened}
+        onValueChange={setOpened}
+        className="w-full"
+      >
+        {notOwned.length > 0 && (
+          <AccordionItem value="0">
+            <AccordionTrigger>
+              {t("frontend.analyze.legacy.notowned")}
+            </AccordionTrigger>
+            <AccordionContent>
+              {renderCategorySection(
+                notOwned,
+                Object.values(AECategories)
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
+        {onlyFour.length > 0 && (
+          <AccordionItem value="1">
+            <AccordionTrigger>
+              {t("frontend.analyze.legacy.onlyfour")}
+            </AccordionTrigger>
+            <AccordionContent>
+              {renderCategorySection(
+                onlyFour,
+                Object.values(AECategories)
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
+        {ccAvailable.length > 0 && (
+          <AccordionItem value="2">
+            <AccordionTrigger>
+              {t("frontend.analyze.legacy.classchange")}
+            </AccordionTrigger>
+            <AccordionContent>
+              {renderStyleSection(ccAvailable)}
+            </AccordionContent>
+          </AccordionItem>
+        )}
+
+        {owned.length > 0 && (
+          <AccordionItem value="3">
+            <AccordionTrigger>
+              <div className="flex items-center justify-between w-full pr-2">
+                <span>{t("frontend.analyze.legacy.owned")}</span>
+                <div
+                  className="flex items-center gap-2"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Label
+                    htmlFor="sort-switch"
+                    className="text-sm font-normal text-muted-foreground"
+                  >
+                    {t("frontend.analyze.legacy.sortelement")}
+                  </Label>
+                  <Switch
+                    id="sort-switch"
+                    checked={WeaponSort}
+                    onCheckedChange={handleSort}
+                  />
+                  <Label className="text-sm font-normal text-muted-foreground">
+                    {t("frontend.analyze.legacy.sortweapon")}
+                  </Label>
                 </div>
-              ) : null;
-            })}
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="1">
-          <AccordionTrigger>{t("frontend.analyze.legacy.onlyfour")}</AccordionTrigger>
-          <AccordionContent className="text-center">
-            {Object.values(AECategories).map((category) => {
-              const filtered = onlyFour.filter((char) => char.category === category);
-              return filtered.length > 0 ? (
-                <div key={category} className="mb-6">
-                  <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
-                    {t(`frontend.category.${category.toLowerCase()}`)} ({filtered.length})
-                  </h3>
-                  <Suspense fallback={<Loading />}>
-                    {renderCharacterGrid(filtered)}
-                  </Suspense>
-                </div>
-              ) : null;
-            })}
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="2">
-          <AccordionTrigger>{t("frontend.analyze.legacy.classchange")}</AccordionTrigger>
-          <AccordionContent className="text-center">
-            {Object.values(AECharacterStyles).map((style) => {
-              if (style === AECharacterStyles.four) return null;
-              const filtered = ccAvailable.filter((char) => char.style === style);
-              return filtered.length > 0 ? (
-                <div key={style} className="mb-6">
-                  <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
-                    {style} ({filtered.length})
-                  </h3>
-                  <Suspense fallback={<Loading />}>
-                    {renderCharacterGrid(filtered)}
-                  </Suspense>
-                </div>
-              ) : null;
-            })}
-          </AccordionContent>
-        </AccordionItem>
-
-        {CollapseOptions.map((opt, idx) =>
-          opt.value.length > 0 ? (
-            <AccordionItem key={3 + idx} value="3">
-              <AccordionTrigger>{t(opt.label)}</AccordionTrigger>
-              <AccordionContent className="text-center">
-                {opt.label === "frontend.analyze.legacy.owned" ? (
-                  <div className="m-4 mt-0 flex items-center justify-center gap-2">
-                    <Label htmlFor="sort-switch">{t("frontend.analyze.legacy.sortelement")}</Label>
-                    <Switch
-                      id="sort-switch"
-                      checked={WeaponSort}
-                      onCheckedChange={handleSort}
-                    />
-                    <Label>{t("frontend.analyze.legacy.sortweapon")}</Label>
-                  </div>
-                ) : null}
-                {opt.part.map((p) => {
-                  const filtered = opt.value.filter((val) =>
-                    val.personalityIds.includes(p)
-                  );
-                  return filtered.length > 0 ? (
-                    <div key={p} className="mb-6">
-                      <h3 className="mt-4 mb-3 py-2 px-4 flex justify-center items-center text-xl font-semibold bg-muted rounded-lg border border-border">
-                        {p.startsWith("personality") ? (
-                          <img
-                            src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${p}.png`}
-                            alt={p}
-                            className="w-[30px] h-[30px] mr-2.5 pointer-events-none"
-                          />
-                        ) : null}
-                        {t(p)} ({filtered.length})
-                      </h3>
-                      <Suspense fallback={<Loading />}>
-                        {renderCharacterGrid(filtered)}
-                      </Suspense>
-                    </div>
-                  ) : null;
-                })}
-              </AccordionContent>
-            </AccordionItem>
-          ) : null
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              {renderOwnedSection(owned)}
+            </AccordionContent>
+          </AccordionItem>
         )}
       </Accordion>
     </div>
