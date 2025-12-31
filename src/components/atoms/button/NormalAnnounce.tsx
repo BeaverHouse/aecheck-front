@@ -18,15 +18,15 @@ function NormalAnnounce() {
 
   if (announceViewed || !visible) return null;
 
-  const title = "25.12.09 Update";
+  const title = "25.12.31 Update";
 
   const description =
     i18n.language === "ko"
-      ? "디자인 1차 개선이 이루어졌어요. 디자인은 계속 개선할 예정이에요."
-      : "Design 1st improvement is complete. The design will be improved continuously.";
+      ? "디자인 2차 개선이 이루어졌어요. 디자인은 계속 개선할 예정이에요."
+      : "Design 2nd improvement is complete. The design will be improved continuously.";
 
   const handleDismiss = () => {
-    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251209");
+    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251231");
     setVisible(false);
   };
 

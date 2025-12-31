@@ -6,11 +6,7 @@ import { getInvenStatus, getStep } from "../../../util/func";
 import useCheckStore from "../../../store/useCheckStore";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import {
-  AECharacterStyles,
-  InvenStatus,
-  LanguageOptions,
-} from "../../../constants/enum";
+import { InvenStatus, LanguageOptions } from "../../../constants/enum";
 import { getNumber } from "../../../util/func";
 import {
   Dialog,
@@ -18,15 +14,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 import { fetchAPI } from "../../../util/api";
 import Loading from "../Loading";
+import MemoirInfo from "./MemoirInfo";
 
 const CharacterModal: React.FC = () => {
-  const { inven, grasta, manifest, staralign, weaponTempering } = useCheckStore();
+  const { inven, grasta, manifest, staralign, weaponTempering } =
+    useCheckStore();
   const { characterID, hideModal } = useModalStore();
   const { t, i18n } = useTranslation();
 
@@ -95,7 +90,6 @@ const CharacterModal: React.FC = () => {
   const id = getNumber(characterData);
 
   const manifestTag = `frontend.manifest.step${characterData.maxManifest}`;
-  const bookName = t(`book.${characterData.id}`, "N/A");
 
   const currentInven = getInvenStatus(relatedCharacters, characterData, inven);
   const currentGrastaStep = getStep(id, grasta);
@@ -119,11 +113,11 @@ const CharacterModal: React.FC = () => {
       <DialogContent className="max-w-[400px] w-[95%] max-h-[75vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center gap-2">
-            <span>{t(characterData.code)} ({characterData.style})</span>
+            <span>
+              {t(characterData.code)} ({characterData.style})
+            </span>
             <img
-              src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/type-${
-                characterData.lightShadow
-              }.png`}
+              src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/type-${characterData.lightShadow}.png`}
               alt={characterData.lightShadow}
               className="w-[30px] h-[30px] pointer-events-none"
             />
@@ -133,15 +127,11 @@ const CharacterModal: React.FC = () => {
         <div className="flex w-full items-center mb-6">
           <picture>
             <source
-              srcSet={`${process.env.NEXT_PUBLIC_CDN_URL}/character/${
-                characterData.id
-              }.webp`}
+              srcSet={`${process.env.NEXT_PUBLIC_CDN_URL}/character/${characterData.id}.webp`}
               type="image/webp"
             />
             <img
-              src={`${process.env.NEXT_PUBLIC_CDN_URL}/character/${
-                characterData.id
-              }.png`}
+              src={`${process.env.NEXT_PUBLIC_CDN_URL}/character/${characterData.id}.png`}
               alt={characterData.id}
               className="w-[75px] h-[75px] pointer-events-none"
             />
@@ -161,7 +151,7 @@ const CharacterModal: React.FC = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <ExternalLink className="w-5 h-5" />
+              <ExternalLink className="w-5 h-5 text-foreground" />
             </a>
           )}
         </div>
@@ -205,9 +195,7 @@ const CharacterModal: React.FC = () => {
         {currentAlignStep === 3 && inven.includes(id) && (
           <div className="flex w-full items-center">
             <img
-              src={`${process.env.NEXT_PUBLIC_CDN_URL}/staralign/${
-                characterData.id
-              }.png`}
+              src={`${process.env.NEXT_PUBLIC_CDN_URL}/staralign/${characterData.id}.png`}
               alt="complete"
               className="w-7 h-7 mr-2"
             />
@@ -217,36 +205,46 @@ const CharacterModal: React.FC = () => {
           </div>
         )}
 
-        <div className="flex w-full items-center justify-center flex-col sm:flex-row mb-2 mt-4">
-          <p className="text-sm font-medium text-foreground m-1">
-            {t(`frontend.word.element`)}
-          </p>
-          <div className="flex-grow m-1 text-center">
-            {Array.isArray(characterData.personalityIds) && characterData.personalityIds
-              .filter((id) => id.startsWith("personality00"))
-              .map((id) => (
-                <img
-                  key={id}
-                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
-                  alt={id}
-                  className="inline w-[30px] h-[30px] pointer-events-none"
-                />
-              ))}
+        <div className="flex w-full items-center justify-center gap-4 mb-2 mt-4">
+          {/* Attributes Group */}
+          <div className="flex flex-col items-center flex-1">
+            <p className="text-sm font-medium text-foreground mb-1">
+              {t(`frontend.word.element`)}
+            </p>
+            <div className="flex justify-center flex-wrap gap-1">
+              {Array.isArray(characterData.personalityIds) &&
+                characterData.personalityIds
+                  .filter((id) => id.startsWith("personality00"))
+                  .map((id) => (
+                    <img
+                      key={id}
+                      src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
+                      alt={id}
+                      className="w-[30px] h-[30px] pointer-events-none"
+                    />
+                  ))}
+            </div>
           </div>
-          <p className="text-sm font-medium text-foreground m-1">
-            {t(`frontend.word.weapon`)}
-          </p>
-          <div className="flex-grow m-1 text-center">
-            {Array.isArray(characterData.personalityIds) && characterData.personalityIds
-              .filter((id) => id.startsWith("personality01"))
-              .map((id) => (
-                <img
-                  key={id}
-                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
-                  alt={id}
-                  className="inline w-[30px] h-[30px] pointer-events-none"
-                />
-              ))}
+
+          {/* Divider if needed or just gap */}
+
+          <div className="flex flex-col items-center flex-1">
+            <p className="text-sm font-medium text-foreground mb-1">
+              {t(`frontend.word.weapon`)}
+            </p>
+            <div className="flex justify-center flex-wrap gap-1">
+              {Array.isArray(characterData.personalityIds) &&
+                characterData.personalityIds
+                  .filter((id) => id.startsWith("personality01"))
+                  .map((id) => (
+                    <img
+                      key={id}
+                      src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${id}.png`}
+                      alt={id}
+                      className="w-[30px] h-[30px] pointer-events-none"
+                    />
+                  ))}
+            </div>
           </div>
         </div>
 
@@ -255,17 +253,14 @@ const CharacterModal: React.FC = () => {
             {t(`frontend.word.personality`)}
           </p>
           <div className="flex-grow text-center">
-            {Array.isArray(characterData.personalityIds) && characterData.personalityIds
-              .filter((id) => !id.endsWith("000"))
-              .map((id) => (
-                <Badge
-                  key={id}
-                  variant="secondary"
-                  className="m-0.5"
-                >
-                  {t(id)}
-                </Badge>
-              ))}
+            {Array.isArray(characterData.personalityIds) &&
+              characterData.personalityIds
+                .filter((id) => !id.endsWith("000"))
+                .map((id) => (
+                  <Badge key={id} variant="secondary" className="m-0.5">
+                    {t(id)}
+                  </Badge>
+                ))}
           </div>
         </div>
 
@@ -277,15 +272,11 @@ const CharacterModal: React.FC = () => {
             <div className="flex-grow text-center">
               <picture>
                 <source
-                  srcSet={`${process.env.NEXT_PUBLIC_CDN_URL}/buddy/${
-                    characterData.buddy.id
-                  }.webp`}
+                  srcSet={`${process.env.NEXT_PUBLIC_CDN_URL}/buddy/${characterData.buddy.id}.webp`}
                   type="image/webp"
                 />
                 <img
-                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/buddy/${
-                    characterData.buddy.id
-                  }.png`}
+                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/buddy/${characterData.buddy.id}.png`}
                   alt={characterData.buddy.id}
                   className="w-[50px] h-[50px] border border-border rounded-[5px] pointer-events-none inline-block"
                 />
@@ -297,83 +288,10 @@ const CharacterModal: React.FC = () => {
           </div>
         )}
 
-        <div className="flex items-center justify-center m-4">
-          {bookName !== "N/A" && (
-            <>
-              <div>
-                <img
-                  src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/book.png`}
-                  alt={"book"}
-                  className="w-[40px] h-[40px] pointer-events-none inline"
-                />
-                <img
-                  src={`${
-                    process.env.NEXT_PUBLIC_CDN_URL
-                  }/icon/grasta${currentGrastaStep}.png`}
-                  alt={"grasta"}
-                  className="w-[40px] h-[40px] pointer-events-none inline"
-                />
-              </div>
-              <p className="text-base font-medium text-foreground ml-2">
-                {bookName}
-              </p>
-            </>
-          )}
-        </div>
-
-        {Array.isArray(characterData.dungeons) && characterData.dungeons.length > 0 && (
-          <div className="mt-2 flex flex-col">
-            <p className="text-sm font-bold text-foreground text-center">
-              {t(`frontend.filter.bookdrop`)}
-              {characterData.style === AECharacterStyles.four ? " (NS)" : ""}
-            </p>
-            {characterData.dungeons.map((dun) => (
-              <div
-                key={dun.id}
-                className="flex text-center items-center m-1"
-              >
-                <Alert
-                  className={cn(
-                    "flex-grow text-center mr-2 ml-2",
-                    dun.id.startsWith("dungeon0")
-                      ? "bg-green-50 text-green-900 border-green-200 dark:bg-green-950 dark:text-green-100 dark:border-green-800"
-                      : "bg-yellow-50 text-yellow-900 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-100 dark:border-yellow-800"
-                  )}
-                >
-                  <AlertDescription>{t(dun.id)}</AlertDescription>
-                </Alert>
-                {dun.altemaURL && dun.aewikiURL && (
-                  <>
-                    <a
-                      aria-label="altema"
-                      href={dun.altemaURL}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Avatar className="w-[30px] h-[30px] mr-2">
-                        <AvatarImage
-                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/altema.jpg`}
-                        />
-                      </Avatar>
-                    </a>
-                    <a
-                      aria-label="wiki"
-                      href={dun.aewikiURL}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Avatar className="w-[30px] h-[30px]">
-                        <AvatarImage
-                          src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/wiki.jpg`}
-                        />
-                      </Avatar>
-                    </a>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+        <MemoirInfo
+          characterData={characterData}
+          currentGrastaStep={currentGrastaStep}
+        />
       </DialogContent>
     </Dialog>
   );

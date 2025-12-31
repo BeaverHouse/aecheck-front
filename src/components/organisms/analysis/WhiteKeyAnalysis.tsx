@@ -97,25 +97,35 @@ const WhiteKeyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   );
 
   return (
-    <div id="ae-wrapper" className="m-2 flex flex-col items-center justify-center text-center bg-background">
-      <p className="m-4 text-base font-medium">
-        {t("frontend.analyze.whitekey.description")}
-      </p>
-      <div className="flex items-center gap-4">
-        <DownloadButton tag="ae-wrapper" />
-        <div className="ml-4 flex items-center space-x-2">
-          <Checkbox
-            id="show-not-owned"
-            checked={ShowNotOwned}
-            onCheckedChange={(checked) => setShowNotOwned(checked === true)}
-          />
-          <Label htmlFor="show-not-owned" className="text-sm">
-            {t("frontend.analyze.whitekey.option")}
-          </Label>
+    <div
+      id="ae-wrapper"
+      className="w-full max-w-[1200px] mx-auto p-2 md:p-6 lg:p-8 space-y-6 md:space-y-8 flex flex-col"
+    >
+      <div className="flex flex-col items-center justify-center text-center space-y-4">
+        <p className="text-muted-foreground text-sm">
+          {t("frontend.analyze.whitekey.description")}
+        </p>
+        <div className="flex items-center gap-4">
+          <DownloadButton tag="ae-wrapper" />
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="show-not-owned"
+              checked={ShowNotOwned}
+              onCheckedChange={(checked) => setShowNotOwned(checked === true)}
+            />
+            <Label htmlFor="show-not-owned" className="text-sm cursor-pointer">
+              {t("frontend.analyze.whitekey.option")}
+            </Label>
+          </div>
         </div>
       </div>
       {targetOptions.length > 0 ? (
-        <Accordion type="multiple" value={Opened} onValueChange={setOpened} className="w-[98%] max-w-[1100px]">
+        <Accordion
+          type="multiple"
+          value={Opened}
+          onValueChange={setOpened}
+          className="w-full"
+        >
           {CollapseOptions.map((opt, idx) =>
             opt.value.length > 0 ? (
               <AccordionItem key={idx} value={String(idx)}>
@@ -130,12 +140,12 @@ const WhiteKeyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
           )}
         </Accordion>
       ) : (
-        <>
-          <img src="/happy.png" alt="empty" />
-          <h2 className="m-4 text-xl font-semibold">
+        <div className="flex flex-col items-center justify-center py-10">
+          <img src="/happy.png" alt="empty" className="max-w-[200px]" />
+          <h2 className="mt-6 text-xl font-semibold">
             {t("frontend.analyze.whitekey.empty")}
           </h2>
-        </>
+        </div>
       )}
     </div>
   );

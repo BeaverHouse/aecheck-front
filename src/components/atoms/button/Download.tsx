@@ -31,6 +31,15 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
   const handleSaveClick = async () => {
     const element = document.getElementById(tag);
     if (!element) return;
+
+    // GA4 다운로드 이벤트 추적
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'download_image', {
+        event_category: 'engagement',
+        event_label: tag,
+      });
+    }
+
     setModal(ModalType.loading);
     try {
       element.querySelectorAll(".shadow").forEach((element) => {

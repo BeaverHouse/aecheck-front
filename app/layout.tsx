@@ -11,8 +11,11 @@ export default function RootLayout({
 }) {
   useEffect(() => {
     // Google Analytics
+    const gaId = process.env.NEXT_PUBLIC_GA_ID;
+    if (!gaId) return;
+
     const script1 = document.createElement('script');
-    script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-J7KTFCS1GH';
+    script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
     script1.async = true;
     document.head.appendChild(script1);
 
@@ -21,7 +24,7 @@ export default function RootLayout({
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-J7KTFCS1GH');
+      gtag('config', '${gaId}');
     `;
     document.head.appendChild(script2);
 
