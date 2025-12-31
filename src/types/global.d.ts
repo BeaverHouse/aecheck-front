@@ -1,3 +1,13 @@
+// Google Analytics gtag
+interface Window {
+  gtag?: (
+    command: 'event' | 'config' | 'js',
+    targetId: string | Date,
+    config?: Record<string, unknown>
+  ) => void;
+  dataLayer?: unknown[];
+}
+
 type APIResponse<T> = {
   status: number;
   message: string;
