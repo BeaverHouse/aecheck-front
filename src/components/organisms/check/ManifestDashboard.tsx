@@ -2,14 +2,13 @@ import { useTranslation } from "react-i18next";
 import useFilterStore from "../../../store/useFilterStore";
 import useCheckStore from "../../../store/useCheckStore";
 import useConfigStore from "../../../store/useConfigStore";
-import { getManifestStatus, getNumber, getShortName } from "../../../util/func";
+import { createCharacterSorter, getManifestStatus, getNumber } from "../../../util/func";
 import CharacterManifest from "../../molecules/character/Manifest";
 import ManifestFilterButton from "../../atoms/button/ManifestFilter";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
-import dayjs from "dayjs";
-import { useState, useEffect, useRef, useCallback } from "react";
 import { DisplayMode, WeaponTemperingStatus } from "../../../constants/enum";
+import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import {
   Pagination,
   PaginationContent,
@@ -52,21 +51,7 @@ function ManifestDashboard({
 
       return matchesAvailable || matchesCompleted;
     })
-    .sort((a, b) => {
-      const aIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(a.lastUpdated));
-      const bIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(b.lastUpdated));
-
-      if (aIsRecent && !bIsRecent) return -1;
-      if (!aIsRecent && bIsRecent) return 1;
-
-      return getShortName(t(a.code), i18n.language).localeCompare(
-        getShortName(t(b.code), i18n.language)
-      );
-    });
+    .sort(createCharacterSorter(t, i18n.language));
 
   const checkAll = () => {
     Swal.fire({
@@ -113,64 +98,22 @@ function ManifestDashboard({
     });
   };
 
-  const [page, setPage] = useState(1);
-  const [loadedCount, setLoadedCount] = useState(50);
-  const observerTarget = useRef<HTMLDivElement>(null);
+  const itemsPerPage = getItemsPerPage("card");
+  const {
+    page,
+    setPage,
+    totalPages,
+    observerTarget,
+    getCurrentItems,
+    hasMore,
+  } = usePagination<CharacterSummary>({
+    totalItems: targetCharacters.length,
+    displayMode,
+    itemsPerPage,
+    dependencies: [filteredCharacters, manifestStatusFilter, weaponTemperingStatusFilter],
+  });
 
-  useEffect(() => {
-    setPage(1);
-    setLoadedCount(50);
-  }, [filteredCharacters, manifestStatusFilter, weaponTemperingStatusFilter]);
-
-  const getItemsPerPage = () => {
-    const width = window.innerWidth;
-    if (width >= 1200) return 24; // lg
-    if (width >= 900) return 18; // md
-    if (width >= 600) return 12; // sm
-    return 6; // xs
-  };
-
-  const itemsPerPage = getItemsPerPage();
-  const totalPages = Math.ceil(targetCharacters.length / itemsPerPage);
-
-  // Infinite scroll observer
-  const loadMore = useCallback(() => {
-    if (loadedCount < targetCharacters.length) {
-      setLoadedCount((prev) => Math.min(prev + 50, targetCharacters.length));
-    }
-  }, [loadedCount, targetCharacters.length]);
-
-  useEffect(() => {
-    if (displayMode !== DisplayMode.infiniteScroll) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [displayMode, loadMore]);
-
-  const currentCharacters =
-    displayMode === DisplayMode.infiniteScroll
-      ? targetCharacters.slice(0, loadedCount)
-      : targetCharacters.slice(
-          (page - 1) * itemsPerPage,
-          page * itemsPerPage
-        );
+  const currentCharacters = getCurrentItems(targetCharacters);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -248,15 +191,14 @@ function ManifestDashboard({
             />
           ))}
         </div>
-        {displayMode === DisplayMode.infiniteScroll &&
-          loadedCount < targetCharacters.length && (
-            <div
-              ref={observerTarget}
-              className="h-20 flex items-center justify-center text-sm text-muted-foreground"
-            >
-              Loading more characters...
-            </div>
-          )}
+        {displayMode === DisplayMode.infiniteScroll && hasMore && (
+          <div
+            ref={observerTarget}
+            className="h-20 flex items-center justify-center text-sm text-muted-foreground"
+          >
+            Loading more characters...
+          </div>
+        )}
       </div>
     </div>
   );

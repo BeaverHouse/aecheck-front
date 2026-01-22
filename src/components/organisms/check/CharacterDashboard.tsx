@@ -2,7 +2,7 @@ import InvenFilterButton from "../../atoms/button/InvenFilter";
 import { useTranslation } from "react-i18next";
 import useFilterStore from "../../../store/useFilterStore";
 import useCheckStore from "../../../store/useCheckStore";
-import { getNumber, getInvenStatus, getShortName } from "../../../util/func";
+import { createCharacterSorter, getNumber, getInvenStatus } from "../../../util/func";
 import {
   AECharacterStyles,
   DisplayMode,
@@ -13,9 +13,8 @@ import CharacterAvatar from "../../atoms/character/Avatar";
 import useModalStore from "../../../store/useModalStore";
 import useConfigStore from "../../../store/useConfigStore";
 import Swal from "sweetalert2";
-import dayjs from "dayjs";
-import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
+import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import {
   Pagination,
   PaginationContent,
@@ -35,31 +34,13 @@ function CharacterDashboard({
   const { popupOnCheck, displayMode } = useConfigStore();
   const { setModal } = useModalStore();
 
-  const [page, setPage] = useState(1);
-  const [loadedCount, setLoadedCount] = useState(50); // For infinite scroll
-  const observerTarget = useRef<HTMLDivElement>(null);
-
   const targetCharacters = filteredCharacters
     .filter(
       (char) =>
         getNumber(char) < 1000 &&
         invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
     )
-    .sort((a, b) => {
-      const aIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(a.updateDate));
-      const bIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(b.updateDate));
-
-      if (aIsRecent && !bIsRecent) return -1;
-      if (!aIsRecent && bIsRecent) return 1;
-
-      return getShortName(t(a.code), i18n.language).localeCompare(
-        getShortName(t(b.code), i18n.language)
-      );
-    });
+    .sort(createCharacterSorter(t, i18n.language));
 
   const addSingleInven = (char: CharacterSummary) => {
     const newCharIds = [...inven, getNumber(char)];
@@ -187,71 +168,22 @@ function CharacterDashboard({
     }
   };
 
-  const getItemsPerPage = () => {
-    const width = window.innerWidth;
-    if (width >= 1200) return 72; // lg
-    if (width >= 900) return 48; // md
-    if (width >= 600) return 36; // sm
-    return 20; // xs
-  };
+  const itemsPerPage = getItemsPerPage("avatar");
+  const {
+    page,
+    setPage,
+    totalPages,
+    observerTarget,
+    getCurrentItems,
+    hasMore,
+  } = usePagination<CharacterSummary>({
+    totalItems: targetCharacters.length,
+    displayMode,
+    itemsPerPage,
+    dependencies: [filteredCharacters, invenStatusFilter],
+  });
 
-  const itemsPerPage = getItemsPerPage();
-  const totalPages = Math.ceil(targetCharacters.length / itemsPerPage);
-
-  // Reset loaded count when filters change
-  useEffect(() => {
-    setLoadedCount(50);
-  }, [targetCharacters.length]);
-
-  // Pagination mode: reset page when filters change
-  useEffect(() => {
-    if (displayMode === DisplayMode.pagination) {
-      const maxPage = Math.ceil(targetCharacters.length / itemsPerPage);
-      if (page > maxPage) {
-        setPage(maxPage || 1);
-      }
-    }
-  }, [targetCharacters, page, itemsPerPage, displayMode]);
-
-  // Infinite scroll observer
-  const loadMore = useCallback(() => {
-    if (loadedCount < targetCharacters.length) {
-      setLoadedCount((prev) => Math.min(prev + 50, targetCharacters.length));
-    }
-  }, [loadedCount, targetCharacters.length]);
-
-  useEffect(() => {
-    if (displayMode !== DisplayMode.infiniteScroll) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [displayMode, loadMore]);
-
-  // Determine which characters to display based on mode
-  const currentCharacters =
-    displayMode === DisplayMode.infiniteScroll
-      ? targetCharacters.slice(0, loadedCount)
-      : targetCharacters.slice(
-          (page - 1) * itemsPerPage,
-          page * itemsPerPage
-        );
+  const currentCharacters = getCurrentItems(targetCharacters);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -329,8 +261,7 @@ function CharacterDashboard({
             />
           ))}
         </div>
-        {displayMode === DisplayMode.infiniteScroll &&
-         loadedCount < targetCharacters.length && (
+        {displayMode === DisplayMode.infiniteScroll && hasMore && (
           <div
             ref={observerTarget}
             className="h-20 flex items-center justify-center text-sm text-muted-foreground"

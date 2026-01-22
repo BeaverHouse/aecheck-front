@@ -12,16 +12,15 @@ import {
   ModalType,
   CheckMenuOptions,
 } from "../../../constants/enum";
-import { getShortName } from "../../../util/func";
+import { createCharacterSorter } from "../../../util/func";
 import { useTranslation } from "react-i18next";
 import GlobalFilter from "../../molecules/GlobalFilter";
 import useFilterStore from "../../../store/useFilterStore";
 import useConfigStore from "../../../store/useConfigStore";
 import Loading from "../../atoms/Loading";
 import { arrAllIncludes, arrOverlap } from "../../../util/arrayUtil";
-import { useState, useEffect, useRef, useCallback } from "react";
 import { fetchAPI } from "../../../util/api";
-import dayjs from "dayjs";
+import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import {
   Pagination,
   PaginationContent,
@@ -53,27 +52,11 @@ function CharacterSearch() {
     throwOnError: true,
   });
 
-  const [page, setPage] = useState(1);
-  const [loadedCount, setLoadedCount] = useState(50);
-  const observerTarget = useRef<HTMLDivElement>(null);
-
-  const allCharacters = isPending ? [] : (data as APIResponse<CharacterSummary[]>).data.sort(
-    (a, b) => {
-      const aIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(a.updateDate));
-      const bIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(b.updateDate));
-
-      if (aIsRecent && !bIsRecent) return -1;
-      if (!aIsRecent && bIsRecent) return 1;
-
-      return getShortName(t(a.code), i18n.language).localeCompare(
-        getShortName(t(b.code), i18n.language)
+  const allCharacters = isPending
+    ? []
+    : (data as APIResponse<CharacterSummary[]>).data.sort(
+        createCharacterSorter(t, i18n.language)
       );
-    }
-  );
 
   const filteredCharacters = allCharacters.filter(
     (char) =>
@@ -92,78 +75,40 @@ function CharacterSearch() {
           char.personalityIds,
           choosePersonalityTags
         )) &&
-      (!dungeon || char.dungeons.map((d) => d.id).includes(dungeon)) &&
+      (!dungeon || char.dungeons.some((d) => d.id === dungeon)) &&
       (t(char.code).toLowerCase().includes(searchWord.toLowerCase()) ||
         t(`book.${char.id}`).toLowerCase().includes(searchWord.toLowerCase()))
   );
 
-  // Infinite scroll observer
-  const loadMore = useCallback(() => {
-    if (loadedCount < filteredCharacters.length) {
-      setLoadedCount((prev) => Math.min(prev + 50, filteredCharacters.length));
-    }
-  }, [loadedCount, filteredCharacters.length]);
-
-  useEffect(() => {
-    setPage(1);
-    setLoadedCount(50);
-  }, [
-    styleFilter,
-    manifestFilter,
-    categoryFilter,
-    alterFilter,
-    lightShadowFilter,
-    staralignFilter,
-    essenTialPersonalityTags,
-    choosePersonalityTags,
-    dungeon,
-    searchWord,
-  ]);
-
-  useEffect(() => {
-    if (displayMode !== DisplayMode.infiniteScroll) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [displayMode, loadMore]);
+  const itemsPerPage = getItemsPerPage("avatar");
+  const {
+    page,
+    setPage,
+    totalPages,
+    observerTarget,
+    getCurrentItems,
+    hasMore,
+  } = usePagination<CharacterSummary>({
+    totalItems: filteredCharacters.length,
+    displayMode,
+    itemsPerPage,
+    dependencies: [
+      styleFilter,
+      manifestFilter,
+      categoryFilter,
+      alterFilter,
+      lightShadowFilter,
+      staralignFilter,
+      essenTialPersonalityTags,
+      choosePersonalityTags,
+      dungeon,
+      searchWord,
+    ],
+  });
 
   if (isPending) return <Loading />;
 
-  const getItemsPerPage = () => {
-    const width = window.innerWidth;
-    if (width >= 1200) return 72; // lg
-    if (width >= 900) return 48; // md
-    if (width >= 600) return 36; // sm
-    return 20; // xs
-  };
-
-  const itemsPerPage = getItemsPerPage();
-  const totalPages = Math.ceil(filteredCharacters.length / itemsPerPage);
-
-  const currentCharacters =
-    displayMode === DisplayMode.infiniteScroll
-      ? filteredCharacters.slice(0, loadedCount)
-      : filteredCharacters.slice(
-          (page - 1) * itemsPerPage,
-          page * itemsPerPage
-        );
+  const currentCharacters = getCurrentItems(filteredCharacters);
 
   return (
     <div className="flex-grow pt-6">
@@ -223,15 +168,14 @@ function CharacterSearch() {
             />
           ))}
         </div>
-        {displayMode === DisplayMode.infiniteScroll &&
-          loadedCount < filteredCharacters.length && (
-            <div
-              ref={observerTarget}
-              className="h-20 flex items-center justify-center text-sm text-muted-foreground mt-4"
-            >
-              Loading more characters...
-            </div>
-          )}
+        {displayMode === DisplayMode.infiniteScroll && hasMore && (
+          <div
+            ref={observerTarget}
+            className="h-20 flex items-center justify-center text-sm text-muted-foreground mt-4"
+          >
+            Loading more characters...
+          </div>
+        )}
       </div>
     </div>
   );

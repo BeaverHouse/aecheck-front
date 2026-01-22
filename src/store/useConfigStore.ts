@@ -39,45 +39,14 @@ const useConfigStore = create(
       lastCheckTab: CheckTabOptions.inven,
       lastSearchMenu: CheckMenuOptions.characters,
       lastAnalysisMenu: AnalysisMenuOptions.stardream,
-      setPopupOnCheck: (popup) =>  set((state) => ({
-        ...state,
-        popupOnCheck: popup,
-      })),
-      toggleTheme: (theme) =>
-        set((state) => ({
-          ...state,
-          theme: theme,
-        })),
-      setDisplayMode: (mode) =>
-        set((state) => ({
-          ...state,
-          displayMode: mode,
-        })),
-      setColorBlindMode: (enabled) =>
-        set((state) => ({
-          ...state,
-          colorBlindMode: enabled,
-        })),
-      updateLastCheckMenu: (option) =>
-        set((state) => ({
-          ...state,
-          lastCheckMenu: option,
-        })),
-      updateLastCheckTab: (option) =>
-        set((state) => ({
-          ...state,
-          lastCheckTab: option,
-        })),
-      updateLastSearchMenu: (option) =>
-        set((state) => ({
-          ...state,
-          lastSearchMenu: option,
-        })),
-      updateLastAnalysisMenu: (option) =>
-        set((state) => ({
-          ...state,
-          lastAnalysisMenu: option,
-        })),
+      setPopupOnCheck: (popup) => set({ popupOnCheck: popup }),
+      toggleTheme: (theme) => set({ theme }),
+      setDisplayMode: (mode) => set({ displayMode: mode }),
+      setColorBlindMode: (enabled) => set({ colorBlindMode: enabled }),
+      updateLastCheckMenu: (option) => set({ lastCheckMenu: option }),
+      updateLastCheckTab: (option) => set({ lastCheckTab: option }),
+      updateLastSearchMenu: (option) => set({ lastSearchMenu: option }),
+      updateLastAnalysisMenu: (option) => set({ lastAnalysisMenu: option }),
     }),
     {
       name: "AE_CONFIG_V3_1",

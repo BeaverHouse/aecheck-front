@@ -69,13 +69,6 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
     status === ManifestStatus.completed;
   const isRecent = isUpdatedInWeeks(info.lastUpdated);
 
-  // Debug: Check if customManifest is being received
-  React.useEffect(() => {
-    if (info.customManifest) {
-      console.log('Character with customManifest:', info.id, info);
-    }
-  }, [info]);
-
   const changeManifest = (step: number) => {
     const changedStep = currentStep + step;
     if (changedStep < 0 || changedStep > info.maxManifest) return;
