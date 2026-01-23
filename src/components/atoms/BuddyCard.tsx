@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 
 interface BuddyCardProps {
   info: BuddyDetail;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
-const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick }) => {
+const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick = () => {} }) => {
   const { buddy, inven } = useCheckStore();
   const { t, i18n } = useTranslation();
   const { setModal } = useModalStore();
