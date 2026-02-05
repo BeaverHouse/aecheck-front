@@ -4,6 +4,7 @@ import useModalStore from "../../../store/useModalStore";
 import { CheckCircle, XCircle, AlertCircle, ExternalLink, Crown } from "lucide-react";
 import { getInvenStatus, getStep } from "../../../util/func";
 import useCheckStore from "../../../store/useCheckStore";
+import useConfigStore from "../../../store/useConfigStore";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { InvenStatus, LanguageOptions } from "../../../constants/enum";
@@ -23,6 +24,7 @@ import MemoirInfo from "./MemoirInfo";
 const CharacterModal: React.FC = () => {
   const { inven, grasta, manifest, staralign, weaponTempering } =
     useCheckStore();
+  const { showTierBadge } = useConfigStore();
   const { characterID, hideModal } = useModalStore();
   const { t, i18n } = useTranslation();
 
@@ -141,7 +143,7 @@ const CharacterModal: React.FC = () => {
             <p className="text-sm font-medium text-foreground">
               Release: {dayjs(characterData.updateDate).format("YYYY-MM-DD")}
             </p>
-            {characterData.tier && (
+            {showTierBadge && characterData.tier && (
               <Popover>
                 <PopoverTrigger asChild>
                   <button className="flex items-center gap-1 mt-1 w-fit cursor-pointer">
