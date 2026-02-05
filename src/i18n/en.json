@@ -25,6 +25,8 @@
   "frontend.tier.criteria.altema": "Score 99",
   "frontend.tier.criteria.gameinfo": "SSS rank or above",
   "frontend.tier.criteria.anothertier": "SS rank or above",
+  "frontend.message.clearFilter": "Clear all filters?",
+  "frontend.word.cancel": "Cancel",
   "frontend.tier.intro.title": "OP Badge",
   "frontend.tier.intro.desc": "Characters rated highly by the community will be highlighted. Want to turn it on?",
   "frontend.tier.intro.enable": "Enable",

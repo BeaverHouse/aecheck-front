@@ -25,6 +25,8 @@
   "frontend.tier.criteria.altema": "99점",
   "frontend.tier.criteria.gameinfo": "SSS 랭크 이상",
   "frontend.tier.criteria.anothertier": "SS 랭크 이상",
+  "frontend.message.clearFilter": "필터를 초기화할까요?",
+  "frontend.word.cancel": "취소",
   "frontend.tier.intro.title": "OP 표시 기능",
   "frontend.tier.intro.desc": "커뮤니티에서 좋은 평가를 받은 캐릭터가 강조돼요. 활성화할까요?",
   "frontend.tier.intro.enable": "켜기",

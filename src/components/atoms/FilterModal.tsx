@@ -40,6 +40,7 @@ import { Check, ChevronsUpDown, Filter, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fetchAPI } from "../../util/api";
 import { Badge } from "@/components/ui/badge";
+import Swal from "sweetalert2";
 
 interface ToggleGroupProps<T> {
   label: string;
@@ -318,7 +319,18 @@ const FilterModal: React.FC = () => {
           <Button
             variant="destructive"
             className="w-full sm:w-auto gap-2"
-            onClick={removeFilter}
+            onClick={() => {
+              hideModal();
+              Swal.fire({
+                text: t("frontend.message.clearFilter"),
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: t("frontend.word.cancel", "Cancel"),
+              }).then((result) => {
+                if (result.isConfirmed) removeFilter();
+              });
+            }}
           >
             <X className="w-4 h-4" />
             {t("frontend.word.clear", "CLEAR FILTER")}

@@ -80,7 +80,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
               try {
                 if (!blob) {
                   hideModal();
-                  return window.alert("!!!");
+                  return Swal.fire({ icon: "error", text: "Image error", width: 280, timer: 1500, showConfirmButton: false });
                 }
 
                 const formData = new FormData();
@@ -130,7 +130,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         canvas.toBlob((blob) => {
           if (!blob) {
             hideModal();
-            return window.alert("!!!");
+            return Swal.fire({ icon: "error", text: "Image error", width: 280, timer: 1500, showConfirmButton: false });
           }
           saveAs(blob, `${Date.now().toString()}${isIOS ? "" : ".jpg"}`);
           hideModal();

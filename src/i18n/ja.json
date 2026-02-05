@@ -25,6 +25,8 @@
   "frontend.tier.criteria.altema": "99点",
   "frontend.tier.criteria.gameinfo": "SSSランク以上",
   "frontend.tier.criteria.anothertier": "SSランク以上",
+  "frontend.message.clearFilter": "フィルターをリセットしますか？",
+  "frontend.word.cancel": "キャンセル",
   "frontend.tier.intro.title": "OP表示機能",
   "frontend.tier.intro.desc": "コミュニティで高評価のキャラクターが強調されます。有効にしますか？",
   "frontend.tier.intro.enable": "有効にする",
