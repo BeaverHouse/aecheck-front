@@ -110,7 +110,7 @@ function GrastaDashboard({
           <Button
             variant={step === 0 ? "secondary" : "default"}
             size="sm"
-            className={step !== 0 ? "bg-green-600 hover:bg-green-700" : ""}
+            className={step !== 0 ? "bg-primary hover:bg-primary/90" : ""}
             onClick={() => changeAllGrasta(step)}
             key={step}
           >

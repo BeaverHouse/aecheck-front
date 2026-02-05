@@ -103,7 +103,7 @@ const CharacterModal: React.FC = () => {
   const invenIcon = () => {
     switch (currentInven) {
       case InvenStatus.owned:
-        return <CheckCircle className="w-7 h-7 text-green-500 mr-2" />;
+        return <CheckCircle className="w-7 h-7 text-primary mr-2" />;
       case InvenStatus.ccRequired:
         return <AlertCircle className="w-7 h-7 text-yellow-500 mr-2" />;
       case InvenStatus.notOwned:

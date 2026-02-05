@@ -200,7 +200,7 @@ function CharacterDashboard({
           <Button
             variant="default"
             size="sm"
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-primary hover:bg-primary/90"
             onClick={() => checkAll()}
           >
             CHECK ALL
