@@ -34,7 +34,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   const currentWeaponTemperingStep = getStep(id, weaponTempering);
 
   const manifestIcon = () => {
-    if (info.customManifest) return null;
+    if (info.customManifest && currentWeaponTemperingStep > 0) return null;
     const manifestCompleted =
       currentManifestStep >= info.maxManifest && info.maxManifest > 0;
     if (manifestCompleted) {

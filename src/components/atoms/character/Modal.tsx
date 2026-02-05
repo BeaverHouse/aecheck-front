@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import useModalStore from "../../../store/useModalStore";
-import { CheckCircle, XCircle, AlertCircle, ExternalLink } from "lucide-react";
+import { CheckCircle, XCircle, AlertCircle, ExternalLink, Crown } from "lucide-react";
 import { getInvenStatus, getStep } from "../../../util/func";
 import useCheckStore from "../../../store/useCheckStore";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { fetchAPI } from "../../../util/api";
 import Loading from "../Loading";
 import MemoirInfo from "./MemoirInfo";
@@ -140,6 +141,23 @@ const CharacterModal: React.FC = () => {
             <p className="text-sm font-medium text-foreground">
               Release: {dayjs(characterData.updateDate).format("YYYY-MM-DD")}
             </p>
+            {characterData.tier && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 mt-1 w-fit">
+                    <Crown className={`w-4 h-4 ${characterData.tier === "super_op" ? "text-yellow-400" : "text-yellow-600"}`} />
+                    <span className={`text-xs font-bold ${characterData.tier === "super_op" ? "text-yellow-400" : "text-yellow-600"}`}>
+                      {characterData.tier === "super_op" ? "Super OP" : "OP"}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {characterData.tier === "super_op"
+                    ? t("frontend.tier.super_op")
+                    : t("frontend.tier.op")}
+                </TooltipContent>
+              </Tooltip>
+            )}
           </div>
           {characterData.seesaaURL && (
             <a
@@ -165,7 +183,7 @@ const CharacterModal: React.FC = () => {
           </div>
         )}
 
-        {!characterData.customManifest &&
+        {!(characterData.customManifest && currentWeaponTemperingStep === 1) &&
           currentManifestStep === characterData.maxManifest &&
           characterData.maxManifest > 0 && (
             <div className="flex w-full items-center">

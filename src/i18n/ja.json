@@ -18,5 +18,7 @@
   "settings.colorBlindMode": "色覚サポートモード",
   "settings.colorBlindModeDesc": "緑色の代わりに青色を使用",
   "settings.showTierBadge": "OP表示",
-  "settings.showTierBadgeDesc": "ティアリストで高評価のキャラクターを強調表示"
+  "settings.showTierBadgeDesc": "ティアリストで高評価のキャラクターを強調表示",
+  "frontend.tier.op": "3つのティアリストのうち2つ以上で高評価",
+  "frontend.tier.super_op": "3つのティアリスト全てで高評価"
 }
