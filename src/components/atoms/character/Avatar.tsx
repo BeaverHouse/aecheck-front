@@ -32,6 +32,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   const currentWeaponTemperingStep = getStep(id, weaponTempering);
 
   const manifestIcon = () => {
+    if (info.customManifest) return null;
     const manifestCompleted =
       currentManifestStep >= info.maxManifest && info.maxManifest > 0;
     if (manifestCompleted) {
@@ -78,12 +79,8 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   const weaponTemperingIcon = () => {
     if (!info.customManifest || currentWeaponTemperingStep === 0) return null;
 
-    // 크라운 완료 여부 확인
-    const manifestCompleted = currentManifestStep >= info.maxManifest && info.maxManifest > 0;
-    const bottomPosition = manifestCompleted ? "bottom-[12px]" : "bottom-[-8px]";
-
     return (
-      <div className={`absolute ${bottomPosition} left-[-5px] z-10`}>
+      <div className="absolute bottom-[-8px] left-[-5px] z-10">
         <div className="relative w-[23px] h-[23px] bg-black/60 rounded-full flex items-center justify-center">
           <img
             src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/weapontempering.png`}

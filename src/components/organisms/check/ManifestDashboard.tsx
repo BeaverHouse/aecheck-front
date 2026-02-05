@@ -28,8 +28,9 @@ function ManifestDashboard({
   const { displayMode } = useConfigStore();
 
   const targetCharacters = filteredCharacters
-    .filter((char) => char.maxManifest > 0)
+    .filter((char) => char.maxManifest > 0 || char.customManifest)
     .filter((char) =>
+      (char.maxManifest === 0 && char.customManifest) ||
       manifestStatusFilter.includes(
         getManifestStatus(allCharacters, char, inven, manifest)
       )

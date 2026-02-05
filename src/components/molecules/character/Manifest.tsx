@@ -112,7 +112,7 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
         {manifestAvailable ? (
           <div className="flex items-center justify-center flex-1 gap-4">
             <CircularProgressWithLabel
-              value={(100 * currentStep) / info.maxManifest}
+              value={info.maxManifest > 0 ? (100 * currentStep) / info.maxManifest : 100}
             />
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="flex gap-1">
@@ -140,7 +140,7 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
                     id={`weapon-tempering-${id}`}
                     checked={weaponTemperingStep === 1}
                     onCheckedChange={toggleWeaponTempering}
-                    disabled={currentStep < info.maxManifest || info.maxManifest === 0}
+                    disabled={info.maxManifest > 0 && currentStep < info.maxManifest}
                   />
                   <label
                     htmlFor={`weapon-tempering-${id}`}

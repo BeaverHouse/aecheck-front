@@ -165,7 +165,8 @@ const CharacterModal: React.FC = () => {
           </div>
         )}
 
-        {currentManifestStep === characterData.maxManifest &&
+        {!characterData.customManifest &&
+          currentManifestStep === characterData.maxManifest &&
           characterData.maxManifest > 0 && (
             <div className="flex w-full items-center">
               <img
