@@ -1,5 +1,6 @@
 import React from "react";
 import useCheckStore from "../../../store/useCheckStore";
+import useConfigStore from "../../../store/useConfigStore";
 import { useTranslation } from "react-i18next";
 import { getNumber, getShortName, getStep, isUpdatedInWeeks } from "../../../util/func";
 import { AECharacterStyles } from "../../../constants/enum";
@@ -20,6 +21,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   onClick,
 }) => {
   const { inven, grasta, manifest, staralign, weaponTempering } = useCheckStore();
+  const { showTierBadge } = useConfigStore();
   const { t, i18n } = useTranslation();
 
   const id = getNumber(info);
@@ -95,7 +97,11 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   return (
     <div
       onClick={onClick}
-      className="w-[75px] h-[75px] cursor-pointer relative"
+      className={cn(
+        "w-[75px] h-[75px] cursor-pointer relative rounded-[3px]",
+        showTierBadge && info.tier === "op" && "ring-2 ring-yellow-500/80",
+        showTierBadge && info.tier === "super_op" && "ring-[3px] ring-yellow-400 shadow-[0_0_8px_3px_rgba(234,179,8,0.5)]"
+      )}
     >
       {styleIcon()}
       {grastaIcon()}

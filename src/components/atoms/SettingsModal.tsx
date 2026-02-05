@@ -52,6 +52,8 @@ const SettingsModal: React.FC = () => {
     toggleTheme,
     colorBlindMode,
     setColorBlindMode,
+    showTierBadge,
+    setShowTierBadge,
   } = useConfigStore();
   const {
     inven,
@@ -359,6 +361,22 @@ const SettingsModal: React.FC = () => {
                   <Switch
                     checked={colorBlindMode}
                     onCheckedChange={setColorBlindMode}
+                  />
+                </div>
+
+                {/* Tier Badge */}
+                <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
+                  <div className="flex-1 min-w-0 pr-4">
+                    <span className="text-sm font-medium text-foreground block">
+                      {t("settings.showTierBadge")}
+                    </span>
+                    <span className="text-xs text-muted-foreground block mt-0.5">
+                      {t("settings.showTierBadgeDesc")}
+                    </span>
+                  </div>
+                  <Switch
+                    checked={showTierBadge}
+                    onCheckedChange={setShowTierBadge}
                   />
                 </div>
               </div>

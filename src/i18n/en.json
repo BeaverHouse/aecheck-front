@@ -16,5 +16,7 @@
   "settings.displayMode.infiniteScroll": "Infinite Scroll",
   "settings.displayMode.infiniteScrollDesc": "Automatically load more characters as you scroll",
   "settings.colorBlindMode": "Color Blind Mode",
-  "settings.colorBlindModeDesc": "Use blue instead of green colors"
+  "settings.colorBlindModeDesc": "Use blue instead of green colors",
+  "settings.showTierBadge": "OP Badge",
+  "settings.showTierBadgeDesc": "Highlight characters rated highly across tier lists"
 }

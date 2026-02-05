@@ -16,5 +16,7 @@
   "settings.displayMode.infiniteScroll": "無限スクロール",
   "settings.displayMode.infiniteScrollDesc": "スクロールすると自動的にキャラクターを読み込みます",
   "settings.colorBlindMode": "色覚サポートモード",
-  "settings.colorBlindModeDesc": "緑色の代わりに青色を使用"
+  "settings.colorBlindModeDesc": "緑色の代わりに青色を使用",
+  "settings.showTierBadge": "OP表示",
+  "settings.showTierBadgeDesc": "ティアリストで高評価のキャラクターを強調表示"
 }

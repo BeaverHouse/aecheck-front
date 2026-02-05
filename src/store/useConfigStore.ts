@@ -14,6 +14,7 @@ interface ConfigState {
   theme: ThemeOptions;
   displayMode: DisplayMode;
   colorBlindMode: boolean;
+  showTierBadge: boolean;
   lastCheckMenu: CheckMenuOptions;
   lastCheckTab: CheckTabOptions;
   lastSearchMenu: CheckMenuOptions;
@@ -22,6 +23,7 @@ interface ConfigState {
   toggleTheme: (theme: ThemeOptions) => void;
   setDisplayMode: (mode: DisplayMode) => void;
   setColorBlindMode: (enabled: boolean) => void;
+  setShowTierBadge: (enabled: boolean) => void;
   updateLastCheckMenu: (option: CheckMenuOptions) => void;
   updateLastCheckTab: (option: CheckTabOptions) => void;
   updateLastSearchMenu: (option: CheckMenuOptions) => void;
@@ -35,6 +37,7 @@ const useConfigStore = create(
       theme: ThemeOptions.light,
       displayMode: DisplayMode.pagination,
       colorBlindMode: false,
+      showTierBadge: true,
       lastCheckMenu: CheckMenuOptions.characters,
       lastCheckTab: CheckTabOptions.inven,
       lastSearchMenu: CheckMenuOptions.characters,
@@ -43,6 +46,7 @@ const useConfigStore = create(
       toggleTheme: (theme) => set({ theme }),
       setDisplayMode: (mode) => set({ displayMode: mode }),
       setColorBlindMode: (enabled) => set({ colorBlindMode: enabled }),
+      setShowTierBadge: (enabled) => set({ showTierBadge: enabled }),
       updateLastCheckMenu: (option) => set({ lastCheckMenu: option }),
       updateLastCheckTab: (option) => set({ lastCheckTab: option }),
       updateLastSearchMenu: (option) => set({ lastSearchMenu: option }),
@@ -60,6 +64,10 @@ const useConfigStore = create(
           // Add colorBlindMode to existing configs if it doesn't exist
           if ('colorBlindMode' in persistedState === false) {
             (persistedState as ConfigState).colorBlindMode = false;
+          }
+          // Add showTierBadge to existing configs if it doesn't exist
+          if ('showTierBadge' in persistedState === false) {
+            (persistedState as ConfigState).showTierBadge = true;
           }
         }
         return persistedState as ConfigState;

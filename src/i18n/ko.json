@@ -16,5 +16,7 @@
   "settings.displayMode.infiniteScroll": "무한 스크롤",
   "settings.displayMode.infiniteScrollDesc": "스크롤하면 자동으로 더 많은 캐릭터를 불러옵니다",
   "settings.colorBlindMode": "색약 모드",
-  "settings.colorBlindModeDesc": "녹색 대신 파란색 계열 사용"
+  "settings.colorBlindModeDesc": "녹색 대신 파란색 계열 사용",
+  "settings.showTierBadge": "OP 표시",
+  "settings.showTierBadgeDesc": "티어 리스트에서 높은 평가를 받은 캐릭터를 강조 표시"
 }
