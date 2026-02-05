@@ -24,7 +24,7 @@ export default function RootLayoutClient({
 }: {
   children: React.ReactNode;
 }) {
-  const { theme, colorBlindMode } = useConfigStore();
+  const { theme, colorBlindMode, hasSeenTierIntro, setHasSeenTierIntro, setShowTierBadge } = useConfigStore();
   const { modalType } = useModalStore();
   const { t } = useTranslation();
   const { loadSaveData } = useCheckStore();
@@ -108,6 +108,24 @@ export default function RootLayoutClient({
   useEffect(() => {
     if (t("frontend.message.migrate") !== "frontend.message.migrate") migrate();
   }, []);
+
+  useEffect(() => {
+    if (hasSeenTierIntro) return;
+    if (t("frontend.tier.intro.title") === "frontend.tier.intro.title") return;
+    Swal.fire({
+      title: t("frontend.tier.intro.title"),
+      html: `<p style="font-size: 14px;">${t("frontend.tier.intro.desc")}</p>`,
+      width: 350,
+      showCancelButton: true,
+      confirmButtonText: t("frontend.tier.intro.enable"),
+      cancelButtonText: t("frontend.tier.intro.dismiss"),
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setShowTierBadge(true);
+      }
+      setHasSeenTierIntro(true);
+    });
+  }, [hasSeenTierIntro]);
 
   // Apply dark mode and color blind mode classes
   useEffect(() => {

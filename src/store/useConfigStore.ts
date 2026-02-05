@@ -15,6 +15,7 @@ interface ConfigState {
   displayMode: DisplayMode;
   colorBlindMode: boolean;
   showTierBadge: boolean;
+  hasSeenTierIntro: boolean;
   lastCheckMenu: CheckMenuOptions;
   lastCheckTab: CheckTabOptions;
   lastSearchMenu: CheckMenuOptions;
@@ -24,6 +25,7 @@ interface ConfigState {
   setDisplayMode: (mode: DisplayMode) => void;
   setColorBlindMode: (enabled: boolean) => void;
   setShowTierBadge: (enabled: boolean) => void;
+  setHasSeenTierIntro: (seen: boolean) => void;
   updateLastCheckMenu: (option: CheckMenuOptions) => void;
   updateLastCheckTab: (option: CheckTabOptions) => void;
   updateLastSearchMenu: (option: CheckMenuOptions) => void;
@@ -37,7 +39,8 @@ const useConfigStore = create(
       theme: ThemeOptions.light,
       displayMode: DisplayMode.pagination,
       colorBlindMode: false,
-      showTierBadge: true,
+      showTierBadge: false,
+      hasSeenTierIntro: false,
       lastCheckMenu: CheckMenuOptions.characters,
       lastCheckTab: CheckTabOptions.inven,
       lastSearchMenu: CheckMenuOptions.characters,
@@ -47,6 +50,7 @@ const useConfigStore = create(
       setDisplayMode: (mode) => set({ displayMode: mode }),
       setColorBlindMode: (enabled) => set({ colorBlindMode: enabled }),
       setShowTierBadge: (enabled) => set({ showTierBadge: enabled }),
+      setHasSeenTierIntro: (seen) => set({ hasSeenTierIntro: seen }),
       updateLastCheckMenu: (option) => set({ lastCheckMenu: option }),
       updateLastCheckTab: (option) => set({ lastCheckTab: option }),
       updateLastSearchMenu: (option) => set({ lastSearchMenu: option }),
@@ -67,7 +71,11 @@ const useConfigStore = create(
           }
           // Add showTierBadge to existing configs if it doesn't exist
           if ('showTierBadge' in persistedState === false) {
-            (persistedState as ConfigState).showTierBadge = true;
+            (persistedState as ConfigState).showTierBadge = false;
+          }
+          // Add hasSeenTierIntro to existing configs if it doesn't exist
+          if ('hasSeenTierIntro' in persistedState === false) {
+            (persistedState as ConfigState).hasSeenTierIntro = false;
           }
         }
         return persistedState as ConfigState;
