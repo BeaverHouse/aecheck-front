@@ -19,6 +19,10 @@
   "settings.colorBlindModeDesc": "Use blue instead of green colors",
   "settings.showTierBadge": "OP Badge",
   "settings.showTierBadgeDesc": "Highlight characters rated highly across tier lists",
-  "frontend.tier.op": "Rated highly in 2 out of 3 tier lists",
-  "frontend.tier.super_op": "Rated highly in all 3 tier lists"
+  "frontend.tier.op": "OP",
+  "frontend.tier.super_op": "Super OP",
+  "frontend.tier.criteria.desc": "OP if 2+ criteria met, Super OP if all 3 met",
+  "frontend.tier.criteria.altema": "Score 99",
+  "frontend.tier.criteria.gameinfo": "SSS rank or above",
+  "frontend.tier.criteria.anothertier": "SS rank or above"
 }

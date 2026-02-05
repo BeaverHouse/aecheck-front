@@ -19,6 +19,7 @@ import {
   Copy,
   Upload,
   Eye,
+  Info,
 } from "lucide-react";
 import {
   Dialog,
@@ -39,6 +40,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 const SettingsModal: React.FC = () => {
   const {
@@ -339,9 +341,35 @@ const SettingsModal: React.FC = () => {
           {/* Tier Badge */}
           <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
             <div className="flex-1 min-w-0 pr-4">
-              <span className="text-sm font-medium text-foreground block">
-                {t("settings.showTierBadge")}
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-medium text-foreground">
+                  {t("settings.showTierBadge")}
+                </span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+                      <Info className="w-3.5 h-3.5" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-72 text-sm space-y-2">
+                    <p className="font-semibold text-foreground">{t("frontend.tier.criteria.desc")}</p>
+                    <ul className="space-y-1 text-xs text-muted-foreground">
+                      <li>
+                        <a href="https://altema.jp/anaden/charalist-2" target="_blank" rel="noreferrer" className="text-primary hover:underline">Altema</a>
+                        {" — "}{t("frontend.tier.criteria.altema")}
+                      </li>
+                      <li>
+                        <a href="https://anothereden.game-info.wiki/d/%a1%da%c6%c3%c0%df%a5%b3%a5%f3%a5%c6%a5%f3%a5%c4%a1%db%c0%b1%a4%ce%cc%b4%a4%ce%a4%ab%a4%b1%a4%e9%a5%ac%a5%a4%a5%c9" target="_blank" rel="noreferrer" className="text-primary hover:underline">Game-info Wiki</a>
+                        {" — "}{t("frontend.tier.criteria.gameinfo")}
+                      </li>
+                      <li>
+                        <a href="https://anothertier.com/" target="_blank" rel="noreferrer" className="text-primary hover:underline">AnotherTier</a>
+                        {" — "}{t("frontend.tier.criteria.anothertier")}
+                      </li>
+                    </ul>
+                  </PopoverContent>
+                </Popover>
+              </div>
               <span className="text-xs text-muted-foreground block mt-0.5">
                 {t("settings.showTierBadgeDesc")}
               </span>
