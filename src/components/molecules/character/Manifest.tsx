@@ -6,6 +6,7 @@ import { Plus, Minus } from "lucide-react";
 import CharacterAvatar from "../../atoms/character/Avatar";
 import { ManifestStatus, ModalType } from "../../../constants/enum";
 import useModalStore from "../../../store/useModalStore";
+import useConfigStore from "../../../store/useConfigStore";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -59,6 +60,7 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
 }) => {
   const { manifest, setManifest, weaponTempering, setWeaponTempering } = useCheckStore();
   const { setModal } = useModalStore();
+  const { showTierBadge } = useConfigStore();
   const { t } = useTranslation();
 
   const id = getNumber(info);
@@ -68,13 +70,7 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
     status === ManifestStatus.incompleted ||
     status === ManifestStatus.completed;
   const isRecent = isUpdatedInWeeks(info.lastUpdated);
-
-  // Debug: Check if customManifest is being received
-  React.useEffect(() => {
-    if (info.customManifest) {
-      console.log('Character with customManifest:', info.id, info);
-    }
-  }, [info]);
+  const hasTier = showTierBadge && (info.tier === "op" || info.tier === "super_op");
 
   const changeManifest = (step: number) => {
     const changedStep = currentStep + step;
@@ -107,19 +103,22 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
     <Card
       className={cn(
         "flex w-full min-w-[275px] overflow-visible",
-        isRecent && "shadow"
+        hasTier && info.tier === "op" && "glow-op",
+        hasTier && info.tier === "super_op" && "glow-super-op",
+        !hasTier && isRecent && "glow-recent"
       )}
     >
       <CardContent className="flex items-center p-2 w-full">
         <CharacterAvatar
           info={info}
           disableShadow={true}
+          disableTierRing={true}
           onClick={() => setModal(ModalType.character, info.id)}
         />
         {manifestAvailable ? (
           <div className="flex items-center justify-center flex-1 gap-4">
             <CircularProgressWithLabel
-              value={(100 * currentStep) / info.maxManifest}
+              value={info.maxManifest > 0 ? (100 * currentStep) / info.maxManifest : 100}
             />
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="flex gap-1">
@@ -147,7 +146,7 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
                     id={`weapon-tempering-${id}`}
                     checked={weaponTemperingStep === 1}
                     onCheckedChange={toggleWeaponTempering}
-                    disabled={currentStep < info.maxManifest || info.maxManifest === 0}
+                    disabled={info.maxManifest > 0 && currentStep < info.maxManifest}
                   />
                   <label
                     htmlFor={`weapon-tempering-${id}`}

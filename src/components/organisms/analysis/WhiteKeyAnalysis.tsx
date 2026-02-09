@@ -60,10 +60,6 @@ const WhiteKeyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
         dayjs().subtract(1, "year").isBefore(dayjs(info.updateDate!))
       ),
     },
-    // {
-    //     label: "frontend.analyze.havebuddy",
-    //     value: targetOptions.filter((info) => buddyCharacterIds.includes(info.id)),
-    // },
     {
       label: "alter.true",
       value: targetOptions.filter((char) => char.isAlter),

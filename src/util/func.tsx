@@ -104,3 +104,25 @@ export const isUpdatedInWeeks = (date: Date | undefined, weeks: number = 3): boo
   if (!date) return false;
   return dayjs().subtract(weeks, "week").isBefore(dayjs(date));
 };
+
+/**
+ * 캐릭터 정렬 비교 함수 (최근 업데이트 우선 + 이름순)
+ */
+export const createCharacterSorter = (
+  t: (key: string) => string,
+  lang: string
+) => {
+  return (a: CharacterSummary, b: CharacterSummary) => {
+    const aDate = a.updateDate || a.lastUpdated;
+    const bDate = b.updateDate || b.lastUpdated;
+    const aIsRecent = isUpdatedInWeeks(aDate);
+    const bIsRecent = isUpdatedInWeeks(bDate);
+
+    if (aIsRecent && !bIsRecent) return -1;
+    if (!aIsRecent && bIsRecent) return 1;
+
+    return getShortName(t(a.code), lang).localeCompare(
+      getShortName(t(b.code), lang)
+    );
+  };
+};

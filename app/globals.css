@@ -143,9 +143,16 @@ a {
   opacity: 0.3;
 }
 
-.shadow {
+.glow-recent {
   box-shadow: 0px 0px 5px 5px #56b4e9 !important;
-  transition: border-radius 1s !important;
+}
+
+.glow-op {
+  box-shadow: 0px 0px 5px 5px rgba(250, 204, 21, 0.7) !important;
+}
+
+.glow-super-op {
+  box-shadow: 0px 0px 8px 6px rgba(253, 224, 71, 0.85) !important;
 }
 
 td[class="odd"] {

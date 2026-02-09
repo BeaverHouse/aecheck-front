@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 
 interface BuddyCardProps {
   info: BuddyDetail;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
-const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick }) => {
+const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick = () => {} }) => {
   const { buddy, inven } = useCheckStore();
   const { t, i18n } = useTranslation();
   const { setModal } = useModalStore();
@@ -31,7 +31,7 @@ const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick }) => {
     <Card
       className={cn(
         "w-full min-w-[275px] max-w-[400px] h-[80px] cursor-pointer hover:bg-accent/50 transition-colors",
-        isRecent && "shadow"
+        isRecent && "glow-recent"
       )}
       onClick={onClick}
     >

@@ -12,21 +12,21 @@ function NormalAnnounce() {
 
   useEffect(() => {
     const viewed =
-      window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20251209";
+      window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20260209";
     setAnnounceViewed(viewed);
   }, []);
 
   if (announceViewed || !visible) return null;
 
-  const title = "25.12.31 Update";
+  const title = "26.02.09 Update";
 
   const description =
     i18n.language === "ko"
-      ? "디자인 2차 개선이 이루어졌어요. 디자인은 계속 개선할 예정이에요."
-      : "Design 2nd improvement is complete. The design will be improved continuously.";
+      ? "디자인과 버그를 수정하고, 티어 표시 기능을 추가했어요."
+      : "Design and bug fixes have been made, and the tier display function has been added.";
 
   const handleDismiss = () => {
-    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20251231");
+    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20260209");
     setVisible(false);
   };
 

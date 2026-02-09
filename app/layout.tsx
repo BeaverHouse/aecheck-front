@@ -57,7 +57,7 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1"
         />
       </head>
-      <body>
+      <body className="bg-background">
         <noscript>AE Check - Another Eden Collection Tracker</noscript>
         <RootLayoutClient>{children}</RootLayoutClient>
       </body>

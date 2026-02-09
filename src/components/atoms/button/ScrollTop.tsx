@@ -35,7 +35,7 @@ function ScrollTop({ children }: ScrollTopProps) {
     <div
       onClick={handleClick}
       className={cn(
-        "fixed bottom-4 right-4 transition-opacity duration-200",
+        "fixed bottom-4 right-4 z-20 transition-opacity duration-200",
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
     >

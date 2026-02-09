@@ -3,17 +3,16 @@ import useFilterStore from "../../../store/useFilterStore";
 import useCheckStore from "../../../store/useCheckStore";
 import useConfigStore from "../../../store/useConfigStore";
 import {
+  createCharacterSorter,
   getInvenStatus,
   getNumber,
-  getShortName,
   getStep,
 } from "../../../util/func";
 import CharacterStaralign from "../../molecules/character/Staralign";
 import StaralignFilterButton from "../../atoms/button/StaralignFilter";
 import InvenFilterButton from "../../atoms/button/InvenFilter";
-import dayjs from "dayjs";
-import { useState, useEffect, useRef, useCallback } from "react";
 import { DisplayMode } from "../../../constants/enum";
+import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import {
   Pagination,
   PaginationContent,
@@ -39,81 +38,24 @@ function StaralignDashboard({
         staralignStatusFilter.includes(getStep(getNumber(char), staralign)) &&
         invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
     )
-    .sort((a, b) => {
-      const aIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(a.lastUpdated));
-      const bIsRecent = dayjs()
-        .subtract(3, "week")
-        .isBefore(dayjs(b.lastUpdated));
+    .sort(createCharacterSorter(t, i18n.language));
 
-      if (aIsRecent && !bIsRecent) return -1;
-      if (!aIsRecent && bIsRecent) return 1;
+  const itemsPerPage = getItemsPerPage("card");
+  const {
+    page,
+    setPage,
+    totalPages,
+    observerTarget,
+    getCurrentItems,
+    hasMore,
+  } = usePagination<CharacterSummary>({
+    totalItems: targetCharacters.length,
+    displayMode,
+    itemsPerPage,
+    dependencies: [filteredCharacters, invenStatusFilter, staralignStatusFilter],
+  });
 
-      return getShortName(t(a.code), i18n.language).localeCompare(
-        getShortName(t(b.code), i18n.language)
-      );
-    });
-
-  // pagination 관련 state 추가
-  const [page, setPage] = useState(1);
-  const [loadedCount, setLoadedCount] = useState(50);
-  const observerTarget = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setPage(1);
-    setLoadedCount(50);
-  }, [filteredCharacters, invenStatusFilter, staralignStatusFilter]);
-
-  const getItemsPerPage = () => {
-    const width = window.innerWidth;
-    if (width >= 1200) return 24; // lg
-    if (width >= 900) return 18; // md
-    if (width >= 600) return 12; // sm
-    return 6; // xs
-  };
-
-  const itemsPerPage = getItemsPerPage();
-  const totalPages = Math.ceil(targetCharacters.length / itemsPerPage);
-
-  // Infinite scroll observer
-  const loadMore = useCallback(() => {
-    if (loadedCount < targetCharacters.length) {
-      setLoadedCount((prev) => Math.min(prev + 50, targetCharacters.length));
-    }
-  }, [loadedCount, targetCharacters.length]);
-
-  useEffect(() => {
-    if (displayMode !== DisplayMode.infiniteScroll) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [displayMode, loadMore]);
-
-  const currentCharacters =
-    displayMode === DisplayMode.infiniteScroll
-      ? targetCharacters.slice(0, loadedCount)
-      : targetCharacters.slice(
-          (page - 1) * itemsPerPage,
-          page * itemsPerPage
-        );
+  const currentCharacters = getCurrentItems(targetCharacters);
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -170,15 +112,14 @@ function StaralignDashboard({
             <CharacterStaralign key={`align-${char.id}`} {...char} />
           ))}
         </div>
-        {displayMode === DisplayMode.infiniteScroll &&
-          loadedCount < targetCharacters.length && (
-            <div
-              ref={observerTarget}
-              className="h-20 flex items-center justify-center text-sm text-muted-foreground"
-            >
-              Loading more characters...
-            </div>
-          )}
+        {displayMode === DisplayMode.infiniteScroll && hasMore && (
+          <div
+            ref={observerTarget}
+            className="h-20 flex items-center justify-center text-sm text-muted-foreground"
+          >
+            Loading more characters...
+          </div>
+        )}
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ function BuddySearch() {
       <GlobalFilter type={CheckMenuOptions.buddies} />
       <div className="grid grid-cols-[repeat(auto-fill,minmax(275px,400px))] gap-4 justify-center p-4">
         {filteredBuddies.map((info) => (
-          <BuddyCard key={info.id} info={info} onClick={() => {}} />
+          <BuddyCard key={info.id} info={info} />
         ))}
       </div>
     </div>

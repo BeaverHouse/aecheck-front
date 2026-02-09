@@ -1,9 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import useModalStore from "../../../store/useModalStore";
-import { CheckCircle, XCircle, AlertCircle, ExternalLink } from "lucide-react";
+import { CheckCircle, XCircle, AlertCircle, ExternalLink, Crown } from "lucide-react";
 import { getInvenStatus, getStep } from "../../../util/func";
 import useCheckStore from "../../../store/useCheckStore";
+import useConfigStore from "../../../store/useConfigStore";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { InvenStatus, LanguageOptions } from "../../../constants/enum";
@@ -15,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { fetchAPI } from "../../../util/api";
 import Loading from "../Loading";
 import MemoirInfo from "./MemoirInfo";
@@ -22,6 +24,7 @@ import MemoirInfo from "./MemoirInfo";
 const CharacterModal: React.FC = () => {
   const { inven, grasta, manifest, staralign, weaponTempering } =
     useCheckStore();
+  const { showTierBadge } = useConfigStore();
   const { characterID, hideModal } = useModalStore();
   const { t, i18n } = useTranslation();
 
@@ -100,7 +103,7 @@ const CharacterModal: React.FC = () => {
   const invenIcon = () => {
     switch (currentInven) {
       case InvenStatus.owned:
-        return <CheckCircle className="w-7 h-7 text-green-500 mr-2" />;
+        return <CheckCircle className="w-7 h-7 text-primary mr-2" />;
       case InvenStatus.ccRequired:
         return <AlertCircle className="w-7 h-7 text-yellow-500 mr-2" />;
       case InvenStatus.notOwned:
@@ -140,6 +143,35 @@ const CharacterModal: React.FC = () => {
             <p className="text-sm font-medium text-foreground">
               Release: {dayjs(characterData.updateDate).format("YYYY-MM-DD")}
             </p>
+            {showTierBadge && characterData.tier && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button className="flex items-center gap-1 mt-1 w-fit cursor-pointer">
+                    <Crown className={`w-4 h-4 ${characterData.tier === "super_op" ? "text-yellow-400" : "text-yellow-600"}`} />
+                    <span className={`text-xs font-bold ${characterData.tier === "super_op" ? "text-yellow-400" : "text-yellow-600"}`}>
+                      {characterData.tier === "super_op" ? "Super OP" : "OP"}
+                    </span>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-72 text-sm space-y-2">
+                  <p className="font-semibold text-foreground">{t("frontend.tier.criteria.desc")}</p>
+                  <ul className="space-y-1 text-xs text-muted-foreground">
+                    <li>
+                      <a href="https://altema.jp/anaden/charalist-2" target="_blank" rel="noreferrer" className="text-primary hover:underline">Altema</a>
+                      {" — "}{t("frontend.tier.criteria.altema")}
+                    </li>
+                    <li>
+                      <a href="https://anothereden.game-info.wiki/d/%a1%da%c6%c3%c0%df%a5%b3%a5%f3%a5%c6%a5%f3%a5%c4%a1%db%c0%b1%a4%ce%cc%b4%a4%ce%a4%ab%a4%b1%a4%e9%a5%ac%a5%a4%a5%c9" target="_blank" rel="noreferrer" className="text-primary hover:underline">Game-info Wiki</a>
+                      {" — "}{t("frontend.tier.criteria.gameinfo")}
+                    </li>
+                    <li>
+                      <a href="https://anothertier.com/" target="_blank" rel="noreferrer" className="text-primary hover:underline">AnotherTier</a>
+                      {" — "}{t("frontend.tier.criteria.anothertier")}
+                    </li>
+                  </ul>
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
           {characterData.seesaaURL && (
             <a
@@ -165,7 +197,8 @@ const CharacterModal: React.FC = () => {
           </div>
         )}
 
-        {currentManifestStep === characterData.maxManifest &&
+        {!(characterData.customManifest && currentWeaponTemperingStep === 1) &&
+          currentManifestStep === characterData.maxManifest &&
           characterData.maxManifest > 0 && (
             <div className="flex w-full items-center">
               <img

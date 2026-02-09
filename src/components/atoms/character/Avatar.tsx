@@ -1,5 +1,6 @@
 import React from "react";
 import useCheckStore from "../../../store/useCheckStore";
+import useConfigStore from "../../../store/useConfigStore";
 import { useTranslation } from "react-i18next";
 import { getNumber, getShortName, getStep, isUpdatedInWeeks } from "../../../util/func";
 import { AECharacterStyles } from "../../../constants/enum";
@@ -9,6 +10,7 @@ interface CharacterCheckProps {
   info: CharacterSummary;
   disableShadow: boolean;
   disableGray?: boolean;
+  disableTierRing?: boolean;
   onClick: () => void;
 }
 
@@ -17,14 +19,17 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   info,
   disableShadow,
   disableGray = false,
+  disableTierRing = false,
   onClick,
 }) => {
   const { inven, grasta, manifest, staralign, weaponTempering } = useCheckStore();
+  const { showTierBadge } = useConfigStore();
   const { t, i18n } = useTranslation();
 
   const id = getNumber(info);
   const checked = inven.includes(id);
   const isRecent = isUpdatedInWeeks(info.updateDate);
+  const hasTierRing = !disableTierRing && showTierBadge && (info.tier === "op" || info.tier === "super_op");
 
   const currentGrastaStep = getStep(id, grasta);
   const currentManifestStep = getStep(id, manifest);
@@ -32,6 +37,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   const currentWeaponTemperingStep = getStep(id, weaponTempering);
 
   const manifestIcon = () => {
+    if (info.customManifest && currentWeaponTemperingStep > 0) return null;
     const manifestCompleted =
       currentManifestStep >= info.maxManifest && info.maxManifest > 0;
     if (manifestCompleted) {
@@ -78,12 +84,8 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   const weaponTemperingIcon = () => {
     if (!info.customManifest || currentWeaponTemperingStep === 0) return null;
 
-    // 크라운 완료 여부 확인
-    const manifestCompleted = currentManifestStep >= info.maxManifest && info.maxManifest > 0;
-    const bottomPosition = manifestCompleted ? "bottom-[12px]" : "bottom-[-8px]";
-
     return (
-      <div className={`absolute ${bottomPosition} left-[-5px] z-10`}>
+      <div className="absolute bottom-[-8px] left-[-5px] z-10">
         <div className="relative w-[23px] h-[23px] bg-black/60 rounded-full flex items-center justify-center">
           <img
             src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/weapontempering.png`}
@@ -98,17 +100,19 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   return (
     <div
       onClick={onClick}
-      className="w-[75px] h-[75px] cursor-pointer relative"
+      className={cn(
+        "w-[75px] h-[75px] cursor-pointer relative rounded-[3px]",
+        hasTierRing && info.tier === "op" && "ring-2 ring-yellow-500/80",
+        hasTierRing && info.tier === "super_op" && "ring-4 ring-yellow-400",
+        !hasTierRing && isRecent && !disableShadow && "ring-2 ring-[#56b4e9]"
+      )}
     >
       {styleIcon()}
       {grastaIcon()}
       {manifestIcon()}
       {weaponTemperingIcon()}
       <picture
-        className={cn(
-          "block w-full h-full rounded-[3px]",
-          isRecent && !disableShadow && "shadow-[0_0_12px_4px_rgba(0,150,255,0.6)]"
-        )}
+        className="block w-full h-full rounded-[3px]"
       >
         {currentAlignStep === 3 && inven.includes(id) ? (
           <>

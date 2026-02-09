@@ -43,6 +43,7 @@ type CharacterSummary = {
   lightShadow: string;
   maxManifest: number;
   customManifest: boolean;
+  tier?: string | null;
   isAwaken: boolean;
   isAlter: boolean;
   alterCharacter?: string | null;

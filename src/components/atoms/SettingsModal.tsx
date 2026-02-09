@@ -15,12 +15,11 @@ import Swal from "sweetalert2";
 import {
   Sun,
   Moon,
-  Monitor,
   Scroll,
   Copy,
   Upload,
   Eye,
-  Palette,
+  Info,
 } from "lucide-react";
 import {
   Dialog,
@@ -41,6 +40,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 const SettingsModal: React.FC = () => {
   const {
@@ -52,6 +52,8 @@ const SettingsModal: React.FC = () => {
     toggleTheme,
     colorBlindMode,
     setColorBlindMode,
+    showTierBadge,
+    setShowTierBadge,
   } = useConfigStore();
   const {
     inven,
@@ -172,242 +174,263 @@ const SettingsModal: React.FC = () => {
           <DialogDescription>{t("settings.description")}</DialogDescription>
         </DialogHeader>
 
-        <Accordion
-          type="single"
-          collapsible
-          defaultValue="display"
-          className="w-full"
-        >
-          {/* Display Settings */}
-          <AccordionItem value="display">
-            <AccordionTrigger className="text-base font-semibold hover:no-underline rounded-lg px-3 hover:bg-accent/50">
-              <div className="flex items-center gap-2">
-                <Monitor className="w-4 h-4 text-muted-foreground" />
-                <span className="text-foreground">Display</span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-3 pt-1 pb-4">
-              <div className="space-y-4">
-                {/* Display Mode */}
-                <div className="space-y-1">
-                  <Label className="text-sm font-medium text-muted-foreground">
-                    {t("settings.displayMode.title")}
-                  </Label>
-                  <RadioGroup
-                    value={displayMode}
-                    onValueChange={handleDisplayModeChange}
-                    className="mt-1"
-                  >
-                    <label
-                      htmlFor="pagination"
-                      className={`flex items-center space-x-3 p-2 rounded-lg border cursor-pointer transition-all ${
-                        displayMode === DisplayMode.pagination
-                          ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                          : "hover:bg-accent/50"
-                      }`}
-                    >
-                      <RadioGroupItem
-                        value={DisplayMode.pagination}
-                        id="pagination"
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium text-sm text-foreground">
-                          {t("settings.displayMode.pagination")}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-0.5">
-                          {t("settings.displayMode.paginationDesc")}
-                        </div>
-                      </div>
-                    </label>
-
-                    <label
-                      htmlFor="infiniteScroll"
-                      className={`flex items-center space-x-3 p-2 rounded-lg border cursor-pointer transition-all ${
-                        displayMode === DisplayMode.infiniteScroll
-                          ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                          : "hover:bg-accent/50"
-                      }`}
-                    >
-                      <RadioGroupItem
-                        value={DisplayMode.infiniteScroll}
-                        id="infiniteScroll"
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium text-sm text-foreground">
-                          {t("settings.displayMode.infiniteScroll")}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-0.5">
-                          {t("settings.displayMode.infiniteScrollDesc")}
-                        </div>
-                      </div>
-                    </label>
-                  </RadioGroup>
-                </div>
-
-                <Separator className="my-4" />
-
-                {/* Popup on Check */}
-                <div className="space-y-3">
-                  <Label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                    <Eye className="w-4 h-4" />
-                    {t("frontend.message.popup-on-check")}
-                  </Label>
-                  <RadioGroup
-                    value={popupOnCheck}
-                    onValueChange={handlePopupOnCheckChange}
-                    className="flex flex-wrap gap-2"
-                  >
-                    {Object.values(PopupOnCheckOptions).map((option) => (
-                      <label
-                        key={option}
-                        htmlFor={option}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-all ${
-                          popupOnCheck === option
-                            ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                            : "hover:bg-accent/50"
-                        }`}
-                      >
-                        <RadioGroupItem
-                          value={option}
-                          id={option}
-                          className="sr-only"
-                        />
-                        <span className="text-sm font-medium text-foreground">
-                          {t(`frontend.config.${option}`)}
-                        </span>
-                      </label>
-                    ))}
-                  </RadioGroup>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          {/* Appearance */}
-          <AccordionItem value="appearance">
-            <AccordionTrigger className="text-base font-semibold hover:no-underline rounded-lg px-3 hover:bg-accent/50">
-              <div className="flex items-center gap-2">
-                <Palette className="w-4 h-4 text-muted-foreground" />
-                <span className="text-foreground">Theme</span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-3 pt-1 pb-4">
-              <div className="space-y-3">
-                {/* Language */}
-                <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground">
-                      Language
-                    </span>
+        <div className="space-y-4">
+          {/* Display Mode */}
+          <div className="space-y-1">
+            <Label className="text-sm font-medium text-muted-foreground">
+              {t("settings.displayMode.title")}
+            </Label>
+            <RadioGroup
+              value={displayMode}
+              onValueChange={handleDisplayModeChange}
+              className="mt-1"
+            >
+              <label
+                htmlFor="pagination"
+                className={`flex items-center space-x-3 p-2 rounded-lg border cursor-pointer transition-all ${
+                  displayMode === DisplayMode.pagination
+                    ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                    : "hover:bg-accent/50"
+                }`}
+              >
+                <RadioGroupItem
+                  value={DisplayMode.pagination}
+                  id="pagination"
+                />
+                <div className="flex-1">
+                  <div className="font-medium text-sm text-foreground">
+                    {t("settings.displayMode.pagination")}
                   </div>
-                  <RadioGroup
-                    value={i18n.language}
-                    onValueChange={(val) =>
-                      handleLanguageChange(val as LanguageOptions)
-                    }
-                    className="flex gap-1"
-                  >
-                    {Object.values(LanguageOptions).map((lang) => (
-                      <label
-                        key={lang}
-                        htmlFor={`lang-${lang}`}
-                        className={`px-3 py-1.5 rounded-md cursor-pointer transition-all text-sm font-medium ${
-                          i18n.language === lang
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-foreground hover:bg-muted/80"
-                        }`}
-                      >
-                        <RadioGroupItem
-                          value={lang}
-                          id={`lang-${lang}`}
-                          className="sr-only"
-                        />
-                        {lang.toUpperCase()}
-                      </label>
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                {/* Theme */}
-                <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <Sun className="w-4 h-4 text-amber-500" />
-                      <span className="text-xs text-muted-foreground">/</span>
-                      <Moon className="w-4 h-4 text-indigo-400" />
-                    </div>
-                    <span className="text-sm font-medium text-foreground">
-                      Dark Mode
-                    </span>
+                  <div className="text-xs text-muted-foreground mt-0.5">
+                    {t("settings.displayMode.paginationDesc")}
                   </div>
-                  <Switch
-                    checked={theme === ThemeOptions.dark}
-                    onCheckedChange={handleThemeToggle}
+                </div>
+              </label>
+
+              <label
+                htmlFor="infiniteScroll"
+                className={`flex items-center space-x-3 p-2 rounded-lg border cursor-pointer transition-all ${
+                  displayMode === DisplayMode.infiniteScroll
+                    ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                    : "hover:bg-accent/50"
+                }`}
+              >
+                <RadioGroupItem
+                  value={DisplayMode.infiniteScroll}
+                  id="infiniteScroll"
+                />
+                <div className="flex-1">
+                  <div className="font-medium text-sm text-foreground">
+                    {t("settings.displayMode.infiniteScroll")}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-0.5">
+                    {t("settings.displayMode.infiniteScrollDesc")}
+                  </div>
+                </div>
+              </label>
+            </RadioGroup>
+          </div>
+
+          <Separator />
+
+          {/* Popup on Check */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              {t("frontend.message.popup-on-check")}
+            </Label>
+            <RadioGroup
+              value={popupOnCheck}
+              onValueChange={handlePopupOnCheckChange}
+              className="flex flex-wrap gap-2"
+            >
+              {Object.values(PopupOnCheckOptions).map((option) => (
+                <label
+                  key={option}
+                  htmlFor={option}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-all ${
+                    popupOnCheck === option
+                      ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                      : "hover:bg-accent/50"
+                  }`}
+                >
+                  <RadioGroupItem
+                    value={option}
+                    id={option}
+                    className="sr-only"
                   />
-                </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {t(`frontend.config.${option}`)}
+                  </span>
+                </label>
+              ))}
+            </RadioGroup>
+          </div>
 
-                {/* Color Blind Mode */}
-                <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
-                  <div className="flex-1 min-w-0 pr-4">
-                    <span className="text-sm font-medium text-foreground block">
-                      {t("settings.colorBlindMode")}
-                    </span>
-                    <span className="text-xs text-muted-foreground block mt-0.5">
-                      {t("settings.colorBlindModeDesc")}
-                    </span>
-                  </div>
-                  <Switch
-                    checked={colorBlindMode}
-                    onCheckedChange={setColorBlindMode}
+          <Separator />
+
+          {/* Language */}
+          <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-foreground">
+                Language
+              </span>
+            </div>
+            <RadioGroup
+              value={i18n.language}
+              onValueChange={(val) =>
+                handleLanguageChange(val as LanguageOptions)
+              }
+              className="flex gap-1"
+            >
+              {Object.values(LanguageOptions).map((lang) => (
+                <label
+                  key={lang}
+                  htmlFor={`lang-${lang}`}
+                  className={`px-3 py-1.5 rounded-md cursor-pointer transition-all text-sm font-medium ${
+                    i18n.language === lang
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  <RadioGroupItem
+                    value={lang}
+                    id={`lang-${lang}`}
+                    className="sr-only"
                   />
-                </div>
+                  {lang.toUpperCase()}
+                </label>
+              ))}
+            </RadioGroup>
+          </div>
+
+          {/* Theme */}
+          <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Sun className="w-4 h-4 text-amber-500" />
+                <span className="text-xs text-muted-foreground">/</span>
+                <Moon className="w-4 h-4 text-indigo-400" />
               </div>
-            </AccordionContent>
-          </AccordionItem>
+              <span className="text-sm font-medium text-foreground">
+                Dark Mode
+              </span>
+            </div>
+            <Switch
+              checked={theme === ThemeOptions.dark}
+              onCheckedChange={handleThemeToggle}
+            />
+          </div>
+
+          {/* Color Blind Mode */}
+          <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="flex-1 min-w-0 pr-4">
+              <span className="text-sm font-medium text-foreground block">
+                {t("settings.colorBlindMode")}
+              </span>
+              <span className="text-xs text-muted-foreground block mt-0.5">
+                {t("settings.colorBlindModeDesc")}
+              </span>
+            </div>
+            <Switch
+              checked={colorBlindMode}
+              onCheckedChange={setColorBlindMode}
+            />
+          </div>
+
+          {/* Tier Badge */}
+          <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="flex-1 min-w-0 pr-4">
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm font-medium text-foreground">
+                  {t("settings.showTierBadge")}
+                </span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+                      <Info className="w-3.5 h-3.5" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-72 text-sm space-y-2">
+                    <p className="font-semibold text-foreground">{t("frontend.tier.criteria.desc")}</p>
+                    <ul className="space-y-1 text-xs text-muted-foreground">
+                      <li>
+                        <a href="https://altema.jp/anaden/charalist-2" target="_blank" rel="noreferrer" className="text-primary hover:underline">Altema</a>
+                        {" — "}{t("frontend.tier.criteria.altema")}
+                      </li>
+                      <li>
+                        <a href="https://anothereden.game-info.wiki/d/%a1%da%c6%c3%c0%df%a5%b3%a5%f3%a5%c6%a5%f3%a5%c4%a1%db%c0%b1%a4%ce%cc%b4%a4%ce%a4%ab%a4%b1%a4%e9%a5%ac%a5%a4%a5%c9" target="_blank" rel="noreferrer" className="text-primary hover:underline">Game-info Wiki</a>
+                        {" — "}{t("frontend.tier.criteria.gameinfo")}
+                      </li>
+                      <li>
+                        <a href="https://anothertier.com/" target="_blank" rel="noreferrer" className="text-primary hover:underline">AnotherTier</a>
+                        {" — "}{t("frontend.tier.criteria.anothertier")}
+                      </li>
+                    </ul>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <span className="text-xs text-muted-foreground block mt-0.5">
+                {t("settings.showTierBadgeDesc")}
+              </span>
+            </div>
+            <Switch
+              checked={showTierBadge}
+              onCheckedChange={setShowTierBadge}
+            />
+          </div>
+
+          <Separator />
 
           {/* Data Management */}
-          <AccordionItem value="data">
-            <AccordionTrigger className="text-base font-semibold hover:no-underline rounded-lg px-3 hover:bg-accent/50">
-              <div className="flex items-center gap-2">
-                <Scroll className="w-4 h-4 text-muted-foreground" />
-                <span className="text-foreground">
-                  {t("frontend.menu.loader")}
-                </span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-3 pt-1 pb-4">
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground bg-accent/30 p-3 rounded-lg">
-                  {t("frontend.menu.loader.description")}
-                </p>
-                <Textarea
-                  rows={8}
-                  className="w-full font-mono text-xs text-foreground bg-muted/50 border-muted-foreground/20"
-                  value={dataText}
-                  onChange={(e) => setDataText(e.target.value)}
-                />
-                <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    className="flex-1 gap-2 text-foreground"
-                    onClick={copyToClipboard}
-                  >
-                    <Copy className="w-4 h-4" />
-                    <span>Copy</span>
-                  </Button>
-                  <Button
-                    variant="default"
-                    className="flex-1 gap-2 bg-primary hover:bg-primary/90"
-                    onClick={loadData}
-                  >
-                    <Upload className="w-4 h-4" />
-                    <span>Load</span>
-                  </Button>
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+          >
+            <AccordionItem value="data">
+              <AccordionTrigger className="text-base font-semibold hover:no-underline rounded-lg px-3 hover:bg-accent/50">
+                <div className="flex items-center gap-2">
+                  <Scroll className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-foreground">
+                    {t("frontend.menu.loader")}
+                  </span>
                 </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              </AccordionTrigger>
+              <AccordionContent className="px-3 pt-1 pb-4">
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground bg-accent/30 p-3 rounded-lg">
+                    {t("frontend.menu.loader.description")}
+                  </p>
+                  <Textarea
+                    rows={8}
+                    className="w-full font-mono text-xs text-foreground bg-muted/50 border-muted-foreground/20"
+                    value={dataText}
+                    onChange={(e) => setDataText(e.target.value)}
+                  />
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      className="flex-1 gap-2 text-foreground"
+                      onClick={copyToClipboard}
+                    >
+                      <Copy className="w-4 h-4" />
+                      <span>Copy</span>
+                    </Button>
+                    <Button
+                      variant="default"
+                      className="flex-1 gap-2 bg-primary hover:bg-primary/90"
+                      onClick={loadData}
+                    >
+                      <Upload className="w-4 h-4" />
+                      <span>Load</span>
+                    </Button>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       </DialogContent>
     </Dialog>
   );
