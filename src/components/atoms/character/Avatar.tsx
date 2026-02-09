@@ -10,6 +10,7 @@ interface CharacterCheckProps {
   info: CharacterSummary;
   disableShadow: boolean;
   disableGray?: boolean;
+  disableTierRing?: boolean;
   onClick: () => void;
 }
 
@@ -18,6 +19,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   info,
   disableShadow,
   disableGray = false,
+  disableTierRing = false,
   onClick,
 }) => {
   const { inven, grasta, manifest, staralign, weaponTempering } = useCheckStore();
@@ -27,6 +29,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   const id = getNumber(info);
   const checked = inven.includes(id);
   const isRecent = isUpdatedInWeeks(info.updateDate);
+  const hasTierRing = !disableTierRing && showTierBadge && (info.tier === "op" || info.tier === "super_op");
 
   const currentGrastaStep = getStep(id, grasta);
   const currentManifestStep = getStep(id, manifest);
@@ -99,8 +102,9 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
       onClick={onClick}
       className={cn(
         "w-[75px] h-[75px] cursor-pointer relative rounded-[3px]",
-        showTierBadge && info.tier === "op" && "ring-2 ring-yellow-500/80",
-        showTierBadge && info.tier === "super_op" && "ring-[3px] ring-yellow-400 shadow-[0_0_8px_3px_rgba(234,179,8,0.5)]"
+        hasTierRing && info.tier === "op" && "ring-2 ring-yellow-500/80",
+        hasTierRing && info.tier === "super_op" && "ring-4 ring-yellow-400",
+        !hasTierRing && isRecent && !disableShadow && "ring-2 ring-[#56b4e9]"
       )}
     >
       {styleIcon()}
@@ -108,10 +112,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
       {manifestIcon()}
       {weaponTemperingIcon()}
       <picture
-        className={cn(
-          "block w-full h-full rounded-[3px]",
-          isRecent && !disableShadow && "shadow-[0_0_12px_4px_rgba(0,150,255,0.6)]"
-        )}
+        className="block w-full h-full rounded-[3px]"
       >
         {currentAlignStep === 3 && inven.includes(id) ? (
           <>

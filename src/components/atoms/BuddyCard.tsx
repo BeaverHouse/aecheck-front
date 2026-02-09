@@ -31,7 +31,7 @@ const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick = () => {} }) => {
     <Card
       className={cn(
         "w-full min-w-[275px] max-w-[400px] h-[80px] cursor-pointer hover:bg-accent/50 transition-colors",
-        isRecent && "shadow"
+        isRecent && "glow-recent"
       )}
       onClick={onClick}
     >

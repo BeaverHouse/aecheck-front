@@ -42,9 +42,10 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
 
     setModal(ModalType.loading);
     try {
-      element.querySelectorAll(".shadow").forEach((element) => {
-        element.classList.remove("shadow");
-        element.classList.add("temporary");
+      element.querySelectorAll(".glow-recent, .glow-op, .glow-super-op").forEach((el) => {
+        const glowClass = ["glow-recent", "glow-op", "glow-super-op"].find((c) => el.classList.contains(c))!;
+        el.classList.remove(glowClass);
+        el.setAttribute("data-glow", glowClass);
       });
 
       // Detect dark mode and set appropriate background color
@@ -59,9 +60,10 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         ignoreElements: (element) => element.id === "downloader",
       });
 
-      element.querySelectorAll(".temporary").forEach((element) => {
-        element.classList.remove("temporary");
-        element.classList.add("shadow");
+      element.querySelectorAll("[data-glow]").forEach((el) => {
+        const glowClass = el.getAttribute("data-glow")!;
+        el.classList.add(glowClass);
+        el.removeAttribute("data-glow");
       });
 
       if (navigator.userAgent.match(/NAVER|KAKAOTALK/i)) {

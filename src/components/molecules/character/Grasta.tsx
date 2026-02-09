@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { getNumber, getStep, isUpdatedInWeeks } from "../../../util/func";
 import CharacterAvatar from "../../atoms/character/Avatar";
 import useModalStore from "../../../store/useModalStore";
+import useConfigStore from "../../../store/useConfigStore";
 import { ModalType } from "../../../constants/enum";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,10 +13,12 @@ import { cn } from "@/lib/utils";
 const CharacterGrasta: React.FC<CharacterSummary> = (info) => {
   const { grasta, setGrasta } = useCheckStore();
   const { setModal } = useModalStore();
+  const { showTierBadge } = useConfigStore();
   const { t } = useTranslation();
 
   const id = getNumber(info);
   const isRecent = isUpdatedInWeeks(info.lastUpdated);
+  const hasTier = showTierBadge && (info.tier === "op" || info.tier === "super_op");
   const currentStep = getStep(id, grasta);
 
   const changeGrasta = (step: number) => {
@@ -32,13 +35,16 @@ const CharacterGrasta: React.FC<CharacterSummary> = (info) => {
     <Card
       className={cn(
         "flex w-full min-w-[275px] overflow-visible",
-        isRecent && "shadow"
+        hasTier && info.tier === "op" && "glow-op",
+        hasTier && info.tier === "super_op" && "glow-super-op",
+        !hasTier && isRecent && "glow-recent"
       )}
     >
       <CardContent className="flex p-2 w-full">
         <CharacterAvatar
           info={info}
           disableShadow={true}
+          disableTierRing={true}
           onClick={() => setModal(ModalType.character, info.id)}
         />
         <div className="flex flex-col flex-1 items-center justify-center">
