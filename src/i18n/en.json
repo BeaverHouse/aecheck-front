@@ -17,7 +17,7 @@
   "settings.displayMode.infiniteScrollDesc": "Keep scrolling to load more",
   "settings.colorBlindMode": "Color Blind Mode",
   "settings.colorBlindModeDesc": "Uses blue tones instead of green",
-  "settings.showTierBadge": "OP Badge",
+  "settings.showTierBadge": "Tier Badge",
   "settings.showTierBadgeDesc": "Highlights characters loved by the community",
   "frontend.tier.op": "OP",
   "frontend.tier.super_op": "Super OP",
@@ -27,7 +27,7 @@
   "frontend.tier.criteria.anothertier": "SS rank or above",
   "frontend.message.clearFilter": "Clear all filters?",
   "frontend.word.cancel": "Cancel",
-  "frontend.tier.intro.title": "OP Badge",
+  "frontend.tier.intro.title": "Tier Badge",
   "frontend.tier.intro.desc": "Characters rated highly by the community will be highlighted. Want to turn it on?",
   "frontend.tier.intro.enable": "Enable",
   "frontend.tier.intro.dismiss": "No thanks"

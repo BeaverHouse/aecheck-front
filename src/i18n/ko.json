@@ -17,7 +17,7 @@
   "settings.displayMode.infiniteScrollDesc": "스크롤하면 자동으로 더 불러와요",
   "settings.colorBlindMode": "색약 모드",
   "settings.colorBlindModeDesc": "녹색 대신 파란색 계열을 사용해요",
-  "settings.showTierBadge": "OP 표시",
+  "settings.showTierBadge": "티어 표시",
   "settings.showTierBadgeDesc": "커뮤니티에서 좋은 평가를 받은 캐릭터가 강조돼요",
   "frontend.tier.op": "OP",
   "frontend.tier.super_op": "Super OP",
@@ -27,7 +27,7 @@
   "frontend.tier.criteria.anothertier": "SS 랭크 이상",
   "frontend.message.clearFilter": "필터를 초기화할까요?",
   "frontend.word.cancel": "취소",
-  "frontend.tier.intro.title": "OP 표시 기능",
+  "frontend.tier.intro.title": "티어 표시 기능",
   "frontend.tier.intro.desc": "커뮤니티에서 좋은 평가를 받은 캐릭터가 강조돼요. 활성화할까요?",
   "frontend.tier.intro.enable": "켜기",
   "frontend.tier.intro.dismiss": "괜찮아요"

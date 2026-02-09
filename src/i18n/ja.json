@@ -17,7 +17,7 @@
   "settings.displayMode.infiniteScrollDesc": "スクロールで自動的に読み込みます",
   "settings.colorBlindMode": "色覚サポートモード",
   "settings.colorBlindModeDesc": "緑の代わりに青系の色を使います",
-  "settings.showTierBadge": "OP表示",
+  "settings.showTierBadge": "ティア表示",
   "settings.showTierBadgeDesc": "コミュニティで高評価のキャラクターが強調されます",
   "frontend.tier.op": "OP",
   "frontend.tier.super_op": "Super OP",
@@ -27,7 +27,7 @@
   "frontend.tier.criteria.anothertier": "SSランク以上",
   "frontend.message.clearFilter": "フィルターをリセットしますか？",
   "frontend.word.cancel": "キャンセル",
-  "frontend.tier.intro.title": "OP表示機能",
+  "frontend.tier.intro.title": "ティア表示機能",
   "frontend.tier.intro.desc": "コミュニティで高評価のキャラクターが強調されます。有効にしますか？",
   "frontend.tier.intro.enable": "有効にする",
   "frontend.tier.intro.dismiss": "いいえ"
