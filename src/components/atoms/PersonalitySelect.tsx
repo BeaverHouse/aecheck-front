@@ -104,7 +104,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
           <Command>
             <CommandInput placeholder="Search..." />
-            <CommandList>
+            <CommandList onWheel={(e) => e.stopPropagation()}>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
                 {options.map((option) => (
