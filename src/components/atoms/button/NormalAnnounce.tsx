@@ -18,15 +18,15 @@ function NormalAnnounce() {
 
   if (announceViewed || !visible) return null;
 
-  const title = "26.02.09 Update";
+  const title = "26.03.06 Update";
 
   const description =
     i18n.language === "ko"
-      ? "디자인과 버그를 수정하고, 티어 표시 기능을 추가했어요."
-      : "Design and bug fixes have been made, and the tier display function has been added.";
+      ? "데이터와 일부 오류를 수정했어요."
+      : "Data & UI minor fix is applied.";
 
   const handleDismiss = () => {
-    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20260209");
+    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20260306");
     setVisible(false);
   };
 

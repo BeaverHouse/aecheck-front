@@ -30,5 +30,13 @@
   "frontend.tier.intro.title": "ティア表示機能",
   "frontend.tier.intro.desc": "コミュニティで高評価のキャラクターが強調されます。有効にしますか？",
   "frontend.tier.intro.enable": "有効にする",
-  "frontend.tier.intro.dismiss": "いいえ"
+  "frontend.tier.intro.dismiss": "いいえ",
+  "support.title": "サポート",
+  "support.desc1": "AE Checkは広告なしで運営されています。",
+  "support.desc2": "サーバー費用は自費と100%任意の寄付のみで運営されています。",
+  "support.desc3": "オープンチャットはギフト券寄付専用でご利用ください。",
+  "support.desc4": "お問い合わせはできれば",
+  "support.desc4.mail": "メール",
+  "support.desc4.suffix": "でお願いします。",
+  "support.button": "サポート"
 }

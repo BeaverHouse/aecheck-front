@@ -14,7 +14,7 @@ import { fetchAPI } from "../../util/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import BuyMeACoffeeButton from "../atoms/button/BuyMeACoffee";
+import { SupportButton } from "../atoms/button/SupportModal";
 import {
   HybridTooltip,
   HybridTooltipContent,
@@ -178,7 +178,9 @@ function HomePage() {
             </TooltipProvider>
           </div>
 
-          <BuyMeACoffeeButton />
+          <div className="flex justify-center mt-10 mb-2.5">
+            <SupportButton />
+          </div>
         </div>
       </div>
     </div>
