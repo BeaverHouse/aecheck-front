@@ -30,5 +30,13 @@
   "frontend.tier.intro.title": "Tier Badge",
   "frontend.tier.intro.desc": "Characters rated highly by the community will be highlighted. Want to turn it on?",
   "frontend.tier.intro.enable": "Enable",
-  "frontend.tier.intro.dismiss": "No thanks"
+  "frontend.tier.intro.dismiss": "No thanks",
+  "support.title": "Support",
+  "support.desc1": "AE Check runs without advertisements.",
+  "support.desc2": "Server costs are covered by personal funds and 100% voluntary donations.",
+  "support.desc3": "Please use the open chat only for gift card donations.",
+  "support.desc4": "For inquiries, please contact via",
+  "support.desc4.mail": "email",
+  "support.desc4.suffix": "if possible.",
+  "support.button": "Support"
 }
