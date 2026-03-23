@@ -114,7 +114,6 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
                 link.click();
                 hideModal();
               } catch (error) {
-                console.error("Upload error:", error);
                 hideModal();
                 AnnounceSwal.fire({
                   icon: "error",
@@ -139,7 +138,6 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         }, "image/jpeg", 0.95);
       }
     } catch (error) {
-      console.error("Download error:", error);
       hideModal();
       AnnounceSwal.fire({
         icon: "error",

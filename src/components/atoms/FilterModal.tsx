@@ -314,8 +314,6 @@ const FilterModal: React.FC = () => {
         </div>
 
         <DialogFooter className="px-6 py-4 border-t border-border bg-background/50 sm:justify-between">
-          <div className="hidden sm:block"></div>{" "}
-          {/* Spacer for center alignment trick if needed, or just justify-end */}
           <Button
             variant="destructive"
             className="w-full sm:w-auto gap-2"
