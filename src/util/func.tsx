@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 export const getShortName = (name: string, lang: string) => {
   const arr = name.split(" ");
   switch (lang) {
-    case "jp":
+    case "ja":
       return arr[0];
     case "ko":
       return name.includes("(") ? arr[0] : arr[arr.length - 1];
