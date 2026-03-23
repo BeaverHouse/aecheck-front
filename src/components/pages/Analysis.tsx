@@ -30,6 +30,8 @@ function AnalysisPage() {
         return <LegacyAnalysis allCharacters={allCharacters} />;
       case AnalysisMenuOptions.legacyTable:
         return <LegacyTableAnalysis allCharacters={allCharacters} />;
+      default:
+        return <StardreamAnalysis allCharacters={allCharacters} />;
     }
   };
 

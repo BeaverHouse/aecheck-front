@@ -37,10 +37,9 @@ const loadTranslationsFromAPI = async () => {
           i18n.addResources(lang, 'translation', translations);
         }
 
-        console.log(`✅ Loaded ${Object.keys(translations).length} translations for ${lang}`);
       }
-    } catch (error) {
-      console.warn(`❌ Failed to load translations for ${lang}:`, error);
+    } catch {
+      // fallback to local translations
     }
   });
 
