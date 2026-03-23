@@ -313,7 +313,7 @@ const FilterModal: React.FC = () => {
           </div>
         </div>
 
-        <DialogFooter className="px-6 py-4 border-t border-border bg-background/50 sm:justify-between">
+        <DialogFooter className="px-6 py-4 border-t border-border bg-background/50 sm:justify-end">
           <Button
             variant="destructive"
             className="w-full sm:w-auto gap-2"
