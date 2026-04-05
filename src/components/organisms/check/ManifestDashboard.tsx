@@ -30,9 +30,8 @@ function ManifestDashboard({
   const targetCharacters = filteredCharacters
     .filter((char) => char.maxManifest > 0 || char.customManifest)
     .filter((char) =>
-      (char.maxManifest === 0 && char.customManifest) ||
       manifestStatusFilter.includes(
-        getManifestStatus(allCharacters, char, inven, manifest)
+        getManifestStatus(allCharacters, char, inven, manifest, weaponTempering)
       )
     )
     .filter((char) => {

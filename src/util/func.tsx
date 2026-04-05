@@ -72,14 +72,19 @@ export const getManifestStatus = (
   relatedCharacters: Array<CharacterSummary>,
   character: CharacterSummary,
   inven: Array<number>,
-  manifest: Array<number>
+  manifest: Array<number>,
+  weaponTempering: Array<number> = []
 ): ManifestStatus => {
   const id = getNumber(character);
   const step = getStep(id, manifest);
   const invenState = getInvenStatus(relatedCharacters, character, inven);
   if (invenState === InvenStatus.notOwned) return ManifestStatus.notOwned;
   else if (invenState === InvenStatus.owned) {
-    return step === character.maxManifest ? ManifestStatus.completed : ManifestStatus.incompleted;
+    const manifestDone = step === character.maxManifest;
+    const weaponTemperingDone = !character.customManifest || weaponTempering.some(
+      (x) => x % 10000 === id && x >= 10000
+    );
+    return manifestDone && weaponTemperingDone ? ManifestStatus.completed : ManifestStatus.incompleted;
   } else {
     if (character.style !== AECharacterStyles.normal) return ManifestStatus.ccRequired;
     else {
