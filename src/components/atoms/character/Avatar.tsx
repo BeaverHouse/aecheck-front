@@ -146,7 +146,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
           </>
         )}
       </picture>
-      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1 leading-tight">
+      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1 leading-tight truncate px-0.5">
         {getShortName(t(info.code), i18n.language)}
       </div>
     </div>
