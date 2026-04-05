@@ -102,43 +102,47 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
   return (
     <Card
       className={cn(
-        "flex w-full min-w-[275px] overflow-visible",
+        "flex w-full overflow-visible",
         hasTier && info.tier === "op" && "glow-op",
         hasTier && info.tier === "super_op" && "glow-super-op",
         !hasTier && isRecent && "glow-recent"
       )}
     >
       <CardContent className="flex items-center p-2 w-full">
-        <CharacterAvatar
-          info={info}
-          disableShadow={true}
-          disableTierRing={true}
-          onClick={() => setModal(ModalType.character, info.id)}
-        />
+        <div className="shrink-0">
+          <CharacterAvatar
+            info={info}
+            disableShadow={true}
+            disableTierRing={true}
+            onClick={() => setModal(ModalType.character, info.id)}
+          />
+        </div>
         {manifestAvailable ? (
           <div className="flex items-center justify-center flex-1 gap-4">
             <CircularProgressWithLabel
               value={info.maxManifest > 0 ? (100 * currentStep) / info.maxManifest : 100}
             />
             <div className="flex flex-col items-center justify-center gap-2">
-              <div className="flex gap-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 w-8 p-0"
-                  onClick={() => changeManifest(-1)}
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 w-8 p-0"
-                  onClick={() => changeManifest(1)}
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
+              {info.maxManifest > 0 && (
+                <div className="flex gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => changeManifest(-1)}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => changeManifest(1)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
               <p className="font-semibold text-sm text-center whitespace-nowrap">{text}</p>
               {info.customManifest && (
                 <div className="flex items-center gap-2">
