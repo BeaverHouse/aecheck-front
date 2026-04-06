@@ -113,7 +113,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
                 link.rel = "noopener noreferrer";
                 link.click();
                 hideModal();
-              } catch (error) {
+              } catch {
                 hideModal();
                 AnnounceSwal.fire({
                   icon: "error",
@@ -137,7 +137,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
           hideModal();
         }, "image/jpeg", 0.95);
       }
-    } catch (error) {
+    } catch {
       hideModal();
       AnnounceSwal.fire({
         icon: "error",
