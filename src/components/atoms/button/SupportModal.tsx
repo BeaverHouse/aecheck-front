@@ -35,7 +35,7 @@ export function SupportModal({ children }: SupportModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-sm">
+      <DialogContent aria-describedby={undefined} className="max-w-sm">
         <DialogHeader>
           <DialogTitle>{t("support.title")}</DialogTitle>
         </DialogHeader>

@@ -43,7 +43,7 @@ const CharacterModal: React.FC = () => {
   if (characterDetailQuery.isError) {
     return (
       <Dialog open={true} onOpenChange={hideModal}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Error</DialogTitle>
           </DialogHeader>
@@ -58,7 +58,7 @@ const CharacterModal: React.FC = () => {
   if (relatedCharacterQuery.isError) {
     return (
       <Dialog open={true} onOpenChange={hideModal}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Error</DialogTitle>
           </DialogHeader>
@@ -73,7 +73,10 @@ const CharacterModal: React.FC = () => {
   if (characterDetailQuery.isPending || relatedCharacterQuery.isPending) {
     return (
       <Dialog open={true} onOpenChange={hideModal}>
-        <DialogContent className="max-w-[400px] w-[95%]">
+        <DialogContent
+          aria-describedby={undefined}
+          className="max-w-[400px] w-[95%]"
+        >
           <DialogHeader>
             <DialogTitle>Loading...</DialogTitle>
           </DialogHeader>
@@ -113,7 +116,10 @@ const CharacterModal: React.FC = () => {
 
   return (
     <Dialog open={true} onOpenChange={hideModal}>
-      <DialogContent className="max-w-[400px] w-[95%] max-h-[75vh] overflow-y-auto">
+      <DialogContent
+        aria-describedby={undefined}
+        className="max-w-[400px] w-[95%] max-h-[75vh] overflow-y-auto"
+      >
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center gap-2">
             <span>

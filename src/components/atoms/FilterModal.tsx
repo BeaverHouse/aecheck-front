@@ -135,7 +135,10 @@ const FilterModal: React.FC = () => {
 
   return (
     <Dialog open={true} onOpenChange={hideModal}>
-      <DialogContent className="w-[95%] max-w-[500px] max-h-[85vh] p-0 gap-0 overflow-hidden flex flex-col bg-card/95 backdrop-blur-sm border-border">
+      <DialogContent
+        aria-describedby={undefined}
+        className="w-[95%] max-w-[500px] max-h-[85vh] p-0 gap-0 overflow-hidden flex flex-col bg-card/95 backdrop-blur-sm border-border"
+      >
         <DialogHeader className="px-6 py-4 border-b border-border bg-background/50">
           <DialogTitle className="flex items-center gap-2 text-xl">
             <Filter className="w-5 h-5 text-primary" />
