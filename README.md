@@ -1,50 +1,44 @@
-# React + TypeScript + Vite
+<p align="center">
+  <a href="https://aecheck.com/">
+    <img src="logo.png" alt="Logo" height="100">
+  </a>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+  <p align="center">
+    Frontend for AE Check, a collection tracker for Another Eden.
+  </p>
 
-Currently, two official plugins are available:
+  <p align="center">
+    <a href="https://nextjs.org/">
+      <img src="https://img.shields.io/badge/Next.js-black?style=flat&logo=next.js&logoColor=white" alt="Next.js">
+    </a>
+    <a href="https://www.typescriptlang.org/">
+      <img src="https://img.shields.io/badge/TypeScript-3178C6.svg?style=flat&logo=typescript&logoColor=white" alt="TypeScript">
+    </a>
+  </p>
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<br>
 
-## Expanding the ESLint configuration
+## Description
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This repository contains the web frontend for [AE Check](https://aecheck.com/), a companion site for **Another Eden** players.
 
-- Configure the top-level `parserOptions` property like this:
+AE Check helps players manage their collection and quickly review progression-related data such as characters, buddies, manifests, grasta, and Stellar Awakening status.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Features
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- Track owned characters and buddies
+- Check manifest, grasta, and Stellar Awakening progress
+- Search character and buddy data
+- Collection-based analysis to help planning for future Gacha pulls, Star Dream Encounter, and so on.
+- Save progress locally in the browser, also exportable via JSON format
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Related Repositories
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- [Data Process](https://github.com/BeaverHouse/aecheck-data-process): data processing CLI for AE Check
+
+<br>
+
+## Attribution
+
+Logo icon is extracted from Another Eden APK.
