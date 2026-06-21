@@ -59,6 +59,7 @@ function AECheckSidebar() {
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
+          aria-describedby={undefined}
           side="left"
           className="w-[240px] flex flex-col h-full bg-background text-foreground"
         >
