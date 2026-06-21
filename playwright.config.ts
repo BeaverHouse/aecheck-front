@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const port = process.env.PLAYWRIGHT_PORT ?? '3003';
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${port}`;
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -8,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -20,5 +23,9 @@ export default defineConfig({
     },
   ],
 
-  webServer: undefined, // 프로세스 생성 금지 - 사용자가 수동으로 서버 실행
+  webServer: {
+    command: `pnpm dev -p ${port}`,
+    url: baseURL,
+    reuseExistingServer: !process.env.CI,
+  },
 });
