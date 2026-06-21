@@ -44,7 +44,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <title>AE Check - Another Eden Collection Tracker</title>
         <meta name="description" content="AE Check - Another Eden Collection Tracker" />
