@@ -71,7 +71,7 @@ const StardreamAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
     },
     {
       label: "frontend.analyze.havebuddy",
-      value: targetOptions.filter((char) => char.buddy !== null),
+      value: targetOptions.filter((char) => char.buddy),
     },
     {
       label: "frontend.filter.alter",
