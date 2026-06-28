@@ -2,7 +2,7 @@ import React from "react";
 import useCheckStore from "../../../store/useCheckStore";
 import useConfigStore from "../../../store/useConfigStore";
 import { useTranslation } from "react-i18next";
-import { getNumber, getShortName, getStep, isUpdatedInWeeks } from "../../../util/func";
+import { getNumber, getShortCharacterName, getStep, isUpdatedInWeeks } from "../../../util/func";
 import { AECharacterStyles } from "../../../constants/enum";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   onClick,
 }) => {
   const { inven, grasta, manifest, staralign, weaponTempering } = useCheckStore();
-  const { showTierBadge } = useConfigStore();
+  const { showTierBadge, showRealName } = useConfigStore();
   const { t, i18n } = useTranslation();
 
   const id = getNumber(info);
@@ -147,7 +147,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
         )}
       </picture>
       <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-center text-xs py-1 leading-tight truncate px-0.5">
-        {getShortName(t(info.code), i18n.language)}
+        {getShortCharacterName(info, t, i18n.language, showRealName)}
       </div>
     </div>
   );

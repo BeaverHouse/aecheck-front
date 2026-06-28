@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import useCheckStore from "../../../store/useCheckStore";
-import { getInvenStatus, getShortName } from "../../../util/func";
+import { createCharacterNameSorter, getInvenStatus } from "../../../util/func";
+import useConfigStore from "../../../store/useConfigStore";
 import dayjs from "dayjs";
 import {
   Accordion,
@@ -27,6 +28,7 @@ const WhiteKeyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   const [ShowNotOwned, setShowNotOwned] = React.useState(false);
   const { setModal } = useModalStore();
   const { inven } = useCheckStore();
+  const { showRealName } = useConfigStore();
   const { t, i18n } = useTranslation();
 
   const baseCharacters = allCharacters
@@ -38,11 +40,7 @@ const WhiteKeyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
           char.style === AECharacterStyles.another ||
           char.isAlter)
     )
-    .sort((a, b) =>
-      getShortName(t(a.code), i18n.language).localeCompare(
-        getShortName(t(b.code), i18n.language)
-      )
-    );
+    .sort(createCharacterNameSorter(t, i18n.language, showRealName));
 
   const firstOptions = baseCharacters.filter(
     (char) =>

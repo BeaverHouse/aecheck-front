@@ -14,6 +14,70 @@ export const getShortName = (name: string, lang: string) => {
       return name;
   }
 };
+
+const getSpoilerName = (
+  character: CharacterSummary | CharacterDetail,
+  t: (key: string) => string
+) => {
+  const spoilerNameKey = `spoiler.${character.code}`;
+  const spoilerName = t(spoilerNameKey);
+  return spoilerName === spoilerNameKey ? "" : spoilerName;
+};
+
+export const getCharacterName = (
+  character: CharacterSummary | CharacterDetail,
+  t: (key: string) => string,
+  useRealName: boolean = false
+) => {
+  const aliasName = t(character.code);
+  if (!useRealName) {
+    return aliasName;
+  }
+
+  const spoilerTrueName = getSpoilerName(character, t);
+  if (spoilerTrueName) {
+    return spoilerTrueName;
+  }
+
+  return aliasName;
+};
+
+export const getShortCharacterName = (
+  character: CharacterSummary | CharacterDetail,
+  t: (key: string) => string,
+  lang: string,
+  useRealName: boolean = false
+) => {
+  return getShortName(getCharacterName(character, t, useRealName), lang);
+};
+
+export const matchesCharacterSearch = (
+  character: CharacterSummary,
+  t: (key: string) => string,
+  searchWord: string,
+  useRealName: boolean = false
+) => {
+  const query = searchWord.trim().toLowerCase();
+  if (!query) return true;
+
+  return [
+    t(character.code),
+    t(`book.${character.id}`),
+    useRealName ? getSpoilerName(character, t) : "",
+  ].some((value) => value.toLowerCase().includes(query));
+};
+
+export const createCharacterNameSorter = (
+  t: (key: string) => string,
+  lang: string,
+  useRealName: boolean = false
+) => {
+  return (a: CharacterSummary, b: CharacterSummary) =>
+    getShortCharacterName(a, t, lang, useRealName).localeCompare(
+      getShortCharacterName(b, t, lang, useRealName)
+    );
+};
+
 export const getNumber = (info: CharacterSummary | CharacterDetail | BuddyDetail | IDInfo) => {
   return Number(info.id.replace(/[^\d-]/g, ''));
 };
@@ -115,7 +179,8 @@ export const isUpdatedInWeeks = (date: Date | undefined, weeks: number = 3): boo
  */
 export const createCharacterSorter = (
   t: (key: string) => string,
-  lang: string
+  lang: string,
+  useRealName: boolean = false
 ) => {
   return (a: CharacterSummary, b: CharacterSummary) => {
     const aDate = a.updateDate || a.lastUpdated;
@@ -126,8 +191,6 @@ export const createCharacterSorter = (
     if (aIsRecent && !bIsRecent) return -1;
     if (!aIsRecent && bIsRecent) return 1;
 
-    return getShortName(t(a.code), lang).localeCompare(
-      getShortName(t(b.code), lang)
-    );
+    return createCharacterNameSorter(t, lang, useRealName)(a, b);
   };
 };

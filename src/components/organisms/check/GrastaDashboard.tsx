@@ -31,7 +31,7 @@ function GrastaDashboard({
   const { t, i18n } = useTranslation();
   const { inven, grasta, setGrasta } = useCheckStore();
   const { invenStatusFilter, grastaStatusFilter, grastaWeaponTemperingFilter } = useFilterStore();
-  const { displayMode } = useConfigStore();
+  const { displayMode, showRealName } = useConfigStore();
 
   const targetCharacters = filteredCharacters
     .filter((char) => char.style !== AECharacterStyles.four && char.dungeons.length > 0)
@@ -57,7 +57,7 @@ function GrastaDashboard({
 
       return matchesHas || matchesNo;
     })
-    .sort(createCharacterSorter(t, i18n.language));
+    .sort(createCharacterSorter(t, i18n.language, showRealName));
 
   const changeAllGrasta = (step: number) => {
     Swal.fire({

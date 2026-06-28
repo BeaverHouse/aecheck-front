@@ -1,4 +1,5 @@
 import React from "react";
+import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import { useTranslation } from "react-i18next";
 import useConfigStore from "../../store/useConfigStore";
 import useCheckStore from "../../store/useCheckStore";
@@ -20,6 +21,8 @@ import {
   Upload,
   Eye,
   Info,
+  User,
+  AlertTriangle,
 } from "lucide-react";
 import {
   Dialog,
@@ -54,6 +57,8 @@ const SettingsModal: React.FC = () => {
     setColorBlindMode,
     showTierBadge,
     setShowTierBadge,
+    showRealName,
+    setShowRealName,
   } = useConfigStore();
   const {
     inven,
@@ -66,6 +71,7 @@ const SettingsModal: React.FC = () => {
   } = useCheckStore();
   const { hideModal } = useModalStore();
   const { t } = useTranslation();
+  const [showRealNameConfirm, setShowRealNameConfirm] = React.useState(false);
 
   const [dataText, setDataText] = React.useState(() =>
     JSON.stringify(
@@ -98,6 +104,24 @@ const SettingsModal: React.FC = () => {
     toggleTheme(
       theme === ThemeOptions.dark ? ThemeOptions.light : ThemeOptions.dark
     );
+  };
+
+  const handleRealNameToggle = (enabled: boolean) => {
+    if (!enabled) {
+      setShowRealName(false);
+      return;
+    }
+
+    setShowRealNameConfirm(true);
+  };
+
+  const confirmRealName = () => {
+    setShowRealName(true);
+    setShowRealNameConfirm(false);
+  };
+
+  const cancelRealName = () => {
+    setShowRealNameConfirm(false);
   };
 
   const loadData = async () => {
@@ -338,6 +362,25 @@ const SettingsModal: React.FC = () => {
             />
           </div>
 
+          {/* Real Name */}
+          <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
+            <div className="flex-1 min-w-0 pr-4">
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-foreground">
+                  {t("settings.showRealName")}
+                </span>
+              </div>
+              <span className="text-xs text-muted-foreground block mt-0.5">
+                {t("settings.showRealNameDesc")}
+              </span>
+            </div>
+            <Switch
+              checked={showRealName}
+              onCheckedChange={handleRealNameToggle}
+            />
+          </div>
+
           {/* Tier Badge */}
           <div className="flex items-center justify-between p-2 rounded-lg border border-border hover:border-primary/30 transition-colors">
             <div className="flex-1 min-w-0 pr-4">
@@ -432,6 +475,45 @@ const SettingsModal: React.FC = () => {
           </Accordion>
         </div>
       </DialogContent>
+      <AlertDialogPrimitive.Root
+        open={showRealNameConfirm}
+        onOpenChange={setShowRealNameConfirm}
+      >
+        <AlertDialogPrimitive.Portal>
+          <AlertDialogPrimitive.Overlay className="fixed inset-0 z-[60] bg-black/40" />
+          <AlertDialogPrimitive.Content className="fixed left-[50%] top-[50%] z-[70] w-[calc(100%-2rem)] max-w-sm translate-x-[-50%] translate-y-[-50%] rounded-lg border border-border bg-card p-6 text-center shadow-xl focus:outline-none">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border-4 border-warning-300 text-warning-500">
+              <AlertTriangle className="h-8 w-8" />
+            </div>
+            <AlertDialogPrimitive.Title className="text-2xl font-semibold text-foreground">
+              {t("settings.showRealNameWarningTitle")}
+            </AlertDialogPrimitive.Title>
+            <AlertDialogPrimitive.Description className="mt-4 text-sm leading-6 text-muted-foreground">
+              {t("settings.showRealNameWarningDesc")}
+            </AlertDialogPrimitive.Description>
+            <div className="mt-6 flex justify-center gap-3">
+              <AlertDialogPrimitive.Action asChild>
+                <Button
+                  onClick={confirmRealName}
+                  className="bg-warning-500 text-neutral-900 shadow-md shadow-warning-500/20 transition-all hover:bg-warning-400 hover:shadow-lg hover:shadow-warning-500/30 active:scale-95 active:bg-warning-500"
+                >
+                  <AlertTriangle className="h-4 w-4" />
+                  {t("settings.showRealNameWarningConfirm")}
+                </Button>
+              </AlertDialogPrimitive.Action>
+              <AlertDialogPrimitive.Cancel asChild>
+                <Button
+                  variant="secondary"
+                  onClick={cancelRealName}
+                  className="transition-all hover:border-foreground/30 active:scale-95"
+                >
+                  {t("frontend.word.cancel")}
+                </Button>
+              </AlertDialogPrimitive.Cancel>
+            </div>
+          </AlertDialogPrimitive.Content>
+        </AlertDialogPrimitive.Portal>
+      </AlertDialogPrimitive.Root>
     </Dialog>
   );
 };

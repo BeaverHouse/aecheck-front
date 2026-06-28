@@ -15,6 +15,7 @@ interface ConfigState {
   displayMode: DisplayMode;
   colorBlindMode: boolean;
   showTierBadge: boolean;
+  showRealName: boolean;
   hasSeenTierIntro: boolean;
   lastCheckMenu: CheckMenuOptions;
   lastCheckTab: CheckTabOptions;
@@ -25,6 +26,7 @@ interface ConfigState {
   setDisplayMode: (mode: DisplayMode) => void;
   setColorBlindMode: (enabled: boolean) => void;
   setShowTierBadge: (enabled: boolean) => void;
+  setShowRealName: (enabled: boolean) => void;
   setHasSeenTierIntro: (seen: boolean) => void;
   updateLastCheckMenu: (option: CheckMenuOptions) => void;
   updateLastCheckTab: (option: CheckTabOptions) => void;
@@ -40,6 +42,7 @@ const useConfigStore = create(
       displayMode: DisplayMode.pagination,
       colorBlindMode: false,
       showTierBadge: false,
+      showRealName: false,
       hasSeenTierIntro: false,
       lastCheckMenu: CheckMenuOptions.characters,
       lastCheckTab: CheckTabOptions.inven,
@@ -50,6 +53,7 @@ const useConfigStore = create(
       setDisplayMode: (mode) => set({ displayMode: mode }),
       setColorBlindMode: (enabled) => set({ colorBlindMode: enabled }),
       setShowTierBadge: (enabled) => set({ showTierBadge: enabled }),
+      setShowRealName: (enabled) => set({ showRealName: enabled }),
       setHasSeenTierIntro: (seen) => set({ hasSeenTierIntro: seen }),
       updateLastCheckMenu: (option) => set({ lastCheckMenu: option }),
       updateLastCheckTab: (option) => set({ lastCheckTab: option }),
@@ -72,6 +76,10 @@ const useConfigStore = create(
           // Add showTierBadge to existing configs if it doesn't exist
           if ('showTierBadge' in persistedState === false) {
             (persistedState as ConfigState).showTierBadge = false;
+          }
+          // Add showRealName to existing configs if it doesn't exist
+          if ('showRealName' in persistedState === false) {
+            (persistedState as ConfigState).showRealName = false;
           }
           // Add hasSeenTierIntro to existing configs if it doesn't exist
           if ('hasSeenTierIntro' in persistedState === false) {

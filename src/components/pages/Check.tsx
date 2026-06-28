@@ -22,9 +22,10 @@ import Loading from "../atoms/Loading";
 import { arrAllIncludes, arrOverlap } from "../../util/arrayUtil";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { fetchAPI } from "../../util/api";
+import { matchesCharacterSearch } from "../../util/func";
 
 function CheckPage() {
-  const { lastCheckMenu, lastCheckTab, updateLastCheckTab } = useConfigStore();
+  const { lastCheckMenu, lastCheckTab, showRealName, updateLastCheckTab } = useConfigStore();
   const { t } = useTranslation();
   const {
     styleFilter,
@@ -67,8 +68,7 @@ function CheckPage() {
           choosePersonalityTags
         )) &&
       (!dungeon || char.dungeons.map((d) => d.id).includes(dungeon)) &&
-      (t(char.code).toLowerCase().includes(searchWord.toLowerCase()) ||
-        t(`book.${char.id}`).toLowerCase().includes(searchWord.toLowerCase()))
+      matchesCharacterSearch(char, t, searchWord, showRealName)
   );
 
   return lastCheckMenu === CheckMenuOptions.characters ? (

@@ -29,7 +29,7 @@ function StaralignDashboard({
   const { t, i18n } = useTranslation();
   const { inven, staralign } = useCheckStore();
   const { invenStatusFilter, staralignStatusFilter } = useFilterStore();
-  const { displayMode } = useConfigStore();
+  const { displayMode, showRealName } = useConfigStore();
 
   const targetCharacters = filteredCharacters
     .filter((char) => char.isAwaken)
@@ -38,7 +38,7 @@ function StaralignDashboard({
         staralignStatusFilter.includes(getStep(getNumber(char), staralign)) &&
         invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
     )
-    .sort(createCharacterSorter(t, i18n.language));
+    .sort(createCharacterSorter(t, i18n.language, showRealName));
 
   const itemsPerPage = getItemsPerPage("card");
   const {

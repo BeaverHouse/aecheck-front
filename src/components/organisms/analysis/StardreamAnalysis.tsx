@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import useCheckStore from "../../../store/useCheckStore";
-import { getInvenStatus, getShortName } from "../../../util/func";
+import { createCharacterNameSorter, getInvenStatus } from "../../../util/func";
+import useConfigStore from "../../../store/useConfigStore";
 import dayjs from "dayjs";
 import {
   Accordion,
@@ -28,6 +29,7 @@ const StardreamAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   const [ShowSevenPiece, setShowSevenPiece] = React.useState(false);
   const { setModal } = useModalStore();
   const { inven } = useCheckStore();
+  const { showRealName } = useConfigStore();
   const { t, i18n } = useTranslation();
 
   const baseCharacters = allCharacters
@@ -44,11 +46,7 @@ const StardreamAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
         (!ShowSevenPiece ||
           dayjs(char.updateDate!).day(1).add(3, "month").isBefore(dayjs()))
     )
-    .sort((a, b) =>
-      getShortName(t(a.code), i18n.language).localeCompare(
-        getShortName(t(b.code), i18n.language)
-      )
-    );
+    .sort(createCharacterNameSorter(t, i18n.language, showRealName));
 
   const firstOptions = baseCharacters.filter(
     (char) =>
