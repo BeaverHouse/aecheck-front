@@ -31,7 +31,7 @@ function CharacterDashboard({
   const { t, i18n } = useTranslation();
   const { invenStatusFilter } = useFilterStore();
   const { inven, buddy, setInven, setBuddy } = useCheckStore();
-  const { popupOnCheck, displayMode } = useConfigStore();
+  const { popupOnCheck, displayMode, showRealName } = useConfigStore();
   const { setModal } = useModalStore();
 
   const targetCharacters = filteredCharacters
@@ -40,7 +40,7 @@ function CharacterDashboard({
         getNumber(char) < 1000 &&
         invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
     )
-    .sort(createCharacterSorter(t, i18n.language));
+    .sort(createCharacterSorter(t, i18n.language, showRealName));
 
   const addSingleInven = (char: CharacterSummary) => {
     const newCharIds = [...inven, getNumber(char)];

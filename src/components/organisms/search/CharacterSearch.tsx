@@ -12,7 +12,7 @@ import {
   ModalType,
   CheckMenuOptions,
 } from "../../../constants/enum";
-import { createCharacterSorter } from "../../../util/func";
+import { createCharacterSorter, matchesCharacterSearch } from "../../../util/func";
 import { useTranslation } from "react-i18next";
 import GlobalFilter from "../../molecules/GlobalFilter";
 import useFilterStore from "../../../store/useFilterStore";
@@ -33,7 +33,7 @@ import {
 function CharacterSearch() {
   const { t, i18n } = useTranslation();
   const { setModal } = useModalStore();
-  const { displayMode } = useConfigStore();
+  const { displayMode, showRealName } = useConfigStore();
   const {
     styleFilter,
     manifestFilter,
@@ -55,7 +55,7 @@ function CharacterSearch() {
   const allCharacters = isPending
     ? []
     : (data as APIResponse<CharacterSummary[]>).data.sort(
-        createCharacterSorter(t, i18n.language)
+        createCharacterSorter(t, i18n.language, showRealName)
       );
 
   const filteredCharacters = allCharacters.filter(
@@ -76,8 +76,7 @@ function CharacterSearch() {
           choosePersonalityTags
         )) &&
       (!dungeon || char.dungeons.some((d) => d.id === dungeon)) &&
-      (t(char.code).toLowerCase().includes(searchWord.toLowerCase()) ||
-        t(`book.${char.id}`).toLowerCase().includes(searchWord.toLowerCase()))
+      matchesCharacterSearch(char, t, searchWord, showRealName)
   );
 
   const itemsPerPage = getItemsPerPage("avatar");
@@ -103,6 +102,7 @@ function CharacterSearch() {
       choosePersonalityTags,
       dungeon,
       searchWord,
+      showRealName,
     ],
   });
 

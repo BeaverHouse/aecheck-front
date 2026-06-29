@@ -25,7 +25,7 @@ function ManifestDashboard({
   const { t, i18n } = useTranslation();
   const { manifestStatusFilter, weaponTemperingStatusFilter } = useFilterStore();
   const { inven, manifest, setManifest, weaponTempering } = useCheckStore();
-  const { displayMode } = useConfigStore();
+  const { displayMode, showRealName } = useConfigStore();
 
   const targetCharacters = filteredCharacters
     .filter((char) => char.maxManifest > 0 || char.customManifest)
@@ -51,7 +51,7 @@ function ManifestDashboard({
 
       return matchesAvailable || matchesCompleted;
     })
-    .sort(createCharacterSorter(t, i18n.language));
+    .sort(createCharacterSorter(t, i18n.language, showRealName));
 
   const checkAll = () => {
     Swal.fire({

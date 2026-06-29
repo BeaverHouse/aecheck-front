@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import useModalStore from "../../../store/useModalStore";
 import { CheckCircle, XCircle, AlertCircle, ExternalLink, Crown } from "lucide-react";
-import { getInvenStatus, getStep } from "../../../util/func";
+import { getCharacterName, getInvenStatus, getStep } from "../../../util/func";
 import useCheckStore from "../../../store/useCheckStore";
 import useConfigStore from "../../../store/useConfigStore";
 import { useQuery } from "@tanstack/react-query";
@@ -24,7 +24,7 @@ import MemoirInfo from "./MemoirInfo";
 const CharacterModal: React.FC = () => {
   const { inven, grasta, manifest, staralign, weaponTempering } =
     useCheckStore();
-  const { showTierBadge } = useConfigStore();
+  const { showTierBadge, showRealName } = useConfigStore();
   const { characterID, hideModal } = useModalStore();
   const { t, i18n } = useTranslation();
 
@@ -123,7 +123,7 @@ const CharacterModal: React.FC = () => {
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center gap-2">
             <span>
-              {t(characterData.code)} ({characterData.style})
+              {getCharacterName(characterData, t, showRealName)} ({characterData.style})
             </span>
             <img
               src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/type-${characterData.lightShadow}.png`}

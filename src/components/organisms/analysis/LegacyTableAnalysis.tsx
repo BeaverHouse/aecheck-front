@@ -1,24 +1,22 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { arrAllIncludes } from "../../../util/arrayUtil";
-import { getShortName } from "../../../util/func";
+import { createCharacterNameSorter } from "../../../util/func";
 import { AEData } from "../../../constants";
 import { AECharacterStyles, ModalType } from "../../../constants/enum";
 import CharacterAvatar from "../../atoms/character/Avatar";
 import useModalStore from "../../../store/useModalStore";
 import DownloadButton from "../../atoms/button/Download";
+import useConfigStore from "../../../store/useConfigStore";
 
 const LegacyTableAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   const { t, i18n } = useTranslation();
   const { setModal } = useModalStore();
+  const { showRealName } = useConfigStore();
 
   const baseCharacters = allCharacters
     .concat()
-    .sort((a, b) =>
-      getShortName(t(a.code), i18n.language).localeCompare(
-        getShortName(t(b.code), i18n.language)
-      )
-    );
+    .sort(createCharacterNameSorter(t, i18n.language, showRealName));
 
   // CSS Grid Template: 1st col fixed (weapon), rest flexible but min-width
   const gridTemplateColumns = `60px repeat(${AEData.elementTags.length}, minmax(360px, 1fr))`;
