@@ -88,8 +88,9 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
                 const formData = new FormData();
                 const fileName = `${Date.now().toString()}.jpg`;
                 formData.append("file", blob, fileName);
+                formData.append("upload_path", "user-image");
 
-                const uploadURL = `https://api.tinyclover.com/file-manager/v1/files/upload/user-image`;
+                const uploadURL = `https://api.tinyclover.com/file-manager/v1/files/upload`;
                 const res = await fetch(uploadURL, {
                   method: "POST",
                   headers: {
