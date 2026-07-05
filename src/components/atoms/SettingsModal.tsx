@@ -11,7 +11,6 @@ import {
   ThemeOptions,
   LanguageOptions,
 } from "../../constants/enum";
-import { getNumber } from "../../util/func";
 import Swal from "sweetalert2";
 import {
   Sun,
@@ -127,29 +126,6 @@ const SettingsModal: React.FC = () => {
   const loadData = async () => {
     try {
       const newData: CheckStateV4 = JSON.parse(dataText.trim());
-      if (!newData.buddy) {
-        const charIds = newData.inven.map(
-          (i) => `char${String(i).padStart(4, "0")}`
-        );
-        const body = {
-          characterIds: charIds,
-        };
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/buddy/partners`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          }
-        );
-        const buddyList = (
-          (await res.json()) as APIResponse<IDInfo[]>
-        ).data.map((i) => getNumber(i));
-
-        newData.buddy = buddyList;
-      }
       loadSaveData(newData);
       Swal.fire({
         text: "Data Load Success",
