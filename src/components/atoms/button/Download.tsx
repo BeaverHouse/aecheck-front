@@ -50,14 +50,27 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
 
       // Detect dark mode and set appropriate background color
       const isDark = document.documentElement.classList.contains('dark');
+      const captureWidth = element.scrollWidth;
+      const captureHeight = element.scrollHeight;
 
       const canvas = await html2canvas(element, {
         scale: 1.1,
         allowTaint: true,
         useCORS: true,
-        windowWidth: tag === "ae-wrapper" ? 1200 : element.clientWidth,
+        width: captureWidth,
+        height: captureHeight,
+        windowWidth: tag === "ae-wrapper" ? 1200 : captureWidth,
+        windowHeight: captureHeight,
         backgroundColor: isDark ? '#171717' : '#ffffff',
         ignoreElements: (element) => element.id === "downloader",
+        onclone: (_: Document, clonedElement: HTMLElement) => {
+          clonedElement.style.width = `${captureWidth}px`;
+          clonedElement.style.height = `${captureHeight}px`;
+          clonedElement.style.maxHeight = "none";
+          clonedElement.style.overflow = "visible";
+          clonedElement.scrollLeft = 0;
+          clonedElement.scrollTop = 0;
+        },
       });
 
       element.querySelectorAll("[data-glow]").forEach((el) => {
