@@ -42,12 +42,6 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
 
     setModal(ModalType.loading);
     try {
-      element.querySelectorAll(".glow-recent, .glow-op, .glow-super-op").forEach((el) => {
-        const glowClass = ["glow-recent", "glow-op", "glow-super-op"].find((c) => el.classList.contains(c))!;
-        el.classList.remove(glowClass);
-        el.setAttribute("data-glow", glowClass);
-      });
-
       // Detect dark mode and set appropriate background color
       const isDark = document.documentElement.classList.contains('dark');
       const captureWidth = element.scrollWidth;
@@ -70,13 +64,45 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
           clonedElement.style.overflow = "visible";
           clonedElement.scrollLeft = 0;
           clonedElement.scrollTop = 0;
-        },
-      });
 
-      element.querySelectorAll("[data-glow]").forEach((el) => {
-        const glowClass = el.getAttribute("data-glow")!;
-        el.classList.add(glowClass);
-        el.removeAttribute("data-glow");
+          const highlights = [
+            {
+              selector: '[data-capture-highlight="recent"], .glow-recent',
+              border: "2px solid #56b4e9",
+            },
+            {
+              selector: '[data-capture-highlight="op"], .glow-op',
+              border: "2px solid rgba(250, 204, 21, 0.8)",
+            },
+            {
+              selector: '[data-capture-highlight="super_op"], .glow-super-op',
+              border: "4px solid #fde047",
+            },
+          ];
+
+          highlights.forEach(({ selector, border }) => {
+            clonedElement.querySelectorAll<HTMLElement>(selector).forEach((highlighted) => {
+              highlighted.style.setProperty("box-shadow", "none", "important");
+              const position = highlighted.ownerDocument.defaultView
+                ?.getComputedStyle(highlighted).position;
+              if (!position || position === "static") {
+                highlighted.style.position = "relative";
+              }
+
+              const overlay = highlighted.ownerDocument.createElement("div");
+              Object.assign(overlay.style, {
+                position: "absolute",
+                inset: "0",
+                border,
+                borderRadius: "inherit",
+                boxSizing: "border-box",
+                pointerEvents: "none",
+                zIndex: "5",
+              });
+              highlighted.appendChild(overlay);
+            });
+          });
+        },
       });
 
       if (navigator.userAgent.match(/NAVER|KAKAOTALK/i)) {
