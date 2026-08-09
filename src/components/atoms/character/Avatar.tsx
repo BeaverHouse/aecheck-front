@@ -100,6 +100,13 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   return (
     <div
       onClick={onClick}
+      data-capture-highlight={
+        hasTierRing
+          ? info.tier
+          : isRecent && !disableShadow
+            ? "recent"
+            : undefined
+      }
       className={cn(
         "w-[75px] h-[75px] cursor-pointer relative rounded-[3px]",
         hasTierRing && info.tier === "op" && "ring-2 ring-yellow-500/80",
