@@ -80,19 +80,15 @@ const MemoirInfo: React.FC<MemoirInfoProps> = ({
               {characterData.dungeons.map((dun) => {
                 const isMainDungeon = dun.id.startsWith("dungeon0");
 
-                // Color Logic
-                let colorClass = "";
-                if (colorBlindMode) {
-                  // Colorblind Mode: Blue for Main, High-Contrast Gray/Yellow for Secondary
-                  colorClass = isMainDungeon
+                // Colorblind Mode: Blue for Main, High-Contrast Gray for Secondary
+                // Normal Mode: Emerald (Green) for Main, Amber (Yellow) for Secondary
+                const colorClass = colorBlindMode
+                  ? isMainDungeon
                     ? "bg-blue-100/80 border-blue-300 text-blue-900 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-100"
-                    : "bg-gray-100/80 border-gray-300 text-gray-900 dark:bg-gray-800/60 dark:border-gray-600 dark:text-gray-100";
-                } else {
-                  // Normal Mode: Emerald (Green) for Main, Amber (Yellow) for Secondary
-                  colorClass = isMainDungeon
+                    : "bg-gray-100/80 border-gray-300 text-gray-900 dark:bg-gray-800/60 dark:border-gray-600 dark:text-gray-100"
+                  : isMainDungeon
                     ? "bg-emerald-50/80 border-emerald-200 text-emerald-900 dark:bg-emerald-900/30 dark:border-emerald-800 dark:text-emerald-100"
                     : "bg-amber-50/80 border-amber-200 text-amber-900 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-100";
-                }
 
                 return (
                   <div
