@@ -7,9 +7,12 @@ const requiredEnvVars = [
   'NEXT_PUBLIC_CDN_URL'
 ] as const;
 
-for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    throw new Error(`Missing required environment variable: ${envVar}`);
+// CI is the only build that ships, and the deploy workflow is where these are
+// set. A local build is a compile check whose values are never served.
+if (process.env.CI) {
+  const missing = requiredEnvVars.filter((name) => !process.env[name]);
+  if (missing.length > 0) {
+    throw new Error(`Missing required environment variables: ${missing.join(", ")}`);
   }
 }
 

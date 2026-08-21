@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3003",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -27,7 +27,7 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@tanstack/react-query": "^5.96.2",
+    "@tanstack/react-query": "^5.101.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -40,10 +40,10 @@
     "i18next-http-backend": "^4.0.0",
     "i18next-resources-to-backend": "^1.2.1",
     "lucide-react": "^0.546.0",
-    "next": "16.2.9",
-    "react": "^19.2.4",
+    "next": "16.3.1",
+    "react": "^19.2.8",
     "react-device-detect": "^2.2.3",
-    "react-dom": "^19.2.4",
+    "react-dom": "^19.2.8",
     "react-hook-form": "^7.72.1",
     "react-i18next": "^15.7.4",
     "sweetalert2": "^11.26.24",
@@ -51,31 +51,34 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^4.3.6",
-    "zustand": "5.0.0-rc.2"
+    "zustand": "5.0.15"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
+    "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.59.1",
-    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/file-saver": "^2.0.7",
-    "@types/node": "^24.12.2",
-    "@types/react": "^19.2.14",
+    "@types/node": "^24",
+    "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.27",
-    "eslint": "^9.39.4",
+    "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.26",
     "globals": "^15.15.0",
-    "postcss": "^8.5.15",
-    "tailwindcss": "^4.2.2",
-    "typescript": "^5.9.3",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1"
   },
   "pnpm": {
     "overrides": {
-      "js-yaml": "^4.2.0",
-      "postcss": "^8.5.15"
+      "brace-expansion": "^1.1.18",
+      "js-yaml": "^4.3.1",
+      "nanoid": "^3.3.18",
+      "postcss": "^8.5.23",
+      "sharp": "^0.35.3"
     }
   }
 }
