@@ -14,124 +14,171 @@ const AnnounceSwal = withReactContent(Swal);
 
 const DESKTOP_CAPTURE_WIDTH = 1200;
 const CAPTURE_SCALE = 1.1;
-const CAPTURE_BATCH_SIZE = 100;
+const HIGHLIGHTS = [
+  {
+    selector: '[data-capture-highlight="recent"], .glow-recent',
+    width: 2,
+    color: "#56b4e9",
+  },
+  {
+    selector: '[data-capture-highlight="op"], .glow-op',
+    width: 2,
+    color: "rgba(250, 204, 21, 0.8)",
+  },
+  {
+    selector: '[data-capture-highlight="super_op"], .glow-super-op',
+    width: 4,
+    color: "#fde047",
+  },
+];
 const TRANSPARENT_PIXEL =
   "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
+interface CaptureImage {
+  bitmap: HTMLCanvasElement;
+  element: HTMLImageElement;
+  layer: number;
+}
+
 /**
- * Captures the element once with every image blanked out and once per batch of images,
- * then merges each batch pass into the blank one wherever their pixels differ.
+ * Captures the element with every image blanked out and paints the pictures the page has
+ * already decoded onto the result.
  *
- * html2canvas reloads every image it draws and tears its clone down while those loads
- * are still running: a capture holding 250 image elements lost about 150 of them and
- * the matching character cards came out blank, one holding 139 lost 4, and one holding
- * 32 lost none. Batching the images around that limit is the way out, but the passes
- * cannot be stitched by rectangle: the capture lays the page out a little differently
- * from the live DOM, and copies placed at the live coordinates drifted further off with
- * every section. Comparing pixels needs no coordinates at all, and it works because the
- * passes differ in nothing but which images carry their picture.
+ * html2canvas reloads each image it draws instead of reusing the decoded one, and it
+ * tears its clone down while those loads are still running: a capture holding 250 images
+ * lost about 150 of them and the matching character cards came out blank, while one
+ * holding 32 lost none. Pointing every image at the same blank pixel leaves the capture
+ * with a single picture to load, and the real ones are drawn afterwards from the canvas
+ * copies taken here. That copying is what the crossOrigin attribute on the images is
+ * for: a canvas holding a plain cross-origin picture cannot be read back.
  */
-const captureInBatches = async (
+const captureWithImages = async (
   element: HTMLElement,
-  options: Parameters<typeof html2canvas>[1]
+  options: Parameters<typeof html2canvas>[1] & { scale: number }
 ) => {
-  const images = Array.from(element.querySelectorAll("img"));
-  if (images.length <= CAPTURE_BATCH_SIZE) return html2canvas(element, options);
-
   const undos: Array<() => void> = [];
-
-  const blank = (target: Element, attribute: string) => {
+  const set = (target: Element, attribute: string, value: string) => {
     const original = target.getAttribute(attribute);
-    // A <source> can be reached through more than one image, and blanking it twice
-    // would record the blank as the value to restore and leave the page without that
-    // picture after the download.
-    if (original === null || original === TRANSPARENT_PIXEL) return;
+    if (original === null || original === value) return;
     undos.push(() => target.setAttribute(attribute, original));
-    target.setAttribute(attribute, TRANSPARENT_PIXEL);
+    target.setAttribute(attribute, value);
   };
 
-  const hide = (batch: Set<Element>) => {
-    images.forEach((image) => {
-      if (batch.has(image)) return;
-      image.parentElement
-        ?.querySelectorAll("source")
-        .forEach((variant) => blank(variant, "srcset"));
-      blank(image, "src");
-    });
-  };
+  const bitmaps = new Map<string, HTMLCanvasElement>();
+  const drawings: CaptureImage[] = [];
 
-  const reveal = () => {
-    undos.forEach((undo) => undo());
-    undos.length = 0;
-  };
-
-  // Every image keeps the box it was measured at, because a blanked image that draws its
-  // own height would collapse and move everything below it out of step with the other
-  // passes.
-  const pinned: Array<() => void> = [];
-  images.forEach((image) => {
+  element.querySelectorAll("img").forEach((image) => {
     const rect = image.getBoundingClientRect();
-    const style = image.getAttribute("style");
-    pinned.push(() => {
-      if (style === null) image.removeAttribute("style");
-      else image.setAttribute("style", style);
-    });
-    image.setAttribute(
+    // A blanked image that draws its own height would collapse and move everything
+    // below it away from the boxes measured here.
+    set(
+      image,
       "style",
-      `${style ?? ""};width:${rect.width}px;height:${rect.height}px`
+      `${image.getAttribute("style") ?? ""};width:${rect.width}px;height:${rect.height}px`
     );
-  });
 
-  try {
-    hide(new Set());
-    const merged: HTMLCanvasElement = await html2canvas(element, options);
-    reveal();
-
-    const context = merged.getContext("2d");
-    if (!context) return merged;
-
-    const target = context.getImageData(0, 0, merged.width, merged.height);
-    const blankPixels = new Uint8ClampedArray(target.data);
-
-    for (let index = 0; index < images.length; index += CAPTURE_BATCH_SIZE) {
-      const batch = new Set<Element>(images.slice(index, index + CAPTURE_BATCH_SIZE));
-
-      hide(batch);
-      let pass: HTMLCanvasElement;
-      try {
-        pass = await html2canvas(element, options);
-      } finally {
-        reveal();
+    if (image.naturalWidth) {
+      let bitmap = bitmaps.get(image.src);
+      if (!bitmap) {
+        bitmap = document.createElement("canvas");
+        bitmap.width = image.naturalWidth;
+        bitmap.height = image.naturalHeight;
+        bitmap.getContext("2d")?.drawImage(image, 0, 0);
+        bitmaps.set(image.src, bitmap);
       }
 
-      const passContext = pass.getContext("2d");
-      if (!passContext) continue;
-
-      const pixels = passContext.getImageData(0, 0, pass.width, pass.height).data;
-      for (let offset = 0; offset < pixels.length; offset += 4) {
-        if (
-          pixels[offset] === blankPixels[offset] &&
-          pixels[offset + 1] === blankPixels[offset + 1] &&
-          pixels[offset + 2] === blankPixels[offset + 2] &&
-          pixels[offset + 3] === blankPixels[offset + 3]
-        ) {
-          continue;
-        }
-
-        target.data[offset] = pixels[offset];
-        target.data[offset + 1] = pixels[offset + 1];
-        target.data[offset + 2] = pixels[offset + 2];
-        target.data[offset + 3] = pixels[offset + 3];
-      }
+      const layer = Number(window.getComputedStyle(image).zIndex);
+      drawings.push({ bitmap, element: image, layer: Number.isNaN(layer) ? 0 : layer });
     }
 
-    context.putImageData(target, 0, 0);
+    // A <source> outranks the img's own src, so the WebP variants go blank as well.
+    // Only the image's own picture may be touched: reaching further up blanked the
+    // character art before its copy was taken, and every card came out empty.
+    image
+      .closest("picture")
+      ?.querySelectorAll(":scope > source")
+      .forEach((variant) => set(variant, "srcset", TRANSPARENT_PIXEL));
+    set(image, "src", TRANSPARENT_PIXEL);
+  });
 
-    return merged;
+  let canvas: HTMLCanvasElement;
+  try {
+    canvas = await html2canvas(element, options);
   } finally {
-    reveal();
-    pinned.forEach((undo) => undo());
+    undos.forEach((undo) => undo());
   }
+
+  const context = canvas.getContext("2d");
+  if (!context) return canvas;
+
+  // The capture leaves its own scale on the context, which multiplied every coordinate
+  // below a second time and pushed the pictures further down the page the lower they sat.
+  context.setTransform(1, 0, 0, 1, 0, 0);
+
+  const bounds = element.getBoundingClientRect();
+  const place = (target: Element) => {
+    const rect = target.getBoundingClientRect();
+    return {
+      x: (rect.left - bounds.left) * options.scale,
+      y: (rect.top - bounds.top) * options.scale,
+      width: rect.width * options.scale,
+      height: rect.height * options.scale,
+    };
+  };
+
+  // The capture holds the name plates and the highlight rings, which belong above the
+  // pictures, so it is kept aside and those parts are put back afterwards.
+  const captured = document.createElement("canvas");
+  captured.width = canvas.width;
+  captured.height = canvas.height;
+  captured.getContext("2d")?.drawImage(canvas, 0, 0);
+
+  const restore = (x: number, y: number, width: number, height: number) => {
+    if (width <= 0 || height <= 0) return;
+    context.drawImage(captured, x, y, width, height, x, y, width, height);
+  };
+
+  drawings
+    .sort((first, second) => first.layer - second.layer)
+    .forEach(({ bitmap, element: image }) => {
+      const box = place(image);
+      const style = window.getComputedStyle(image);
+
+      context.save();
+      context.filter = style.filter;
+      context.globalAlpha = Number(style.opacity);
+      context.beginPath();
+      context.roundRect(
+        box.x,
+        box.y,
+        box.width,
+        box.height,
+        parseFloat(style.borderTopLeftRadius) * options.scale || 0
+      );
+      context.clip();
+      context.drawImage(bitmap, box.x, box.y, box.width, box.height);
+      context.restore();
+    });
+
+  element.querySelectorAll("picture").forEach((picture) => {
+    const plate = picture.nextElementSibling;
+    if (!plate) return;
+    const box = place(plate);
+    restore(box.x, box.y, box.width, box.height);
+  });
+
+  HIGHLIGHTS.forEach(({ selector, width }) => {
+    const ring = width * options.scale;
+    element.querySelectorAll(selector).forEach((highlighted) => {
+      const box = place(highlighted);
+      restore(box.x, box.y, box.width, ring);
+      restore(box.x, box.y + box.height - ring, box.width, ring);
+      restore(box.x, box.y, ring, box.height);
+      restore(box.x + box.width - ring, box.y, ring, box.height);
+    });
+  });
+
+  return canvas;
 };
 
 interface DownloadProps {
@@ -179,15 +226,20 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
       const captureWidth = element.scrollWidth;
       const captureHeight = element.scrollHeight;
 
-      const canvas = await captureInBatches(element, {
+      const canvas = await captureWithImages(element, {
         scale: CAPTURE_SCALE,
         allowTaint: true,
         useCORS: true,
         width: captureWidth,
         height: captureHeight,
         backgroundColor: isDark ? '#171717' : '#ffffff',
-        ignoreElements: (element) => element.id === "downloader",
         onclone: (_: Document, clonedElement: HTMLElement) => {
+          // The button is hidden rather than dropped from the capture: dropping it took
+          // its height out of the layout, and everything below sat about 30px higher
+          // than the page it was measured from.
+          const downloader = clonedElement.querySelector<HTMLElement>("#downloader");
+          if (downloader) downloader.style.visibility = "hidden";
+
           clonedElement.style.width = `${captureWidth}px`;
           clonedElement.style.height = `${captureHeight}px`;
           clonedElement.style.maxHeight = "none";
@@ -195,22 +247,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
           clonedElement.scrollLeft = 0;
           clonedElement.scrollTop = 0;
 
-          const highlights = [
-            {
-              selector: '[data-capture-highlight="recent"], .glow-recent',
-              border: "2px solid #56b4e9",
-            },
-            {
-              selector: '[data-capture-highlight="op"], .glow-op',
-              border: "2px solid rgba(250, 204, 21, 0.8)",
-            },
-            {
-              selector: '[data-capture-highlight="super_op"], .glow-super-op',
-              border: "4px solid #fde047",
-            },
-          ];
-
-          highlights.forEach(({ selector, border }) => {
+          HIGHLIGHTS.forEach(({ selector, width, color }) => {
             clonedElement.querySelectorAll<HTMLElement>(selector).forEach((highlighted) => {
               highlighted.style.setProperty("box-shadow", "none", "important");
               const position = highlighted.ownerDocument.defaultView
@@ -223,7 +260,7 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
               Object.assign(overlay.style, {
                 position: "absolute",
                 inset: "0",
-                border,
+                border: `${width}px solid ${color}`,
                 borderRadius: "inherit",
                 boxSizing: "border-box",
                 pointerEvents: "none",
