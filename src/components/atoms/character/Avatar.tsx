@@ -14,6 +14,10 @@ interface CharacterCheckProps {
   onClick: () => void;
 }
 
+// Every CDN image here carries crossOrigin="anonymous". The download button captures
+// this grid with html2canvas, which reloads each image in CORS mode; without the
+// attribute the page caches a plain response instead, that reload comes back empty, and
+// the downloaded image loses those pictures. The style badges vanished that way.
 // 캐릭터 체크 UI
 const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   info,
@@ -45,6 +49,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
         <div className="absolute bottom-[-8px] left-[-5px] z-10">
           <div className="relative w-[23px] h-[23px] bg-black/60 rounded-full flex items-center justify-center">
             <img
+              crossOrigin="anonymous"
               src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/crown.png`}
               alt="complete"
               className="w-[18px] h-[18px]"
@@ -59,6 +64,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
     if (info.style === AECharacterStyles.four) return null;
     return (
       <img
+        crossOrigin="anonymous"
         src={`${
           process.env.NEXT_PUBLIC_CDN_URL
         }/icon/${info.style.toLowerCase()}.png`}
@@ -72,6 +78,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
     if (currentGrastaStep === 0) return null;
     return (
       <img
+        crossOrigin="anonymous"
         src={`${
           process.env.NEXT_PUBLIC_CDN_URL
         }/icon/grasta${currentGrastaStep}.png`}
@@ -88,6 +95,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
       <div className="absolute bottom-[-8px] left-[-5px] z-10">
         <div className="relative w-[23px] h-[23px] bg-black/60 rounded-full flex items-center justify-center">
           <img
+            crossOrigin="anonymous"
             src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/weapontempering.png`}
             alt="weapon tempering"
             className="w-[18px] h-[18px]"
@@ -128,6 +136,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
               type="image/webp"
             />
             <img
+              crossOrigin="anonymous"
               src={`${process.env.NEXT_PUBLIC_CDN_URL}/staralign/${info.id}.png`}
               alt={info.id}
               className={cn(
@@ -143,6 +152,7 @@ const CharacterAvatar: React.FC<CharacterCheckProps> = ({
               type="image/webp"
             />
             <img
+              crossOrigin="anonymous"
               src={`${process.env.NEXT_PUBLIC_CDN_URL}/character/${info.id}.png`}
               alt={info.id}
               className={cn(

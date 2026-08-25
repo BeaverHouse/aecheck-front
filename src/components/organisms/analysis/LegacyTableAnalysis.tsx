@@ -49,6 +49,7 @@ const LegacyTableAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
               className="sticky top-0 z-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border shadow-sm p-4 flex items-center justify-center border-l border-border/50"
             >
               <img
+                crossOrigin="anonymous"
                 src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${element}.png`}
                 alt={element}
                 className="w-8 h-8 object-contain"
@@ -62,6 +63,7 @@ const LegacyTableAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
               {/* Row Header (Weapon) */}
               <div className="bg-background border-r border-border p-4 flex items-center justify-center sticky left-0 z-[5] border-b border-border/50">
                 <img
+                  crossOrigin="anonymous"
                   src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${weapon}.png`}
                   alt={weapon}
                   className="w-8 h-8 object-contain"

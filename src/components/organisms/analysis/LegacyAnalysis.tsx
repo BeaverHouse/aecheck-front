@@ -143,6 +143,7 @@ const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
               <h4 className="flex items-center gap-2 text-base font-semibold mb-3 pb-2 border-b border-border text-foreground">
                 {p.startsWith("personality") && (
                   <img
+                    crossOrigin="anonymous"
                     src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/${p}.png`}
                     alt={p}
                     className="w-6 h-6"
