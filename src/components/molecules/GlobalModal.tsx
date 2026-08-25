@@ -5,6 +5,7 @@ import { ModalType } from "../../constants/enum";
 import FilterModal from "../atoms/FilterModal";
 import SettingsModal from "../atoms/SettingsModal";
 import Loading from "../atoms/Loading";
+import { useTranslation } from "react-i18next";
 
 interface GlobalModalProps {
   type: ModalType | undefined;
@@ -12,6 +13,7 @@ interface GlobalModalProps {
 
 const GlobalModal: React.FC<GlobalModalProps> = ({ type }) => {
   const { hideModal } = useModalStore();
+  const { t } = useTranslation();
 
   const popModal = (e: PopStateEvent) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ const GlobalModal: React.FC<GlobalModalProps> = ({ type }) => {
       case ModalType.settings:
         return <SettingsModal />;
       case ModalType.loading:
-        return <Loading />;
+        return <Loading message={t("frontend.download.loading")} />;
     }
   }
 };

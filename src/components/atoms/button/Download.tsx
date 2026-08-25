@@ -12,6 +12,36 @@ import { isIOS } from "react-device-detect";
 
 const AnnounceSwal = withReactContent(Swal);
 
+const DESKTOP_CAPTURE_WIDTH = 1200;
+const CAPTURE_SCALE = 1.1;
+
+/**
+ * Copies the picture each image already shows into a canvas the capture can draw
+ * without loading anything.
+ *
+ * html2canvas reloads every image by address instead of reusing the decoded one, and it
+ * tears its clone down while those loads are still running: a capture holding 250 images
+ * lost about 150 of them and the matching character cards came out blank, while one
+ * holding 32 lost none. A canvas needs no loading, which is also why the images carry
+ * crossOrigin="anonymous": a canvas holding a plain cross-origin picture taints the
+ * capture and blocks the export.
+ */
+const replaceImagesWithCanvas = (source: HTMLElement, clone: HTMLElement) => {
+  const originals = source.querySelectorAll("img");
+  clone.querySelectorAll("img").forEach((image, index) => {
+    const original = originals[index];
+    if (!original?.naturalWidth) return;
+
+    const canvas = image.ownerDocument.createElement("canvas");
+    canvas.width = original.naturalWidth;
+    canvas.height = original.naturalHeight;
+    canvas.getContext("2d")?.drawImage(original, 0, 0);
+    canvas.className = image.className;
+    canvas.style.cssText = image.style.cssText;
+    image.replaceWith(canvas);
+  });
+};
+
 interface DownloadProps {
   tag: string;
 }
@@ -41,23 +71,33 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
     }
 
     setModal(ModalType.loading);
+    const originalWidth = element.style.width;
+    const originalMaxWidth = element.style.maxWidth;
     try {
       // Detect dark mode and set appropriate background color
       const isDark = document.documentElement.classList.contains('dark');
+
+      // The avatar grid fills its container, so a phone keeps its narrow column count
+      // unless the element is widened to the desktop layout before it is measured.
+      if (tag === "ae-wrapper") {
+        element.style.width = `${DESKTOP_CAPTURE_WIDTH}px`;
+        element.style.maxWidth = "none";
+      }
+
       const captureWidth = element.scrollWidth;
       const captureHeight = element.scrollHeight;
 
       const canvas = await html2canvas(element, {
-        scale: 1.1,
+        scale: CAPTURE_SCALE,
         allowTaint: true,
         useCORS: true,
         width: captureWidth,
         height: captureHeight,
-        windowWidth: tag === "ae-wrapper" ? 1200 : captureWidth,
-        windowHeight: captureHeight,
         backgroundColor: isDark ? '#171717' : '#ffffff',
         ignoreElements: (element) => element.id === "downloader",
         onclone: (_: Document, clonedElement: HTMLElement) => {
+          replaceImagesWithCanvas(element, clonedElement);
+
           clonedElement.style.width = `${captureWidth}px`;
           clonedElement.style.height = `${captureHeight}px`;
           clonedElement.style.maxHeight = "none";
@@ -185,6 +225,9 @@ const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
         text: "Please try again later.",
         confirmButtonText: "Ok",
       });
+    } finally {
+      element.style.width = originalWidth;
+      element.style.maxWidth = originalMaxWidth;
     }
   };
 

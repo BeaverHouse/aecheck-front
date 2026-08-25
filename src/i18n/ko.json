@@ -1,4 +1,5 @@
 {
+  "frontend.download.loading": "이미지를 만드는 중입니다.",
   "frontend.menu.analysis": "분석",
   "frontend.menu.check": "체크",
   "frontend.menu.loader": "데이터 저장 & 불러오기",
