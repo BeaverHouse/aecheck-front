@@ -1,4 +1,5 @@
 {
+  "frontend.download.loading": "Creating the image. This takes a few seconds when there are many characters.",
   "frontend.menu.analysis": "Analysis",
   "frontend.menu.check": "Check",
   "frontend.menu.loader": "Data Save & Load",

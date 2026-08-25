@@ -1,4 +1,5 @@
 {
+  "frontend.download.loading": "画像を作成しています。キャラクターが多い場合は数秒かかります。",
   "frontend.menu.analysis": "分析",
   "frontend.menu.check": "チェック",
   "frontend.menu.loader": "データ Save & Load",
