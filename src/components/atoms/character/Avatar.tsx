@@ -14,10 +14,9 @@ interface CharacterCheckProps {
   onClick: () => void;
 }
 
-// Every CDN image here carries crossOrigin="anonymous". The download button captures
-// this grid with html2canvas, which reloads each image in CORS mode; without the
-// attribute the page caches a plain response instead, that reload comes back empty, and
-// the downloaded image loses those pictures. The style badges vanished that way.
+// Every CDN image here carries crossOrigin="anonymous". The download button copies
+// these pictures into canvases so that the capture does not reload them, and a canvas
+// holding a plain cross-origin picture cannot be exported afterwards.
 // 캐릭터 체크 UI
 const CharacterAvatar: React.FC<CharacterCheckProps> = ({
   info,
