@@ -54,7 +54,7 @@ function CharacterSearch() {
 
   const allCharacters = isPending
     ? []
-    : (data as APIResponse<CharacterSummary[]>).data.sort(
+    : [...(data as APIResponse<CharacterSummary[]>).data].sort(
         createCharacterSorter(t, i18n.language, showRealName)
       );
 

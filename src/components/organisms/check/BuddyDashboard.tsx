@@ -21,7 +21,7 @@ function BuddyDashboard() {
 
   if (error) return <div className="text-destructive">An error has occurred: {error.message}</div>;
 
-  const allBuddies = (data as APIResponse<BuddyDetail[]>).data.sort((a, b) =>
+  const allBuddies = [...(data as APIResponse<BuddyDetail[]>).data].sort((a, b) =>
     t(a.id).localeCompare(t(b.id))
   );
 
