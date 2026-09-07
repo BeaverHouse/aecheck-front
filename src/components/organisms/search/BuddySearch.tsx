@@ -18,7 +18,7 @@ function BuddySearch() {
 
   if (isPending) return <Loading />;
 
-  const allBuddies = (data as APIResponse<BuddyDetail[]>).data.sort((a, b) =>
+  const allBuddies = [...(data as APIResponse<BuddyDetail[]>).data].sort((a, b) =>
     t(a.id).localeCompare(t(b.id))
   );
 

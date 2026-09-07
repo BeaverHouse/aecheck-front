@@ -75,82 +75,25 @@ const useFilterStore = create(
   persist<FilterState>(
     (set) => ({
       ...initialState,
-      setSearch: (word) =>
-        set((state) => ({
-          ...state,
-          searchWord: word,
-        })),
-      setInvenStatusFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          invenStatusFilter: newFilter,
-        })),
-      setManifestStatusFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          manifestStatusFilter: newFilter,
-        })),
-      setWeaponTemperingStatusFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          weaponTemperingStatusFilter: newFilter,
-        })),
-      setGrastaWeaponTemperingFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          grastaWeaponTemperingFilter: newFilter,
-        })),
-      setGrastaStatusFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          grastaStatusFilter: newFilter,
-        })),
-      setStaralignStatusFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          staralignStatusFilter: newFilter,
-        })),
-      setStyleFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          styleFilter: newFilter,
-        })),
-      setManifestFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          manifestFilter: newFilter,
-        })),
-      setCategoryFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          categoryFilter: newFilter,
-        })),
-      setAlterFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          alterFilter: newFilter,
-        })),
-      setLightShadowFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          lightShadowFilter: newFilter,
-        })),
-      setStaralignFilter: (newFilter) =>
-        set((state) => ({
-          ...state,
-          staralignFilter: newFilter,
-        })),
+      setSearch: (word) => set({ searchWord: word }),
+      setInvenStatusFilter: (newFilter) => set({ invenStatusFilter: newFilter }),
+      setManifestStatusFilter: (newFilter) => set({ manifestStatusFilter: newFilter }),
+      setWeaponTemperingStatusFilter: (newFilter) => set({ weaponTemperingStatusFilter: newFilter }),
+      setGrastaWeaponTemperingFilter: (newFilter) => set({ grastaWeaponTemperingFilter: newFilter }),
+      setGrastaStatusFilter: (newFilter) => set({ grastaStatusFilter: newFilter }),
+      setStaralignStatusFilter: (newFilter) => set({ staralignStatusFilter: newFilter }),
+      setStyleFilter: (newFilter) => set({ styleFilter: newFilter }),
+      setManifestFilter: (newFilter) => set({ manifestFilter: newFilter }),
+      setCategoryFilter: (newFilter) => set({ categoryFilter: newFilter }),
+      setAlterFilter: (newFilter) => set({ alterFilter: newFilter }),
+      setLightShadowFilter: (newFilter) => set({ lightShadowFilter: newFilter }),
+      setStaralignFilter: (newFilter) => set({ staralignFilter: newFilter }),
       setPersonalities: (tags, essential) => {
-        if (essential)
-          set((state) => ({
-            ...state,
-            essenTialPersonalityTags: tags,
-          }));
-        else
-          set((state) => ({
-            ...state,
-            choosePersonalityTags: tags,
-          }));
+        if (essential) {
+          set({ essenTialPersonalityTags: tags });
+        } else {
+          set({ choosePersonalityTags: tags });
+        }
       },
       removeFilter: () => {
         set(
@@ -167,11 +110,7 @@ const useFilterStore = create(
           true
         );
       },
-      setDungeon: (word) =>
-        set((state) => ({
-          ...state,
-          dungeon: word,
-        })),
+      setDungeon: (word) => set({ dungeon: word }),
     }),
     {
       name: "AE_FILTER_V3_1",

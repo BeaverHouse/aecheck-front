@@ -25,7 +25,8 @@ const CharacterModal: React.FC = () => {
   const { inven, grasta, manifest, staralign, weaponTempering } =
     useCheckStore();
   const { showTierBadge, showRealName } = useConfigStore();
-  const { characterID, hideModal } = useModalStore();
+  const characterID = useModalStore((state) => state.characterID);
+  const hideModal = useModalStore((state) => state.hideModal);
   const { t, i18n } = useTranslation();
 
   const characterDetailQuery = useQuery({

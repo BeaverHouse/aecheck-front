@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 const CharacterGrasta: React.FC<CharacterSummary> = (info) => {
   const { grasta, setGrasta } = useCheckStore();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { showTierBadge } = useConfigStore();
   const { t } = useTranslation();
 

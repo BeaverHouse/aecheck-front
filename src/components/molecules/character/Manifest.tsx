@@ -59,7 +59,7 @@ const CharacterManifest: React.FC<CharacterManifestProps> = ({
   status,
 }) => {
   const { manifest, setManifest, weaponTempering, setWeaponTempering } = useCheckStore();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { showTierBadge } = useConfigStore();
   const { t } = useTranslation();
 

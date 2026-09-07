@@ -68,7 +68,7 @@ const SettingsModal: React.FC = () => {
     weaponTempering,
     loadSaveData,
   } = useCheckStore();
-  const { hideModal } = useModalStore();
+  const hideModal = useModalStore((state) => state.hideModal);
   const { t } = useTranslation();
   const [showRealNameConfirm, setShowRealNameConfirm] = React.useState(false);
 

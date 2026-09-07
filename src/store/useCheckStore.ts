@@ -27,36 +27,12 @@ const useCheckStore = create(
       staralign: [],
       buddy: [],
       weaponTempering: [],
-      setInven: (inven) =>
-        set((state) => ({
-          ...state,
-          inven: cleanNumArr(inven),
-        })),
-      setManifest: (manifest) =>
-        set((state) => ({
-          ...state,
-          manifest: cleanNumArr(manifest),
-        })),
-      setGrasta: (grasta) =>
-        set((state) => ({
-          ...state,
-          grasta: cleanNumArr(grasta),
-        })),
-      setStaralign: (staralign) =>
-        set((state) => ({
-          ...state,
-          staralign: cleanNumArr(staralign),
-        })),
-      setBuddy: (buddy) =>
-        set((state) => ({
-          ...state,
-          buddy: cleanNumArr(buddy),
-        })),
-      setWeaponTempering: (weaponTempering) =>
-        set((state) => ({
-          ...state,
-          weaponTempering: cleanNumArr(weaponTempering),
-        })),
+      setInven: (inven) => set({ inven: cleanNumArr(inven) }),
+      setManifest: (manifest) => set({ manifest: cleanNumArr(manifest) }),
+      setGrasta: (grasta) => set({ grasta: cleanNumArr(grasta) }),
+      setStaralign: (staralign) => set({ staralign: cleanNumArr(staralign) }),
+      setBuddy: (buddy) => set({ buddy: cleanNumArr(buddy) }),
+      setWeaponTempering: (weaponTempering) => set({ weaponTempering: cleanNumArr(weaponTempering) }),
       loadSaveData: (data) => {
         set({
           inven: cleanNumArr(data.inven || []),
