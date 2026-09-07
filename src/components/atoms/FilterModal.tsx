@@ -111,7 +111,7 @@ const FilterModal: React.FC = () => {
     setDungeon,
     removeFilter,
   } = useFilterStore();
-  const { hideModal } = useModalStore();
+  const hideModal = useModalStore((state) => state.hideModal);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 

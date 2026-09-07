@@ -32,7 +32,7 @@ function CharacterDashboard({
   const { invenStatusFilter } = useFilterStore();
   const { inven, buddy, setInven, setBuddy } = useCheckStore();
   const { popupOnCheck, displayMode, showRealName } = useConfigStore();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
 
   const targetCharacters = filteredCharacters
     .filter(

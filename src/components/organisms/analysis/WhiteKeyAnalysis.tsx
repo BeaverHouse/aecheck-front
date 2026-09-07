@@ -26,7 +26,7 @@ import DownloadButton from "../../atoms/button/Download";
 const WhiteKeyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   const [Opened, setOpened] = React.useState(["0", "1", "2", "3", "4"]);
   const [ShowNotOwned, setShowNotOwned] = React.useState(false);
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { inven } = useCheckStore();
   const { showRealName } = useConfigStore();
   const { t, i18n } = useTranslation();

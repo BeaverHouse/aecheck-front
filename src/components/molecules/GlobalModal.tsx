@@ -12,7 +12,7 @@ interface GlobalModalProps {
 }
 
 const GlobalModal: React.FC<GlobalModalProps> = ({ type }) => {
-  const { hideModal } = useModalStore();
+  const hideModal = useModalStore((state) => state.hideModal);
   const { t } = useTranslation();
 
   const popModal = (e: PopStateEvent) => {

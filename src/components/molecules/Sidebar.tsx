@@ -30,7 +30,7 @@ function AECheckSidebar() {
   const [open, setOpen] = React.useState(false);
   const { t } = useTranslation();
   const router = useRouter();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
 
   const menuData = [
     {

@@ -41,7 +41,7 @@ const ExternalLinks = [
 
 function HomePage() {
   const { t } = useTranslation();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const router = useRouter();
   const { isPending, data } = useQuery({
     queryKey: ["getCharacters"],

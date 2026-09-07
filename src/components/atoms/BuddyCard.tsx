@@ -17,7 +17,7 @@ interface BuddyCardProps {
 const BuddyCard: React.FC<BuddyCardProps> = ({ info, onClick = () => {} }) => {
   const { buddy, inven } = useCheckStore();
   const { t, i18n } = useTranslation();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
 
   const id = getNumber(info);
   const partnerID = info.characterID

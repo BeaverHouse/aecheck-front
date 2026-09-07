@@ -32,7 +32,7 @@ import {
 
 function CharacterSearch() {
   const { t, i18n } = useTranslation();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { displayMode, showRealName } = useConfigStore();
   const {
     styleFilter,

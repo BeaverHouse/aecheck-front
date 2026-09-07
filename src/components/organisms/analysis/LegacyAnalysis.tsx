@@ -25,7 +25,7 @@ import DownloadButton from "../../atoms/button/Download";
 const LegacyAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   const [Opened, setOpened] = React.useState(["0", "1", "2", "3"]);
   const [WeaponSort, setWeaponSort] = React.useState(false);
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { inven } = useCheckStore();
   const { t } = useTranslation();
 

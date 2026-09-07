@@ -56,7 +56,8 @@ interface DownloadProps {
  */
 const DownloadButton: React.FC<DownloadProps> = ({ tag }) => {
   const { i18n } = useTranslation();
-  const { setModal, hideModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
+  const hideModal = useModalStore((state) => state.hideModal);
 
   const handleSaveClick = async () => {
     const element = document.getElementById(tag);

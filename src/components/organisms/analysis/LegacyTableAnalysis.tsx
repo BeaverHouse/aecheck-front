@@ -11,7 +11,7 @@ import useConfigStore from "../../../store/useConfigStore";
 
 const LegacyTableAnalysis: React.FC<AnalysisProps> = ({ allCharacters }) => {
   const { t, i18n } = useTranslation();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { showRealName } = useConfigStore();
 
   const baseCharacters = allCharacters

@@ -50,7 +50,7 @@ function CircularProgressWithLabel({ value }: { value: number }) {
 
 const CharacterStaralign: React.FC<CharacterSummary> = (info) => {
   const { inven, staralign, setStaralign } = useCheckStore();
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { showTierBadge } = useConfigStore();
   const { t } = useTranslation();
 

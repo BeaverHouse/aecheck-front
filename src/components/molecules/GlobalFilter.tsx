@@ -11,7 +11,7 @@ interface GlobalFilterProps {
 }
 
 const GlobalFilter: React.FC<GlobalFilterProps> = ({ type }) => {
-  const { setModal } = useModalStore();
+  const setModal = useModalStore((state) => state.setModal);
   const { t } = useTranslation();
   return (
     <div className="w-full max-w-[600px] flex items-center mx-auto mb-4 justify-center gap-2 px-4">
