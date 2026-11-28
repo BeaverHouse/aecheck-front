@@ -11,11 +11,11 @@ Only the changes that matter, recorded from November 2026.
 - A Normal Style can use its 4★ picture as its portrait, so the two cannot be told apart. They are listed separately; switch them yourself.
 - Characters with a lookalike picture, and characters AE Check does not list such as 3★ allies, are shown separately.
 - Your images are not sent to any server.
-- This can take a while.
+- This can take up to 10 to 20 seconds.
 
 ### Check page
 
-- Improved the filter UI.
-- Actions that change everything at once, such as check all and clear all, are in the ⋯ menu.
+- Improved the filter UI and optimized the page for phones.
+- Actions that change everything at once, such as check all and clear all, moved to the ⋯ menu.
 - Page navigation moved below the list.
 - Fixed the announcement coming back after it was closed.
