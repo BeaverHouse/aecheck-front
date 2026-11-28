@@ -47,6 +47,7 @@
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.85.0",
     "react-i18next": "^17.0.11",
+    "react-markdown": "^10.1.0",
     "sweetalert2": "^11.26.24",
     "sweetalert2-react-content": "^5.1.2",
     "tailwind-merge": "^3.6.0",

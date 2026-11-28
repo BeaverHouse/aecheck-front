@@ -51,6 +51,8 @@
   "filter.staralign": "星導覚醒",
   "filter.gauge": "覚醒ゲージ {{n}}/3",
   "filter.awakened": "覚醒済み",
+  "announce.desc": "スクリーンショットで所持キャラクターをチェックできます。",
+  "announce.release": "リリースノートを見る",
   "screenshot.title": "スクリーンショットでチェック",
   "screenshot.button": "スクショ",
   "screenshot.pick": "スクリーンショットを選ぶ",

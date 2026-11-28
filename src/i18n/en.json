@@ -51,6 +51,8 @@
   "filter.staralign": "Stellar Awakening",
   "filter.gauge": "Awakening Gauge {{n}}/3",
   "filter.awakened": "Awakened",
+  "announce.desc": "Check your owned characters from screenshots.",
+  "announce.release": "See the release notes",
   "screenshot.title": "Check from screenshots",
   "screenshot.button": "Screenshot",
   "screenshot.pick": "Choose screenshots",

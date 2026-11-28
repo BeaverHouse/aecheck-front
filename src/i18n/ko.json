@@ -51,6 +51,8 @@
   "filter.staralign": "성도각성",
   "filter.gauge": "각성 게이지 {{n}}/3",
   "filter.awakened": "각성 완료",
+  "announce.desc": "스크린샷으로 보유 캐릭터를 체크할 수 있어요.",
+  "announce.release": "릴리스 노트 보기",
   "screenshot.title": "스크린샷으로 체크",
   "screenshot.button": "스크린샷",
   "screenshot.pick": "스크린샷 고르기",

@@ -1,15 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { X, Info } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const ANNOUNCE_KEY = "AE_ANNOUNCE_3_2";
-const ANNOUNCE_DATE = "20260306"; // a new date shows the banner again to everyone
+const ANNOUNCE_DATE = "20261128"; // a new date shows the banner again to everyone
 
 function NormalAnnounce() {
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(true);
   const [announceViewed, setAnnounceViewed] = useState(true);
 
@@ -20,12 +21,7 @@ function NormalAnnounce() {
 
   if (announceViewed || !visible) return null;
 
-  const title = "26.03.06 Update";
-
-  const description =
-    i18n.language === "ko"
-      ? "데이터와 일부 오류를 수정했어요."
-      : "Data & UI minor fix is applied.";
+  const title = "26.11.28 Update";
 
   const handleDismiss = () => {
     window.localStorage.setItem(ANNOUNCE_KEY, ANNOUNCE_DATE);
@@ -41,7 +37,16 @@ function NormalAnnounce() {
             <span className="font-semibold text-sm text-foreground">
               {title}
             </span>
-            <span className="text-sm text-muted-foreground">{description}</span>
+            <span className="text-sm text-muted-foreground">
+              {t("announce.desc")}{" "}
+              <Link
+                href="/release"
+                prefetch={false}
+                className="font-medium text-foreground underline underline-offset-2"
+              >
+                {t("announce.release")}
+              </Link>
+            </span>
           </div>
         </div>
         <Button
