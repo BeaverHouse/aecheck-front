@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
-import { Camera, ImagePlus } from "lucide-react";
+import { Camera, ImagePlus, Minus, Plus } from "lucide-react";
 import useCheckStore from "../../../store/useCheckStore";
 import { getNumber } from "../../../util/func";
 import { AECharacterStyles } from "../../../constants/enum";
@@ -227,7 +227,7 @@ function ScreenshotReader({ allCharacters, onApply }: ReaderProps) {
             {sure.map((pick) => (
               <label
                 key={pick.cell.id}
-                className={cn(choiceClass, pick.chosen < 0 && "opacity-40")}
+                className={cn(choiceClass, "relative cursor-pointer")}
               >
                 <input
                   type="checkbox"
@@ -235,13 +235,26 @@ function ScreenshotReader({ allCharacters, onApply }: ReaderProps) {
                   checked={pick.chosen === 0}
                   onChange={(e) => choose(pick, e.target.checked ? 0 : -1)}
                 />
-                <CharacterAvatar
-                  info={pick.options[0]}
-                  disableShadow
-                  disableGray
-                  disableTierRing
-                  onClick={labelHandlesClick}
-                />
+                <div className={cn(pick.chosen < 0 && "opacity-40")}>
+                  <CharacterAvatar
+                    info={pick.options[0]}
+                    disableShadow
+                    disableGray
+                    disableTierRing
+                    onClick={labelHandlesClick}
+                  />
+                </div>
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute -right-2 -top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full shadow [&_svg]:size-4",
+                    pick.chosen === 0
+                      ? "bg-destructive text-destructive-foreground"
+                      : "bg-primary text-primary-foreground",
+                  )}
+                >
+                  {pick.chosen === 0 ? <Minus /> : <Plus />}
+                </span>
               </label>
             ))}
           </div>
