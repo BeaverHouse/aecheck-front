@@ -635,13 +635,16 @@ function matchAt(crop: RGBImage, bank: PortraitBank, near?: Position) {
 export function readStyleGrid(
   shot: RGBAImage,
   bank: PortraitBank,
+  onCell?: (done: number, total: number) => void,
 ): CellMatch[] {
   let near: Position | undefined;
   const scale = shot.height / SHOT_HEIGHT; // cell centres back in the screenshot's own pixels
-  return findGridCells(shot).map(({ row, col, x, y, crop }) => {
+  const cells = findGridCells(shot);
+  return cells.map(({ row, col, x, y, crop }, i) => {
     let m = matchAt(crop, bank, near);
     if (near && m.score < ACCEPT_SCORE) m = matchAt(crop, bank);
     if (m.score >= SURE_SCORE) near = m.at;
+    onCell?.(i + 1, cells.length);
     const { id, score, status, brightness, owned, candidates } = m;
     return {
       row,
@@ -703,6 +706,7 @@ export async function loadPortraitBank(
 export async function readStyleScreenshot(
   file: Blob,
   bank: PortraitBank,
+  onCell?: (done: number, total: number) => void,
 ): Promise<CellMatch[]> {
-  return readStyleGrid(await decode(file), bank);
+  return readStyleGrid(await decode(file), bank, onCell);
 }

@@ -57,6 +57,7 @@
   "screenshot.description": "ゲーム内のスタイル一覧画面のスクリーンショットをアップロードしてください。複数枚をまとめて選べます。画像が端末の外に送信されることはありません。",
   "screenshot.loading": "キャラクター画像を準備中 {{done}}/{{total}}",
   "screenshot.reading": "スクリーンショットを読み取り中 {{done}}/{{total}}",
+  "screenshot.wait": "初回はキャラクター画像のダウンロードに10秒以上かかることがあります。画面を閉じずにお待ちください。",
   "screenshot.error": "画像を読み取れませんでした。もう一度アップロードしてください。",
   "screenshot.sure": "チェックするキャラクター",
   "screenshot.unsure": "確認が必要です",

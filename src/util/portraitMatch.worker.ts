@@ -7,6 +7,7 @@ import {
 export type MatchRequest = { characters: CharacterSummary[]; files: File[] };
 export type MatchEvent =
   | { type: "bank"; done: number; total: number }
+  | { type: "cell"; index: number; done: number; total: number }
   | { type: "shot"; index: number; height: number; cells: CellMatch[] };
 
 // Matching takes seconds per screenshot, so it runs off the main thread.
@@ -21,7 +22,9 @@ self.onmessage = async ({ data }: MessageEvent<MatchRequest>) => {
       type: "shot",
       index,
       height: bitmap.height,
-      cells: await readStyleScreenshot(file, bank),
+      cells: await readStyleScreenshot(file, bank, (done, total) =>
+        post({ type: "cell", index, done, total }),
+      ),
     });
     bitmap.close();
   }

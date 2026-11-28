@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { Camera, ImagePlus } from "lucide-react";
 import useCheckStore from "../../../store/useCheckStore";
 import { getNumber } from "../../../util/func";
@@ -112,12 +113,27 @@ function Crop({ shot, cell }: Pick) {
   );
 }
 
+/** Bar position 0-1: preparing the pictures fills the first half, reading the screenshots' cells the second. */
+function progressOf(event: MatchEvent, shots: number, t: TFunction) {
+  if (event.type === "bank")
+    return {
+      label: t("screenshot.loading", event),
+      value: event.done / event.total / 2,
+    };
+  const cells = event.type === "cell" ? event.done / event.total : 1;
+  return {
+    label: t("screenshot.reading", { done: event.index + 1, total: shots }),
+    value: 0.5 + (event.index + cells) / shots / 2,
+  };
+}
+
 function ScreenshotReader({ allCharacters, onApply }: ReaderProps) {
   const { t } = useTranslation();
   const inven = useCheckStore((state) => state.inven);
   const [job, setJob] = React.useState<{ worker: Worker; urls: string[] }>();
-  const [progress, setProgress] = React.useState("");
+  const [progress, setProgress] = React.useState({ label: "", value: 0 });
   const [picks, setPicks] = React.useState<Pick[]>();
+  const progressId = React.useId();
 
   React.useEffect(
     () => () => {
@@ -133,18 +149,16 @@ function ScreenshotReader({ allCharacters, onApply }: ReaderProps) {
     );
     const urls = files.map((file) => URL.createObjectURL(file));
     const shots: Shot[] = [];
-    worker.onerror = () => setProgress(t("screenshot.error"));
+    worker.onerror = () =>
+      setProgress((p) => ({ ...p, label: t("screenshot.error") }));
     worker.onmessage = ({ data }: MessageEvent<MatchEvent>) => {
-      if (data.type === "bank")
-        return setProgress(t("screenshot.loading", data));
+      setProgress(progressOf(data, files.length, t));
+      if (data.type !== "shot") return;
       shots.push({
         url: urls[data.index],
         height: data.height,
         cells: data.cells,
       });
-      setProgress(
-        t("screenshot.reading", { done: shots.length, total: files.length }),
-      );
       if (shots.length === files.length)
         setPicks(toPicks(allCharacters, inven, shots));
     };
@@ -176,9 +190,17 @@ function ScreenshotReader({ allCharacters, onApply }: ReaderProps) {
     );
   if (!picks)
     return (
-      <p role="status" className="text-sm text-foreground">
-        {progress}
-      </p>
+      <div className="space-y-2">
+        <p id={progressId} role="status" className="text-sm text-foreground">
+          {progress.label}
+        </p>
+        <progress
+          aria-labelledby={progressId}
+          value={progress.value}
+          className="h-2 w-full overflow-hidden rounded-full [&::-moz-progress-bar]:bg-primary [&::-webkit-progress-bar]:bg-muted [&::-webkit-progress-value]:bg-primary"
+        />
+        <p className="text-xs text-muted-foreground">{t("screenshot.wait")}</p>
+      </div>
     );
 
   const choose = (pick: Pick, chosen: number) =>

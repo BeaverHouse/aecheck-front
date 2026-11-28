@@ -57,6 +57,7 @@
   "screenshot.description": "게임의 메뉴 → 기록 → 스타일 화면을 캡처해서 올려 주세요. 여러 장을 한 번에 올릴 수 있고, 이미지는 기기 밖으로 나가지 않아요.",
   "screenshot.loading": "캐릭터 그림을 준비하는 중 {{done}}/{{total}}",
   "screenshot.reading": "스크린샷을 읽는 중 {{done}}/{{total}}",
+  "screenshot.wait": "처음 쓸 때는 캐릭터 그림을 내려받느라 10초 넘게 걸릴 수 있어요. 창을 닫지 말고 기다려 주세요.",
   "screenshot.error": "이미지를 읽지 못했어요. 다시 올려 주세요.",
   "screenshot.sure": "체크할 캐릭터",
   "screenshot.unsure": "확인이 필요해요",

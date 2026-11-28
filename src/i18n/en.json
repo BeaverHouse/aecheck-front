@@ -57,6 +57,7 @@
   "screenshot.description": "Upload screenshots of the in-game Menu → Records → Styles screen. You can pick several at once, and the images never leave your device.",
   "screenshot.loading": "Preparing character images {{done}}/{{total}}",
   "screenshot.reading": "Reading screenshots {{done}}/{{total}}",
+  "screenshot.wait": "The first time, downloading the character pictures can take more than 10 seconds. Please keep this window open.",
   "screenshot.error": "Could not read the images. Please upload them again.",
   "screenshot.sure": "Characters to check",
   "screenshot.unsure": "Needs your confirmation",
