@@ -79,7 +79,7 @@ const TopNavigateBox: React.FC = () => {
 
   return (
     <Select value={currentOption} onValueChange={handleChange}>
-      <SelectTrigger className="min-w-[250px] max-w-[250px] mx-auto text-center">
+      <SelectTrigger className="w-40 text-center sm:w-[250px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

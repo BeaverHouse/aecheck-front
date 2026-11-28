@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Camera } from "lucide-react";
+import { Camera, ImagePlus } from "lucide-react";
 import useCheckStore from "../../../store/useCheckStore";
 import { getNumber } from "../../../util/func";
 import { AECharacterStyles } from "../../../constants/enum";
@@ -11,7 +11,8 @@ import type {
 } from "../../../util/portraitMatch.worker";
 import CharacterAvatar from "../../atoms/character/Avatar";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { useAddInven } from "../../../hooks/useAddInven";
 import {
   Dialog,
   DialogContent,
@@ -34,7 +35,7 @@ interface Pick {
   chosen: number; // index into options, -1 to leave the cell out
 }
 
-type ImportProps = AnalysisProps & {
+type ReaderProps = AnalysisProps & {
   onApply: (chars: CharacterSummary[]) => void;
 };
 
@@ -111,7 +112,7 @@ function Crop({ shot, cell }: Pick) {
   );
 }
 
-function ScreenshotReader({ allCharacters, onApply }: ImportProps) {
+function ScreenshotReader({ allCharacters, onApply }: ReaderProps) {
   const { t } = useTranslation();
   const inven = useCheckStore((state) => state.inven);
   const [job, setJob] = React.useState<{ worker: Worker; urls: string[] }>();
@@ -156,14 +157,22 @@ function ScreenshotReader({ allCharacters, onApply }: ImportProps) {
 
   if (!job)
     return (
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        aria-label={t("screenshot.title")}
-        className="text-sm text-foreground file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:text-primary-foreground"
-        onChange={(e) => e.target.files?.length && read([...e.target.files])}
-      />
+      <label
+        className={cn(
+          buttonVariants(),
+          "mx-auto cursor-pointer has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
+        )}
+      >
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          className="sr-only"
+          onChange={(e) => e.target.files?.length && read([...e.target.files])}
+        />
+        <ImagePlus />
+        {t("screenshot.pick")}
+      </label>
     );
   if (!picks)
     return (
@@ -290,16 +299,21 @@ function ScreenshotReader({ allCharacters, onApply }: ImportProps) {
   );
 }
 
-function ScreenshotImport({ allCharacters, onApply }: ImportProps) {
+function ScreenshotImport({ allCharacters }: AnalysisProps) {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
+  const addInven = useAddInven(allCharacters);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 text-foreground">
-          <Camera className="h-4 w-4" />
-          {t("screenshot.title")}
+        <Button
+          variant="outline"
+          aria-label={t("screenshot.title")}
+          className="h-9 shrink-0 rounded-full px-3 text-foreground"
+        >
+          <Camera />
+          {t("screenshot.button")}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
@@ -310,7 +324,7 @@ function ScreenshotImport({ allCharacters, onApply }: ImportProps) {
         <ScreenshotReader
           allCharacters={allCharacters}
           onApply={(chars) => {
-            onApply(chars);
+            addInven(chars);
             setOpen(false);
           }}
         />

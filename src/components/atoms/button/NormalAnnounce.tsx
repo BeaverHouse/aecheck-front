@@ -5,14 +5,16 @@ import { Button } from "@/components/ui/button";
 import { X, Info } from "lucide-react";
 import { useState, useEffect } from "react";
 
+const ANNOUNCE_KEY = "AE_ANNOUNCE_3_2";
+const ANNOUNCE_DATE = "20260306"; // a new date shows the banner again to everyone
+
 function NormalAnnounce() {
   const { i18n } = useTranslation();
   const [visible, setVisible] = useState(true);
   const [announceViewed, setAnnounceViewed] = useState(true);
 
   useEffect(() => {
-    const viewed =
-      window.localStorage.getItem("AE_ANNOUNCE_3_2") === "20260209";
+    const viewed = window.localStorage.getItem(ANNOUNCE_KEY) === ANNOUNCE_DATE;
     setAnnounceViewed(viewed);
   }, []);
 
@@ -26,7 +28,7 @@ function NormalAnnounce() {
       : "Data & UI minor fix is applied.";
 
   const handleDismiss = () => {
-    window.localStorage.setItem("AE_ANNOUNCE_3_2", "20260306");
+    window.localStorage.setItem(ANNOUNCE_KEY, ANNOUNCE_DATE);
     setVisible(false);
   };
 

@@ -2,23 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import CharacterAvatar from "../../atoms/character/Avatar";
 import useModalStore from "../../../store/useModalStore";
 import {
-  AEAlterStatus,
-  AEAwakenStatus,
-  AECategories,
-  AECharacterStyles,
-  AELightShadow,
-  AEManifestLevels,
   DisplayMode,
   ModalType,
   CheckMenuOptions,
 } from "../../../constants/enum";
-import { createCharacterSorter, matchesCharacterSearch } from "../../../util/func";
+import { createCharacterSorter } from "../../../util/func";
+import { useCharacterFilter } from "../../../hooks/useCharacterFilter";
 import { useTranslation } from "react-i18next";
 import GlobalFilter from "../../molecules/GlobalFilter";
 import useFilterStore from "../../../store/useFilterStore";
 import useConfigStore from "../../../store/useConfigStore";
 import Loading from "../../atoms/Loading";
-import { arrAllIncludes, arrOverlap } from "../../../util/arrayUtil";
 import { fetchAPI } from "../../../util/api";
 import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import ListPagination from "@/components/molecules/ListPagination";
@@ -39,6 +33,7 @@ function CharacterSearch() {
     dungeon,
     searchWord,
   } = useFilterStore();
+  const matchesFilter = useCharacterFilter();
   const { isPending, data } = useQuery({
     queryKey: ["getCharacters"],
     queryFn: () => fetchAPI("character"),
@@ -48,29 +43,10 @@ function CharacterSearch() {
   const allCharacters = isPending
     ? []
     : [...(data as APIResponse<CharacterSummary[]>).data].sort(
-        createCharacterSorter(t, i18n.language, showRealName)
+        createCharacterSorter(t, i18n.language, showRealName),
       );
 
-  const filteredCharacters = allCharacters.filter(
-    (char) =>
-      styleFilter.includes(char.style as AECharacterStyles) &&
-      manifestFilter.includes(char.maxManifest as AEManifestLevels) &&
-      categoryFilter.includes(char.category as AECategories) &&
-      alterFilter.includes(char.isAlter as AEAlterStatus) &&
-      lightShadowFilter.includes(char.lightShadow as AELightShadow) &&
-      staralignFilter.includes(char.isAwaken as AEAwakenStatus) &&
-      arrAllIncludes(
-        char.personalityIds,
-        essenTialPersonalityTags
-      ) &&
-      (choosePersonalityTags.length <= 0 ||
-        arrOverlap(
-          char.personalityIds,
-          choosePersonalityTags
-        )) &&
-      (!dungeon || char.dungeons.some((d) => d.id === dungeon)) &&
-      matchesCharacterSearch(char, t, searchWord, showRealName)
-  );
+  const filteredCharacters = allCharacters.filter(matchesFilter);
 
   const itemsPerPage = getItemsPerPage("avatar");
   const {
@@ -106,12 +82,6 @@ function CharacterSearch() {
   return (
     <div className="flex-grow pt-6">
       <GlobalFilter type={CheckMenuOptions.characters} />
-      {displayMode === DisplayMode.pagination && (
-        <div className="flex justify-center mt-4 mb-4">
-          <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
-        </div>
-      )}
-
       <div className="px-4 py-4">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(75px,1fr))] gap-6">
           {currentCharacters.map((char) => (
@@ -132,6 +102,9 @@ function CharacterSearch() {
           </div>
         )}
       </div>
+      {displayMode === DisplayMode.pagination && (
+        <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
+      )}
     </div>
   );
 }

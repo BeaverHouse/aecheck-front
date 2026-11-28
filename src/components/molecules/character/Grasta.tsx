@@ -18,7 +18,8 @@ const CharacterGrasta: React.FC<CharacterSummary> = (info) => {
 
   const id = getNumber(info);
   const isRecent = isUpdatedInWeeks(info.lastUpdated);
-  const hasTier = showTierBadge && (info.tier === "op" || info.tier === "super_op");
+  const hasTier =
+    showTierBadge && (info.tier === "op" || info.tier === "super_op");
   const currentStep = getStep(id, grasta);
 
   const changeGrasta = (step: number) => {
@@ -37,7 +38,7 @@ const CharacterGrasta: React.FC<CharacterSummary> = (info) => {
         "flex w-full min-w-[275px] overflow-visible",
         hasTier && info.tier === "op" && "glow-op",
         hasTier && info.tier === "super_op" && "glow-super-op",
-        !hasTier && isRecent && "glow-recent"
+        !hasTier && isRecent && "glow-recent",
       )}
     >
       <CardContent className="flex p-2 w-full">
@@ -49,20 +50,23 @@ const CharacterGrasta: React.FC<CharacterSummary> = (info) => {
         />
         <div className="flex flex-col flex-1 items-center justify-center">
           <p className="mb-1 text-sm font-bold">{t(`book.${info.id}`)}</p>
-          <div className="flex h-10 pl-1">
+          <div className="flex w-full flex-col gap-1 pl-2">
             {[0, 1, 2].map((step) => (
               <Button
                 key={step}
                 variant={currentStep === step ? "default" : "outline"}
-                className="flex-grow flex-shrink-0 basis-0 max-h-[50px] p-2"
+                size="sm"
+                aria-pressed={currentStep === step}
+                className="h-8 justify-start text-xs"
                 onClick={() => changeGrasta(step)}
               >
                 <img
                   src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/grasta${step}.png`}
-                  alt={`${step}`}
-                  width={33}
-                  height={33}
+                  alt=""
+                  width={20}
+                  height={20}
                 />
+                {t(`grasta.${step}`)}
               </Button>
             ))}
           </div>

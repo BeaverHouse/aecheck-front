@@ -17,10 +17,13 @@ import CharacterAvatar from "../../atoms/character/Avatar";
 import useModalStore from "../../../store/useModalStore";
 import useConfigStore from "../../../store/useConfigStore";
 import Swal from "sweetalert2";
-import { Button } from "@/components/ui/button";
 import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import ListPagination from "@/components/molecules/ListPagination";
+import { useAddInven } from "../../../hooks/useAddInven";
 import ScreenshotImport from "./ScreenshotImport";
+import { CheckCheck, Eraser } from "lucide-react";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import BulkActionsMenu from "@/components/molecules/BulkActionsMenu";
 
 function CharacterDashboard({
   allCharacters,
@@ -40,19 +43,7 @@ function CharacterDashboard({
     )
     .sort(createCharacterSorter(t, i18n.language, showRealName));
 
-  const addInven = (chars: CharacterSummary[]) => {
-    const codes = chars
-      .filter((char) => char.style === AECharacterStyles.normal)
-      .map((char) => char.code);
-    const fourStars = allCharacters.filter(
-      (c) => c.style === AECharacterStyles.four && codes.includes(c.code),
-    );
-    setInven([...inven, ...[...chars, ...fourStars].map(getNumber)]);
-    setBuddy([
-      ...buddy,
-      ...chars.flatMap((char) => (char.buddy ? getNumber(char.buddy) : [])),
-    ]);
-  };
+  const addInven = useAddInven(allCharacters);
 
   const addSingleInven = (char: CharacterSummary) => {
     addInven([char]);
@@ -185,33 +176,21 @@ function CharacterDashboard({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex flex-col items-center gap-2 mb-2 px-4">
+      <div className="flex flex-wrap items-center justify-center gap-2 px-4">
         <InvenFilterButton />
-        <div className="flex gap-2">
-          <Button variant="secondary" size="sm" onClick={() => uncheckAll()}>
-            CLEAR ALL
-          </Button>
-          <Button
-            variant="default"
-            size="sm"
-            className="bg-primary hover:bg-primary/90"
-            onClick={() => checkAll()}
-          >
+        <ScreenshotImport allCharacters={allCharacters} />
+        <BulkActionsMenu>
+          <DropdownMenuItem onSelect={checkAll}>
+            <CheckCheck />
             CHECK ALL
-          </Button>
-        </div>
-        <ScreenshotImport allCharacters={allCharacters} onApply={addInven} />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={uncheckAll}>
+            <Eraser />
+            CLEAR ALL
+          </DropdownMenuItem>
+        </BulkActionsMenu>
       </div>
-      {displayMode === DisplayMode.pagination && (
-        <div className="flex justify-center mb-4 mt-4">
-          <ListPagination
-            page={page}
-            setPage={setPage}
-            totalPages={totalPages}
-          />
-        </div>
-      )}
-      <div className="flex-grow overflow-auto px-4 py-4 mt-2">
+      <div className="flex-grow overflow-auto px-4 py-3">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(75px,1fr))] gap-6">
           {currentCharacters.map((char) => (
             <CharacterAvatar
@@ -231,6 +210,9 @@ function CharacterDashboard({
           </div>
         )}
       </div>
+      {displayMode === DisplayMode.pagination && (
+        <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
+      )}
     </div>
   );
 }

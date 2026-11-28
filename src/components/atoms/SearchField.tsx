@@ -16,7 +16,7 @@ const SearchField: React.FC<SearchBoxInfo> = ({ label }) => {
       value={searchWord}
       onChange={(e) => setSearch(e.target.value)}
       placeholder={label}
-      className="h-9"
+      className="h-10"
     />
   );
 };
