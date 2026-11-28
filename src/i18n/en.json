@@ -60,7 +60,7 @@
   "screenshot.loading": "Preparing character images {{done}}/{{total}}",
   "screenshot.reading": "Reading screenshots {{done}}/{{total}}",
   "screenshot.wait": "The first time, downloading the character pictures can take more than 10 seconds. Please keep this window open.",
-  "screenshot.error": "Could not read the images. Please upload them again.",
+  "screenshot.error": "Something went wrong while reading. Check your connection and open this window again.",
   "screenshot.sure": "Characters to check",
   "screenshot.unsure": "Needs your confirmation",
   "screenshot.unsureDesc": "★4 and ★5 share the same picture and cannot be told apart. Pick the one you really own.",

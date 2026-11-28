@@ -8,15 +8,16 @@ export type MatchRequest = { characters: CharacterSummary[]; files: File[] };
 export type MatchEvent =
   | { type: "bank"; done: number; total: number }
   | { type: "cell"; index: number; done: number; total: number }
-  | { type: "shot"; index: number; height: number; cells: CellMatch[] };
+  | { type: "shot"; index: number; height: number; cells: CellMatch[] }
+  | { type: "error" };
 
-// Matching takes seconds per screenshot, so it runs off the main thread.
-self.onmessage = async ({ data }: MessageEvent<MatchRequest>) => {
-  const post = (event: MatchEvent) => self.postMessage(event);
-  const bank = await loadPortraitBank(data.characters, (done, total) =>
+const post = (event: MatchEvent) => self.postMessage(event);
+
+async function match({ characters, files }: MatchRequest) {
+  const bank = await loadPortraitBank(characters, (done, total) =>
     post({ type: "bank", done, total }),
   );
-  for (const [index, file] of data.files.entries()) {
+  for (const [index, file] of files.entries()) {
     const bitmap = await createImageBitmap(file);
     post({
       type: "shot",
@@ -28,4 +29,9 @@ self.onmessage = async ({ data }: MessageEvent<MatchRequest>) => {
     });
     bitmap.close();
   }
-};
+}
+
+// Matching takes seconds per screenshot, so it runs off the main thread.
+// A rejected promise here never reaches the page's worker.onerror, so it is reported as a message.
+self.onmessage = ({ data }: MessageEvent<MatchRequest>) =>
+  match(data).catch(() => post({ type: "error" }));

@@ -60,7 +60,7 @@
   "screenshot.loading": "キャラクター画像を準備中 {{done}}/{{total}}",
   "screenshot.reading": "スクリーンショットを読み取り中 {{done}}/{{total}}",
   "screenshot.wait": "初回はキャラクター画像のダウンロードに10秒以上かかることがあります。画面を閉じずにお待ちください。",
-  "screenshot.error": "画像を読み取れませんでした。もう一度アップロードしてください。",
+  "screenshot.error": "読み取り中に問題が発生しました。接続を確認して、画面を開き直してください。",
   "screenshot.sure": "チェックするキャラクター",
   "screenshot.unsure": "確認が必要です",
   "screenshot.unsureDesc": "★4と★5は同じ絵なので区別できません。実際に持っているほうを選んでください。",

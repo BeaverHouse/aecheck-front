@@ -114,7 +114,11 @@ function Crop({ shot, cell }: Pick) {
 }
 
 /** Bar position 0-1: preparing the pictures fills the first half, reading the screenshots' cells the second. */
-function progressOf(event: MatchEvent, shots: number, t: TFunction) {
+function progressOf(
+  event: Exclude<MatchEvent, { type: "error" }>,
+  shots: number,
+  t: TFunction,
+) {
   if (event.type === "bank")
     return {
       label: t("screenshot.loading", event),
@@ -149,9 +153,11 @@ function ScreenshotReader({ allCharacters, onApply }: ReaderProps) {
     );
     const urls = files.map((file) => URL.createObjectURL(file));
     const shots: Shot[] = [];
-    worker.onerror = () =>
+    const fail = () =>
       setProgress((p) => ({ ...p, label: t("screenshot.error") }));
+    worker.onerror = fail;
     worker.onmessage = ({ data }: MessageEvent<MatchEvent>) => {
+      if (data.type === "error") return fail();
       setProgress(progressOf(data, files.length, t));
       if (data.type !== "shot") return;
       shots.push({

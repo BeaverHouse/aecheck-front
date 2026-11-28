@@ -639,7 +639,10 @@ export function readStyleGrid(
 ): CellMatch[] {
   let near: Position | undefined;
   const scale = shot.height / SHOT_HEIGHT; // cell centres back in the screenshot's own pixels
-  const cells = findGridCells(shot);
+  // A flat centre is an empty slot, not a portrait; correlation would score it 1 against anything.
+  const cells = findGridCells(shot).filter(
+    ({ crop }) => template(crop, PATCH).energy >= Number.EPSILON,
+  );
   return cells.map(({ row, col, x, y, crop }, i) => {
     let m = matchAt(crop, bank, near);
     if (near && m.score < ACCEPT_SCORE) m = matchAt(crop, bank);
@@ -699,6 +702,8 @@ export async function loadPortraitBank(
       onProgress?.(++done, characters.length);
     }),
   );
+  if (images.size === 0)
+    throw new Error("No character picture could be downloaded");
   return buildPortraitBank(characters, images);
 }
 
