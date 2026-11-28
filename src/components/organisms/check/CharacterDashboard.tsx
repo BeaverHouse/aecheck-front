@@ -2,7 +2,11 @@ import InvenFilterButton from "../../atoms/button/InvenFilter";
 import { useTranslation } from "react-i18next";
 import useFilterStore from "../../../store/useFilterStore";
 import useCheckStore from "../../../store/useCheckStore";
-import { createCharacterSorter, getNumber, getInvenStatus } from "../../../util/func";
+import {
+  createCharacterSorter,
+  getNumber,
+  getInvenStatus,
+} from "../../../util/func";
 import {
   AECharacterStyles,
   DisplayMode,
@@ -16,6 +20,7 @@ import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
 import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import ListPagination from "@/components/molecules/ListPagination";
+import ScreenshotImport from "./ScreenshotImport";
 
 function CharacterDashboard({
   allCharacters,
@@ -31,26 +36,26 @@ function CharacterDashboard({
     .filter(
       (char) =>
         getNumber(char) < 1000 &&
-        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
+        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven)),
     )
     .sort(createCharacterSorter(t, i18n.language, showRealName));
 
-  const addSingleInven = (char: CharacterSummary) => {
-    const newCharIds = [...inven, getNumber(char)];
-
-    const fourStarChar = allCharacters.find(
-      (c) => c.code === char.code && c.style === AECharacterStyles.four
+  const addInven = (chars: CharacterSummary[]) => {
+    const codes = chars
+      .filter((char) => char.style === AECharacterStyles.normal)
+      .map((char) => char.code);
+    const fourStars = allCharacters.filter(
+      (c) => c.style === AECharacterStyles.four && codes.includes(c.code),
     );
-    if (fourStarChar && char.style === AECharacterStyles.normal) {
-      newCharIds.push(getNumber(fourStarChar));
-    }
+    setInven([...inven, ...[...chars, ...fourStars].map(getNumber)]);
+    setBuddy([
+      ...buddy,
+      ...chars.flatMap((char) => (char.buddy ? getNumber(char.buddy) : [])),
+    ]);
+  };
 
-    setInven(newCharIds);
-
-    if (char.buddy) {
-      const newBuddyIds = [...buddy, getNumber(char.buddy)];
-      setBuddy(newBuddyIds);
-    }
+  const addSingleInven = (char: CharacterSummary) => {
+    addInven([char]);
 
     if (
       popupOnCheck === PopupOnCheckOptions.all ||
@@ -66,7 +71,7 @@ function CharacterDashboard({
 
     const isFourStar = char.style === AECharacterStyles.four;
     const NSChar = allCharacters.find(
-      (c) => c.code === char.code && c.style === AECharacterStyles.normal
+      (c) => c.code === char.code && c.style === AECharacterStyles.normal,
     );
 
     if (isFourStar && NSChar) {
@@ -99,7 +104,7 @@ function CharacterDashboard({
         const fourStars = allCharacters.filter(
           (char) =>
             char.style === AECharacterStyles.four &&
-            newCodes.includes(char.code)
+            newCodes.includes(char.code),
         );
         for (const char of fourStars) {
           newInven.push(getNumber(char));
@@ -135,7 +140,7 @@ function CharacterDashboard({
         const normalStyles = allCharacters.filter(
           (char) =>
             char.style === AECharacterStyles.normal &&
-            newCodes.includes(char.code)
+            newCodes.includes(char.code),
         );
         for (const char of normalStyles) {
           removeInven.push(getNumber(char));
@@ -183,11 +188,7 @@ function CharacterDashboard({
       <div className="flex flex-col items-center gap-2 mb-2 px-4">
         <InvenFilterButton />
         <div className="flex gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => uncheckAll()}
-          >
+          <Button variant="secondary" size="sm" onClick={() => uncheckAll()}>
             CLEAR ALL
           </Button>
           <Button
@@ -199,10 +200,15 @@ function CharacterDashboard({
             CHECK ALL
           </Button>
         </div>
+        <ScreenshotImport allCharacters={allCharacters} onApply={addInven} />
       </div>
       {displayMode === DisplayMode.pagination && (
         <div className="flex justify-center mb-4 mt-4">
-          <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
+          <ListPagination
+            page={page}
+            setPage={setPage}
+            totalPages={totalPages}
+          />
         </div>
       )}
       <div className="flex-grow overflow-auto px-4 py-4 mt-2">
