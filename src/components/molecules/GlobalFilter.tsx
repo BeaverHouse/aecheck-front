@@ -14,19 +14,18 @@ const GlobalFilter: React.FC<GlobalFilterProps> = ({ type }) => {
   const setModal = useModalStore((state) => state.setModal);
   const { t } = useTranslation();
   return (
-    <div className="w-full max-w-[600px] flex items-center mx-auto mb-4 justify-center gap-2 px-4">
+    <div className="w-full max-w-[600px] flex items-center mx-auto mb-2 justify-center gap-2 px-4">
       {type !== CheckMenuOptions.buddies && (
         <Button
-          variant="secondary"
-          size="icon"
-          aria-label="Filter Button"
+          variant="outline"
           onClick={() => setModal(ModalType.filter)}
-          className="w-10 h-10 flex-shrink-0"
+          className="h-10 shrink-0 px-3 text-foreground"
         >
-          <Filter className="h-5 w-5" />
+          <Filter />
+          {t("filter.button")}
         </Button>
       )}
-      <div className="flex-grow">
+      <div className="min-w-0 flex-grow">
         <SearchField label={t(`frontend.search.label.${type}`)} />
       </div>
     </div>

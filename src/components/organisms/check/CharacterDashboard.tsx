@@ -2,7 +2,11 @@ import InvenFilterButton from "../../atoms/button/InvenFilter";
 import { useTranslation } from "react-i18next";
 import useFilterStore from "../../../store/useFilterStore";
 import useCheckStore from "../../../store/useCheckStore";
-import { createCharacterSorter, getNumber, getInvenStatus } from "../../../util/func";
+import {
+  createCharacterSorter,
+  getNumber,
+  getInvenStatus,
+} from "../../../util/func";
 import {
   AECharacterStyles,
   DisplayMode,
@@ -13,9 +17,13 @@ import CharacterAvatar from "../../atoms/character/Avatar";
 import useModalStore from "../../../store/useModalStore";
 import useConfigStore from "../../../store/useConfigStore";
 import Swal from "sweetalert2";
-import { Button } from "@/components/ui/button";
 import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import ListPagination from "@/components/molecules/ListPagination";
+import { useAddInven } from "../../../hooks/useAddInven";
+import ScreenshotImport from "./ScreenshotImport";
+import { CheckCheck, Eraser } from "lucide-react";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import BulkActionsMenu from "@/components/molecules/BulkActionsMenu";
 
 function CharacterDashboard({
   allCharacters,
@@ -31,26 +39,14 @@ function CharacterDashboard({
     .filter(
       (char) =>
         getNumber(char) < 1000 &&
-        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
+        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven)),
     )
     .sort(createCharacterSorter(t, i18n.language, showRealName));
 
+  const addInven = useAddInven(allCharacters);
+
   const addSingleInven = (char: CharacterSummary) => {
-    const newCharIds = [...inven, getNumber(char)];
-
-    const fourStarChar = allCharacters.find(
-      (c) => c.code === char.code && c.style === AECharacterStyles.four
-    );
-    if (fourStarChar && char.style === AECharacterStyles.normal) {
-      newCharIds.push(getNumber(fourStarChar));
-    }
-
-    setInven(newCharIds);
-
-    if (char.buddy) {
-      const newBuddyIds = [...buddy, getNumber(char.buddy)];
-      setBuddy(newBuddyIds);
-    }
+    addInven([char]);
 
     if (
       popupOnCheck === PopupOnCheckOptions.all ||
@@ -66,7 +62,7 @@ function CharacterDashboard({
 
     const isFourStar = char.style === AECharacterStyles.four;
     const NSChar = allCharacters.find(
-      (c) => c.code === char.code && c.style === AECharacterStyles.normal
+      (c) => c.code === char.code && c.style === AECharacterStyles.normal,
     );
 
     if (isFourStar && NSChar) {
@@ -99,7 +95,7 @@ function CharacterDashboard({
         const fourStars = allCharacters.filter(
           (char) =>
             char.style === AECharacterStyles.four &&
-            newCodes.includes(char.code)
+            newCodes.includes(char.code),
         );
         for (const char of fourStars) {
           newInven.push(getNumber(char));
@@ -135,7 +131,7 @@ function CharacterDashboard({
         const normalStyles = allCharacters.filter(
           (char) =>
             char.style === AECharacterStyles.normal &&
-            newCodes.includes(char.code)
+            newCodes.includes(char.code),
         );
         for (const char of normalStyles) {
           removeInven.push(getNumber(char));
@@ -180,32 +176,21 @@ function CharacterDashboard({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex flex-col items-center gap-2 mb-2 px-4">
+      <div className="flex flex-wrap items-center justify-center gap-2 px-4">
         <InvenFilterButton />
-        <div className="flex gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => uncheckAll()}
-          >
-            CLEAR ALL
-          </Button>
-          <Button
-            variant="default"
-            size="sm"
-            className="bg-primary hover:bg-primary/90"
-            onClick={() => checkAll()}
-          >
+        <ScreenshotImport allCharacters={allCharacters} />
+        <BulkActionsMenu>
+          <DropdownMenuItem onSelect={checkAll}>
+            <CheckCheck />
             CHECK ALL
-          </Button>
-        </div>
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={uncheckAll}>
+            <Eraser />
+            CLEAR ALL
+          </DropdownMenuItem>
+        </BulkActionsMenu>
       </div>
-      {displayMode === DisplayMode.pagination && (
-        <div className="flex justify-center mb-4 mt-4">
-          <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
-        </div>
-      )}
-      <div className="flex-grow overflow-auto px-4 py-4 mt-2">
+      <div className="flex-grow overflow-auto px-4 py-3">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(75px,1fr))] gap-6">
           {currentCharacters.map((char) => (
             <CharacterAvatar
@@ -225,6 +210,9 @@ function CharacterDashboard({
           </div>
         )}
       </div>
+      {displayMode === DisplayMode.pagination && (
+        <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
+      )}
     </div>
   );
 }

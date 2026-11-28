@@ -2,10 +2,16 @@ import { useTranslation } from "react-i18next";
 import useFilterStore from "../../../store/useFilterStore";
 import useCheckStore from "../../../store/useCheckStore";
 import useConfigStore from "../../../store/useConfigStore";
-import { createCharacterSorter, getManifestStatus, getNumber } from "../../../util/func";
+import {
+  createCharacterSorter,
+  getManifestStatus,
+  getNumber,
+} from "../../../util/func";
 import CharacterManifest from "../../molecules/character/Manifest";
 import ManifestFilterButton from "../../atoms/button/ManifestFilter";
-import { Button } from "@/components/ui/button";
+import { CheckCheck, Eraser } from "lucide-react";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import BulkActionsMenu from "@/components/molecules/BulkActionsMenu";
 import Swal from "sweetalert2";
 import { DisplayMode, WeaponTemperingStatus } from "../../../constants/enum";
 import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
@@ -16,7 +22,8 @@ function ManifestDashboard({
   filteredCharacters,
 }: DashboardProps) {
   const { t, i18n } = useTranslation();
-  const { manifestStatusFilter, weaponTemperingStatusFilter } = useFilterStore();
+  const { manifestStatusFilter, weaponTemperingStatusFilter } =
+    useFilterStore();
   const { inven, manifest, setManifest, weaponTempering } = useCheckStore();
   const { displayMode, showRealName } = useConfigStore();
 
@@ -24,8 +31,14 @@ function ManifestDashboard({
     .filter((char) => char.maxManifest > 0 || char.customManifest)
     .filter((char) =>
       manifestStatusFilter.includes(
-        getManifestStatus(allCharacters, char, inven, manifest, weaponTempering)
-      )
+        getManifestStatus(
+          allCharacters,
+          char,
+          inven,
+          manifest,
+          weaponTempering,
+        ),
+      ),
     )
     .filter((char) => {
       if (weaponTemperingStatusFilter.includes(WeaponTemperingStatus.all)) {
@@ -33,7 +46,7 @@ function ManifestDashboard({
       }
 
       const hasWeaponTempering = weaponTempering.some(
-        (x) => x % 10000 === getNumber(char) && x >= 10000
+        (x) => x % 10000 === getNumber(char) && x >= 10000,
       );
       const matchesAvailable =
         weaponTemperingStatusFilter.includes(WeaponTemperingStatus.available) &&
@@ -61,7 +74,7 @@ function ManifestDashboard({
           ...manifest.filter((i) => !ids.includes(i % 10000)),
           ...targetCharacters
             .filter(
-              (char) => char.maxManifest > 0 && inven.includes(getNumber(char))
+              (char) => char.maxManifest > 0 && inven.includes(getNumber(char)),
             )
             .map((char) => char.maxManifest * 10000 + getNumber(char)),
         ];
@@ -103,40 +116,31 @@ function ManifestDashboard({
     totalItems: targetCharacters.length,
     displayMode,
     itemsPerPage,
-    dependencies: [filteredCharacters, manifestStatusFilter, weaponTemperingStatusFilter],
+    dependencies: [
+      filteredCharacters,
+      manifestStatusFilter,
+      weaponTemperingStatusFilter,
+    ],
   });
 
   const currentCharacters = getCurrentItems(targetCharacters);
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex flex-col items-center gap-2 mb-2 px-4">
+      <div className="flex flex-wrap items-center justify-center gap-2 px-4">
         <ManifestFilterButton />
-        <div className="flex gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => uncheckAll()}
-          >
-            CLEAR ALL
-          </Button>
-          <Button
-            variant="default"
-            size="sm"
-            className="bg-primary hover:bg-primary/90"
-            onClick={() => checkAll()}
-          >
+        <BulkActionsMenu>
+          <DropdownMenuItem onSelect={checkAll}>
+            <CheckCheck />
             CHECK ALL
-          </Button>
-        </div>
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={uncheckAll}>
+            <Eraser />
+            CLEAR ALL
+          </DropdownMenuItem>
+        </BulkActionsMenu>
       </div>
-      {displayMode === DisplayMode.pagination && (
-        <div className="flex justify-center mb-4 mt-4">
-          <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
-        </div>
-      )}
-
-      <div className="flex-grow overflow-auto px-2 mt-2">
+      <div className="flex-grow overflow-auto px-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-4">
           {currentCharacters.map((char) => (
             <CharacterManifest
@@ -155,6 +159,9 @@ function ManifestDashboard({
           </div>
         )}
       </div>
+      {displayMode === DisplayMode.pagination && (
+        <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
+      )}
     </div>
   );
 }

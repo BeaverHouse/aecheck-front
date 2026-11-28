@@ -1,21 +1,20 @@
 import { InvenStatus } from "../../../constants/enum";
 import { useTranslation } from "react-i18next";
 import useFilterStore from "../../../store/useFilterStore";
-import ToggleButtonGroup from "../ToggleButtonGroup";
+import FilterChip from "../FilterChip";
 
 function InvenFilterButton() {
   const { t } = useTranslation();
   const { invenStatusFilter, setInvenStatusFilter } = useFilterStore();
 
   return (
-    <div className="flex justify-center m-2">
-      <ToggleButtonGroup
-        options={Object.values(InvenStatus)}
-        value={invenStatusFilter}
-        onChange={setInvenStatusFilter}
-        getLabel={(option) => t(`frontend.status.${option}`)}
-      />
-    </div>
+    <FilterChip
+      title={t("filter.inven")}
+      options={Object.values(InvenStatus)}
+      value={invenStatusFilter}
+      onChange={setInvenStatusFilter}
+      getLabel={(option) => t(`frontend.status.${option}`)}
+    />
   );
 }
 

@@ -47,6 +47,7 @@
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.85.0",
     "react-i18next": "^17.0.11",
+    "react-markdown": "^10.1.0",
     "sweetalert2": "^11.26.24",
     "sweetalert2-react-content": "^5.1.2",
     "tailwind-merge": "^3.6.0",
@@ -69,6 +70,7 @@
     "eslint-plugin-react-refresh": "^0.5.4",
     "globals": "^17.11.0",
     "postcss": "^8.5.26",
+    "prettier": "^3.10.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0"

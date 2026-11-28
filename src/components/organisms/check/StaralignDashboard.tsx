@@ -29,7 +29,7 @@ function StaralignDashboard({
     .filter(
       (char) =>
         staralignStatusFilter.includes(getStep(getNumber(char), staralign)) &&
-        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
+        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven)),
     )
     .sort(createCharacterSorter(t, i18n.language, showRealName));
 
@@ -45,23 +45,22 @@ function StaralignDashboard({
     totalItems: targetCharacters.length,
     displayMode,
     itemsPerPage,
-    dependencies: [filteredCharacters, invenStatusFilter, staralignStatusFilter],
+    dependencies: [
+      filteredCharacters,
+      invenStatusFilter,
+      staralignStatusFilter,
+    ],
   });
 
   const currentCharacters = getCurrentItems(targetCharacters);
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex items-center justify-center flex-wrap gap-2 mb-2 px-4">
+      <div className="flex items-center justify-center flex-wrap gap-2 px-4">
         <StaralignFilterButton />
         <InvenFilterButton />
       </div>
-      {displayMode === DisplayMode.pagination && (
-        <div className="flex justify-center mb-4 mt-4">
-          <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
-        </div>
-      )}
-      <div className="flex-grow overflow-auto px-2 mt-2">
+      <div className="flex-grow overflow-auto px-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-4">
           {currentCharacters.map((char) => (
             <CharacterStaralign key={`align-${char.id}`} {...char} />
@@ -76,6 +75,9 @@ function StaralignDashboard({
           </div>
         )}
       </div>
+      {displayMode === DisplayMode.pagination && (
+        <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
+      )}
     </div>
   );
 }

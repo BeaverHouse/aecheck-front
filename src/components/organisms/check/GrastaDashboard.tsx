@@ -10,10 +10,15 @@ import {
 } from "../../../util/func";
 import CharacterGrasta from "../../molecules/character/Grasta";
 import GrastaFilterButton from "../../atoms/button/GrastaFilter";
-import { Button } from "@/components/ui/button";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import BulkActionsMenu from "@/components/molecules/BulkActionsMenu";
 import InvenFilterButton from "../../atoms/button/InvenFilter";
 import Swal from "sweetalert2";
-import { AECharacterStyles, DisplayMode, GrastaWeaponTemperingFilter } from "../../../constants/enum";
+import {
+  AECharacterStyles,
+  DisplayMode,
+  GrastaWeaponTemperingFilter,
+} from "../../../constants/enum";
 import { usePagination, getItemsPerPage } from "../../../hooks/usePagination";
 import ListPagination from "@/components/molecules/ListPagination";
 
@@ -23,30 +28,42 @@ function GrastaDashboard({
 }: DashboardProps) {
   const { t, i18n } = useTranslation();
   const { inven, grasta, setGrasta } = useCheckStore();
-  const { invenStatusFilter, grastaStatusFilter, grastaWeaponTemperingFilter } = useFilterStore();
+  const { invenStatusFilter, grastaStatusFilter, grastaWeaponTemperingFilter } =
+    useFilterStore();
   const { displayMode, showRealName } = useConfigStore();
 
   const targetCharacters = filteredCharacters
-    .filter((char) => char.style !== AECharacterStyles.four && char.dungeons.length > 0)
+    .filter(
+      (char) =>
+        char.style !== AECharacterStyles.four && char.dungeons.length > 0,
+    )
     .filter(
       (char) =>
         grastaStatusFilter.includes(getStep(getNumber(char), grasta)) &&
-        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven))
+        invenStatusFilter.includes(getInvenStatus(allCharacters, char, inven)),
     )
     .filter((char) => {
-      if (grastaWeaponTemperingFilter.length === 0 ||
-          (grastaWeaponTemperingFilter.includes(GrastaWeaponTemperingFilter.hasWeaponTempering) &&
-           grastaWeaponTemperingFilter.includes(GrastaWeaponTemperingFilter.noWeaponTempering))) {
+      if (
+        grastaWeaponTemperingFilter.length === 0 ||
+        (grastaWeaponTemperingFilter.includes(
+          GrastaWeaponTemperingFilter.hasWeaponTempering,
+        ) &&
+          grastaWeaponTemperingFilter.includes(
+            GrastaWeaponTemperingFilter.noWeaponTempering,
+          ))
+      ) {
         return true;
       }
 
       const hasWeaponTempering = char.customManifest;
       const matchesHas =
-        grastaWeaponTemperingFilter.includes(GrastaWeaponTemperingFilter.hasWeaponTempering) &&
-        hasWeaponTempering;
+        grastaWeaponTemperingFilter.includes(
+          GrastaWeaponTemperingFilter.hasWeaponTempering,
+        ) && hasWeaponTempering;
       const matchesNo =
-        grastaWeaponTemperingFilter.includes(GrastaWeaponTemperingFilter.noWeaponTempering) &&
-        !hasWeaponTempering;
+        grastaWeaponTemperingFilter.includes(
+          GrastaWeaponTemperingFilter.noWeaponTempering,
+        ) && !hasWeaponTempering;
 
       return matchesHas || matchesNo;
     })
@@ -63,11 +80,13 @@ function GrastaDashboard({
       if (result.isConfirmed) {
         const newGrasta = grasta.filter(
           (m) =>
-            !targetCharacters.map((info) => getNumber(info)).includes(m % 10000)
+            !targetCharacters
+              .map((info) => getNumber(info))
+              .includes(m % 10000),
         );
         if (step > 0) {
           newGrasta.push(
-            ...targetCharacters.map((char) => step * 10000 + getNumber(char))
+            ...targetCharacters.map((char) => step * 10000 + getNumber(char)),
           );
         }
         setGrasta(newGrasta);
@@ -94,35 +113,24 @@ function GrastaDashboard({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex items-center justify-center flex-wrap gap-2 mb-2 px-4">
+      <div className="flex items-center justify-center flex-wrap gap-2 px-4">
         <GrastaFilterButton />
         <InvenFilterButton />
+        <BulkActionsMenu>
+          {[0, 1, 2].map((step) => (
+            <DropdownMenuItem onSelect={() => changeAllGrasta(step)} key={step}>
+              <img
+                src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/grasta${step}.png`}
+                alt=""
+                width={24}
+                height={24}
+              />
+              {t("grasta.setAll", { label: t(`grasta.${step}`) })}
+            </DropdownMenuItem>
+          ))}
+        </BulkActionsMenu>
       </div>
-      <div className="flex items-center justify-center flex-wrap gap-2 mb-2 px-4">
-        {[0, 1, 2].map((step) => (
-          <Button
-            variant={step === 0 ? "secondary" : "default"}
-            size="sm"
-            className={step !== 0 ? "bg-primary hover:bg-primary/90" : ""}
-            onClick={() => changeAllGrasta(step)}
-            key={step}
-          >
-            <b className="mr-1">ALL</b>
-            <img
-              src={`${process.env.NEXT_PUBLIC_CDN_URL}/icon/grasta${step}.png`}
-              alt={`grasta${step}`}
-              width={24}
-              height={24}
-            />
-          </Button>
-        ))}
-      </div>
-      {displayMode === DisplayMode.pagination && (
-        <div className="flex justify-center mb-4 mt-4">
-          <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
-        </div>
-      )}
-      <div className="flex-grow overflow-auto px-2 mt-2">
+      <div className="flex-grow overflow-auto px-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-4">
           {currentCharacters.map((char) => (
             <CharacterGrasta key={`grasta-${char.id}`} {...char} />
@@ -137,6 +145,9 @@ function GrastaDashboard({
           </div>
         )}
       </div>
+      {displayMode === DisplayMode.pagination && (
+        <ListPagination page={page} setPage={setPage} totalPages={totalPages} />
+      )}
     </div>
   );
 }
